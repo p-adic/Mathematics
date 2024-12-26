@@ -3,6 +3,11 @@
 #pragma once
 #include "a_Macro.hpp"
 
+// verify:
+// https://yukicoder.me/submissions/1002390（setのMaximumLeq, MinimumGeq）
+// https://yukicoder.me/submissions/1002389（mapのMaximumLeq）
+// https://atcoder.jp/contests/abc385/submissions/61103563 (setのMaximumLeq, MinimumLeq, EraseBack, EraseFront)
+
 class is_ordered
 {
 
@@ -21,3 +26,11 @@ public:
 // - unordered_set<T>()がwell-formedならばunordered_set<T>
 // - そうでなくoperator<(declval<T>(),declval<T>())がwell-formedならばset<T>
 // - そうでないならばvoid
+
+template <typename SET , typename T> inline typename SET::const_iterator MaximumLeq( const SET& S , const T& t );
+template <typename SET , typename T> inline typename SET::const_iterator MaximumLt( const SET& S , const T& t );
+template <typename SET , typename T> inline typename SET::const_iterator MinimumGeq( const SET& S , const T& t );
+template <typename SET , typename T> inline typename SET::const_iterator MinimumGt( const SET& S , const T& t );
+
+template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITERATOR& itr );
+template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr );

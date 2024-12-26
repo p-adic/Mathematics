@@ -4,5 +4,7 @@
 #define DC_OF_HASH(...)struct hash<__VA_ARGS__>{IN size_t OP()(CO __VA_ARGS__& n)CO;};
 CL is_ordered{PU:is_ordered()= delete;TE <TY T> ST CE auto Check(CO T& t)-> decltype(t < t,true_type());ST CE false_type Check(...);TE <TY T> ST CE CO bool value = is_same_v< decltype(Check(declval<T>())),true_type >;};
 TE <TY T>US Set = conditional_t<is_COructible_v<unordered_set<T>>,unordered_set<T>,conditional_t<is_ordered::value<T>,set<T>,VO>>;
+
+TE <TY SET,TY T> IN TY SET::const_iterator MaximumLeq(CO SET& S,CO T& t){auto IT = S.upper_bound(t);RE IT == S.BE()?S.EN():--IT;}TE <TY SET,TY T> IN TY SET::const_iterator MaximumLt(CO SET& S,CO T& t){auto IT = S.lower_bound(t);RE IT == S.BE()?S.EN():--IT;}TE <TY SET,TY T> IN TY SET::const_iterator MinimumGeq(CO SET& S,CO T& t){RE S.lower_bound(t);}TE <TY SET,TY T> IN TY SET::const_iterator MinimumGt(CO SET& S,CO T& t){RE S.upper_bound(t);}TE <TY SET,TY ITERATOR> IN VO EraseBack(SET& S,ITERATOR& IT){IT = S.erase(IT);}TE <TY SET,TY ITERATOR> IN VO EraseFront(SET& S,ITERATOR& IT){IT = S.erase(IT);IT == S.BE()?IT = S.EN():--IT;}
 #endif
 
