@@ -30,10 +30,22 @@ vector<pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v );
 
 inline void SetWallStringOnGrid( const int& i , vector<string>& S );
 
+// xy_axis = true: 右と上を正軸方向とする座標
+// (0,1) -> U
+// (1,0) -> R
+// (0,-1) -> D
+// (-1,0) -> L
+// xy_axis = false: 下と右を正軸方向とする座標
+// (-1,0) -> U
+// (0,1) -> R
+// (1,0) -> D
+// (0,-1) -> L
 const string direction = "URDL";
 
-inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h );
-inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w );
-inline int DirectionNumberOnGrid( const int& v , const int& w );
+inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h , const bool& xy_axis = false );
+inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w , const bool& xy_axis = false );
+inline int DirectionNumberOnGrid( const int& v , const int& w , const bool& xy_axis = false );
+inline int DirectionNumberOnGrid( const char& c );
 inline int ReverseDirectionNumberOnGrid( const int& n );
 
+inline T2<int> DirectionVectorOnGrid( const char& c , const bool& xy_axis = false );

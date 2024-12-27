@@ -89,8 +89,10 @@ vector<pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v ){
 
 inline void SetWallStringOnGrid(){ grid.resize( H ); for( int i = 0 ; i < H ; i++ ){ SET( grid[i] ); assert( int( grid[i].size() ) == W ); } }
 
-inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h ) { return i < k ? 2 : i > k ? 0 : j < h ? 1 : ( assert( j > h ) , 3 ); }
-inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w ) { auto& [i,j] = v; auto& [k,h] = w; return DirectionNumberOnGrid( i , j , k , h ); }
-inline int DirectionNumberOnGrid( const int& v , const int& w ) { return DirectionNumberOnGrid( EnumHW( v ) , EnumHW( w ) ); }
-inline int ReverseDirectionNumberOnGrid( const int& n ) { assert( 0 <= n && n<4 ); return n ^ 2; }
+inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h , const bool& xy_axis ) { return xy_axis ? i < k ? 1 : i > k ? 3 : j < h ? 0 : j > h ? 2 : -1 : i < k ? 2 : i > k ? 0 : j < h ? 1 : j > h ? 3 : -1; }
+inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w , const bool& xy_axis ) { auto& [i,j] = v; auto& [k,h] = w; return DirectionNumberOnGrid( i , j , k , h ); }
+inline int DirectionNumberOnGrid( const int& v , const int& w , const bool& xy_axis ) { return DirectionNumberOnGrid( EnumHW( v ) , EnumHW( w ) ); }
+inline int DirectionNumberOnGrid( const char& c ) { return c == 'U' ? 0 : c == 'R' ? 1 : c == 'D' ? 2 : c == 'L' ? 3 : -1; }
+inline int ReverseDirectionNumberOnGrid( const int& n ) { assert( 0 <= n && n < 4 ); return n ^ 2; }
 
+inline T2<int> DirectionVectorOnGrid( const char& c , const bool& xy_axis ) { const int n = DirectionNumberOnGrid( c ); assert( n != -1 ); return T2<int>{ xy_axis ? n == 1 ? 1 : n == 3 ? -1 : 0 : n == 0 ? -1 : n == 2 ? 1 : 0 , xy_axis ? n == 0 ? 1 : n == 2 ? -1 : 0 : n == 1 ? 1 : n == 3 ? -1 : 0 }; }
