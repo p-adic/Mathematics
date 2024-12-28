@@ -1,0 +1,9 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/FloorSum/FloorRiemanZeta/a_Body.hpp"
+#else
+TE <TY INT>INT RoundDownSqrt(CO INT& n){AS(n >= 0);if(n <= 1){RE n;}INT l = 1,r = n;WH(l < r - 1){CO INT m =(l + r)>> 1;(m <= n / m?l:r)= m;}RE l;}TE <TY INT>INT RoundUpSqrt(CO INT& n){AS(n >= 0);if(n <= 2){RE n;}CO INT n_minus = n - 1;INT l = 1,r = n;WH(l + 1 < r){CO INT m =(l + r)>> 1;(m <= n_minus / m?l:r)= m;}RE r;}
+
+TE <TY T> IN T Square(CO T& t){RE t * t;}TE <TY T,TY UINT>T PW(T t,UINT EX){T AN =(EX & 1)== 1?t:1;EX >>= 1;WH(EX > 0){t = Square(t);(EX & 1)== 1?AN *= t:AN;EX >>= 1;}RE AN;}TE <TY T,TY UINT>T PW(T t,UINT EX,T init){(EX & 1)== 1?init *= t:init;EX >>= 1;WH(EX > 0){t = Square(t);(EX & 1)== 1?init *= t:init;EX >>= 1;}RE MO(init);}
+
+TE <TY INT>INT FloorRiemannZeta(CO INT& n,CO INT& EX){INT i_max = RoundDownSqrt(n);INT AN = 0;for(INT i = 1;i <= i_max;i++){AN +=(n / i - n /(i + 1))* PW(i,EX);}i_max = n /(i_max + 1);for(INT i = 1;i <= i_max;i++){AN += PW(n / i,EX);}RE AN;}TE <TY INT> IN INT HarmonicFloorSum(CO INT& n){RE n < 0?- FloorRiemannZeta<INT>(- n - 1,1)- n:FloorRiemannZeta<INT>(n,1);}
+#endif
