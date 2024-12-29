@@ -9,17 +9,16 @@ template <typename INT> inline void CoordinateCompress<INT>::SetR( INT t ) { m_r
 template <typename INT> template <typename U , template <typename...> typename V > inline void CoordinateCompress<INT>::SetR( V<U> a ) { for( auto& t : a ){ SetR( move( t ) ); } }
 
 template <typename INT>
-pair<vector<INT>,unordered_map<INT,int>> CoordinateCompress<INT>::GetR()
+tuple<vector<INT>,unordered_map<INT,int>,int> CoordinateCompress<INT>::GetR()
 {
 
-  pair<vector<INT>,unordered_map<INT,int>> answer{};
-  answer.first.resize( m_r.size() );
-  int i = 0;
-    
+  tuple<vector<INT>,unordered_map<INT,int>,int> answer{};
+  auto& [value,value_inv,value_max] = answer;
+  value.resize( m_r.size() );
+  
   for( auto t : m_r ){
 
-    answer.first[i] = t;
-    answer.second[t] = i++;
+    value[value_inv[t] = value_max++] = t;
 
   }
 
@@ -33,11 +32,11 @@ template <typename INT> inline void CoordinateCompress<INT>::SetL( INT& t ) { m_
 template <typename INT> template <typename U , template <typename...> typename V > inline void CoordinateCompress<INT>::SetL( V<U>& a ) { for( auto& t : a ){ SetL( t ); } }
 
 template <typename INT>
-vector<INT> CoordinateCompress<INT>::GetL()
+pair<vector<INT>,int> CoordinateCompress<INT>::GetL()
 {
 
-  int i = -1;
-  vector<INT> answer{};
+  pair<vector<INT>,int> answer{ {} , -1 };
+  auto& [value,value_max] = answer;
 
   if( !m_l.empty() ){
 
@@ -47,12 +46,13 @@ vector<INT> CoordinateCompress<INT>::GetL()
 
     for( auto p : m_l ){
 
-      *p = temp == *p ? i : ( answer.push_back( temp = *p ) , ++i );
+      *p = temp == *p ? value_max : ( value.push_back( temp = *p ) , ++value_max );
 
     }
 
   }
 
+  value_max++;
   return answer;
 
 }
