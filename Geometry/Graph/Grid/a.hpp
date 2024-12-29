@@ -41,6 +41,10 @@ inline void SetWallStringOnGrid( const int& i , vector<string>& S );
 // (1,0) -> D
 // (0,-1) -> L
 const string direction = "URDL";
+bool grid_edge_i_plus = true;
+bool grid_edge_j_plus = true;
+bool grid_edge_i_minus = true;
+bool grid_edge_j_minus = true;
 
 inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h , const bool& xy_axis = false );
 inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w , const bool& xy_axis = false );
