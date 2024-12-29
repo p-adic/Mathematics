@@ -1,13 +1,15 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/BIT/IntervalMax/a_Body.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/BIT/IntervalMax/Debug/a_Body.hpp
 
 #pragma once
 #include "a.hpp"
 
-#include "../../../../../Algebra/Monoid/Semilattice/a_Body.hpp"
+#include "../../../../../../Algebra/Monoid/Semilattice/a_Body.hpp"
 
-template <typename U , typename COMM_IDEM_MONOID> inline IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IdempotentMonoidBIT( COMM_IDEM_MONOID M , const int& size ) : m_M( move( M ) ) , m_size( size ) , m_a( size , m_M.One() ) , m_fenwick_0( m_size + 1 , m_M.One() ) , m_fenwick_1( m_size + 1 , m_M.One() ) , m_power( 1 ) { Construct(); }
+#include "../../../../../../../Error/Debug/a_Body.hpp"
 
-template <typename U , typename COMM_IDEM_MONOID> inline IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IdempotentMonoidBIT( COMM_IDEM_MONOID M , vector<U> a ) : m_M( move( M ) ) , m_size( a.size() ) , m_a( move( a ) ) , m_fenwick_0( m_size + 1 ) , m_fenwick_1( m_size + 1 ) , m_power( 1 )
+template <typename U , typename COMM_IDEM_MONOID> inline IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IdempotentMonoidBIT( COMM_IDEM_MONOID M , const int& size , const bool& output_mode ) : Debug( output_mode ) , m_M( move( M ) ) , m_size( size ) , m_a( size , m_M.One() ) , m_fenwick_0( m_size + 1 , m_M.One() ) , m_fenwick_1( m_size + 1 , m_M.One() ) , m_power( 1 ) { Construct(); }
+
+template <typename U , typename COMM_IDEM_MONOID> inline IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IdempotentMonoidBIT( COMM_IDEM_MONOID M , vector<U> a , const bool& output_mode ) : Debug( output_mode ) , m_M( move( M ) ) , m_size( a.size() ) , m_a( move( a ) ) , m_fenwick_0( m_size + 1 ) , m_fenwick_1( m_size + 1 ) , m_power( 1 )
 {
 
   Construct();
@@ -62,6 +64,34 @@ template <typename U , typename COMM_IDEM_MONOID> inline void IdempotentMonoidBI
 
   }
 
+  
+  static bool init = true;
+
+  if( init ){
+
+    if( m_output_mode ){
+      
+      DERR( "IdempotentMonoidBITをデバッグモードで実行します。" );
+      DERR( "通常のIdempotentMonoidBITと比べると各種操作にO(N)かかる" );
+      DERR( "ことにご注意ください。" );
+      DERR( "" );
+
+    }
+
+    init = false;
+
+  }
+
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITコンストラクタに単位元を渡し忘れるミスにご注意ください。" );
+    DERR( "IdempotentMonoidBITの単位元：" , m_M.One() );
+    DERR( "IdempotentMonoidBITの初期値：" );
+    DERR( *this );
+    DERR( "" );
+
+  }
+  
 }
 
 template <typename U , typename COMM_IDEM_MONOID> template <typename...Args> inline void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Initialise( Args&&... args ) { IdempotentMonoidBIT<U,COMM_IDEM_MONOID> temp{ m_M , forward<Args>( args )... };  m_size = temp.m_size; m_a = move( temp.m_a ); m_fenwick_0 = move( temp.m_fenwick_0 ); m_fenwick_1 = move( temp.m_fenwick_1 ); m_power = temp.m_power; }
@@ -70,11 +100,26 @@ template <typename U , typename COMM_IDEM_MONOID>
 void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Set( const int& i , const U& u )
 {
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの第" , i , "成分に" , u , "を代入します。" );
+
+  }
+  
   U& ai = m_a[i];
 
   if( u == m_M.Product( ai , u ) ){
 
+    if( m_output_mode ){
+      
+      DERR( u , "== m_M.Product(" , ai , " , " , u , ")なので演算適用で処理します。" );
+
+    }
+
+    bool output_mode = m_output_mode;
+    m_output_mode = false;
     Multiply( i , u );
+    m_output_mode = output_mode;
 
   } else {
   
@@ -128,6 +173,14 @@ void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Set( const int& i , const U& u )
 
   }
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの更新後の成分：" );
+    DERR( *this );
+    DERR( "" );
+
+  }
+  
   return;
 
 }
@@ -136,6 +189,12 @@ template <typename U , typename COMM_IDEM_MONOID>
 void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Multiply( const int& i , const U& u ) 
 {
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの第" , i , "成分に" , u , "を演算適用します。" );
+
+  }
+  
   U& ai = m_a[i];
   ai = m_M.Product( move( ai ) , u );
   int j = i + 1;
@@ -158,6 +217,14 @@ void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Multiply( const int& i , const U& 
 
   }
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの更新後の成分：" );
+    DERR( *this );
+    DERR( "" );
+
+  }
+
   return;
 
 }
@@ -169,6 +236,12 @@ template <typename U , typename COMM_IDEM_MONOID>
 void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IntervalMultiply( const int& i_start , const int& i_final , const U& u ) 
 {
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの区間[" , i_start , "," , i_final , "]に" , u , "を演算適用します。" );
+
+  }
+  
   const int j_min = max( i_start + 1 , 1 );
   const int j_max = min( i_final + 1 , m_size );
 
@@ -216,6 +289,14 @@ void IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IntervalMultiply( const int& i_sta
 
   }
 
+  if( m_output_mode ){
+      
+    DERR( "IdempotentMonoidBITの更新後の成分：" );
+    DERR( *this );
+    DERR( "" );
+
+  }
+
   return;
 
 }
@@ -239,7 +320,15 @@ U IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IntervalProduct( const int& i_start ,
 
   if( j_min > j_max ){
 
+    if( m_output_mode ){
+      
+      DERR( "IdempotentBITの区間[" , i_start , "," , i_final , "] における区間演算取得：" , m_M.One() );
+      DERR( "区間が空なため単位元を返しました。" );
+
+    }
+    
     return m_M.One();
+
   }
     
   U answer1 = m_M.One();
@@ -268,7 +357,15 @@ U IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::IntervalProduct( const int& i_start ,
 
   }
 
-  return m_M.Product( move( answer1 ) , answer0 );
+  answer1 = m_M.Product( move( answer1 ) , answer0 );
+
+  if( m_output_mode ){
+      
+    DERR( "IdempotentBITの区間[" , i_start , "," , i_final , "] における区間演算取得：" , answer1 );
+
+  }
+
+  return answer1;
 
 }
 
@@ -317,5 +414,30 @@ template <typename U , typename COMM_IDEM_MONOID> template <typename F , SFINAE_
 
 template <typename U , typename COMM_IDEM_MONOID> inline int IdempotentMonoidBIT<U,COMM_IDEM_MONOID>::Search( const U& u ) { return Search( [&]( const U& prod , const int& ){ return prod == m_M.Product( prod , u ); } ); }
 
-template <class Traits , typename U , typename COMM_IDEM_MONOID> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const IdempotentMonoidBIT<U,COMM_IDEM_MONOID>& bit ) { auto&& size = bit.size(); for( int i = 0 ; i < size ; i++ ){ ( i == 0 ? os : os << " " ) << bit[i]; } return os; }
+template <class Traits , typename U , typename COMM_IDEM_MONOID> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const IdempotentMonoidBIT<U,COMM_IDEM_MONOID>& bit )
+{
+
+  auto&& size = bit.size();
+
+  if( exec_mode == solve_mode ){
+
+    os << "[";
+
+  }
+
+  for( int i = 0 ; i < size ; i++ ){
+
+    ( i == 0 ? os : os << "," ) << bit[i];
+
+  }
+
+  if( exec_mode == solve_mode ){
+
+    os << "]";
+
+  }
+
+  return os;
+
+}
 

@@ -1,35 +1,17 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/BIT/IntervalMax/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/BIT/IntervalMax/Debug/a.hpp
 
 #pragma once
-#include "../a_Macro.hpp"
-#include "../../../../../Algebra/Monoid/Semilattice/a.hpp"
+#include "../../a_Macro.hpp"
+#include "../../../../../../Algebra/Monoid/Semilattice/a.hpp"
 
-// verify:
-// https://yukicoder.me/submissions/982703（IntervalMaxBIT、SetMax, IntervalMax）
-// https://yukicoder.me/submissions/979134（IntervalMinBIT、SetMin, IntervalMin）
+#include "../../../../../../../Error/Debug/a.hpp"
 
-// 入力の範囲内で要件
-// (1) MがUの可換羃等モノイド構造である。
-// を満たす場合にのみサポート。
+// デバッグ用にIntervalBITに出力機能を追加したもの。
+// 通常のIntervalBITと比べると各種操作にO(N)かかることに注意。
 
-// 配列による初期化O(size)
-
-// 一点取得O(1)
-// M.Product()に関するLSB切片積取得O(1)（left:a[j-(j&-j)]*...*a[j-1]、right:a[j-1]*...*a[j+(j&-j)-1]）
-// M.Product()に関する区間積取得O(log_2 size)
-
-// 一点代入O((log_2 size)^2)
-// M.Product()に関する一点乗算O(log_2 size)（可換性と羃等性を用いる）
-// M.Product()に関する区間乗算O(i_final-i_start+log_2 size)（可換性と羃等性を用いる）
-
-// uを吸収する（uに吸収される）要素の添字の最小値の二分探索O(log_2 size)
-// （存在しない場合はsize以上の最小の2羃×2-1を返すので、size以上であることで判定可能）
-
-// そのうちの区間積取得と一点乗算は
-// M. Dima, R. Ceterchi, Efficient Range Minimum Queries using Binary Indexed Trees, Olympiads in Informatics, 2015, Vol. 9, 39--44
-// の手法を一般の可換羃等モノイドに拡張することで実装
 template <typename U , typename COMM_IDEM_MONOID>
-class IdempotentMonoidBIT
+class IdempotentMonoidBIT :
+  public Debug
 {
 private:
   COMM_IDEM_MONOID m_M;
@@ -40,8 +22,8 @@ private:
   int m_power;
 
 public:
-  inline IdempotentMonoidBIT( COMM_IDEM_MONOID M , const int& size = 0 );
-  inline IdempotentMonoidBIT( COMM_IDEM_MONOID M , vector<U> a );
+  inline IdempotentMonoidBIT( COMM_IDEM_MONOID M , const int& size = 0 , const bool& output_mode = true );
+  inline IdempotentMonoidBIT( COMM_IDEM_MONOID M , vector<U> a , const bool& output_mode = true );
 
   template <typename...Args> inline void Initialise( Args&&... args );
   void Set( const int& i , const U& u );
