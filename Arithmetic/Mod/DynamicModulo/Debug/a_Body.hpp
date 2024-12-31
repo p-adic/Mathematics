@@ -82,7 +82,7 @@ template <int NUM , class Traits>
 inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const DynamicMods<NUM>& n )
 {
 
-  if( exec_mode == solve_mode ){
+  if( exec_mode == solve_mode || exec_mode == sample_analysis_mode  ){
 
     os << ( n.GetSign() ? "" : "-" ) << n.GetNumerator();
     return n.GetDenominator() == 1 ? n.GetSign() ? os : os << " ß " << n.Represent() : os << "/" << n.GetDenominator() << " ß " << n.Represent();
