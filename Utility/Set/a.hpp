@@ -34,3 +34,5 @@ template <typename SET , typename T> inline typename SET::const_iterator Minimum
 
 template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITERATOR& itr );
 template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr );
+
+template <typename SET , typename T> inline bool In( const SET& S , const T& t );
