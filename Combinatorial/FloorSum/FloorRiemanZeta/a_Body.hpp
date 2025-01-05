@@ -4,7 +4,7 @@
 #include "a.hpp"
 
 #include "../../../Arithmetic/Sqrt/a_Body.hpp"
-#include "../../../Arithmetic/Power/a_Body.hpp"
+#include "../../../Arithmetic/Sum/a_Body.hpp"
 
 template <typename INT>
 INT FloorRiemannZeta( const INT& n , const INT& exponent )

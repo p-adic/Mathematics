@@ -6,7 +6,7 @@
 // FloorSumCompositionÇ…égÇ§ÅB
 #include "../../Polynomial/Cumulative/a_Body.hpp"
 #include "../../Arithmetic/Mod/Function/Residue/a_Body.hpp"
-#include "../../Arithmetic/Power/Constexpr/Log/a_Body.hpp"
+#include "../../Arithmetic/Sum/Constexpr/Log/a_Body.hpp"
 
 template <typename INT>
 INT FloorSum( const INT& y , const INT& d , const INT& q , const INT& n )
