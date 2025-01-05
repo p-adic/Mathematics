@@ -5,12 +5,13 @@
 // https://atcoder.jp/contests/abc379/submissions/61409472 (Sum, ArithmeticProgressionSum)
 // https://yukicoder.me/submissions/1015838 (GeometricProgressionLinearCombinationSum)
 
-// MがTのモノイド構造である場合にのみサポート。
-// Tの要素の列のMに関する総乗を分割統治で計算し、その結果を返す。
-// V<T>はeraseを持つ必要がある。
-template <typename T , template <typename...> typename V , typename MONOID> T MonoidalProd( MONOID M , V<T> f );
-template <typename T , template <typename...> typename V> inline T Sum( V<T> f );
-template <typename T , template <typename...> typename V> inline T Prod( V<T> f , T unit = 1 );
+// fが空でない場合にのみサポート。
+// Tの要素の列のopeに関する左結合的総乗を愚直に計算し、その結果を返す。
+template <typename T , template <typename...> typename V , typename OPR> T LeftConnectiveProd( const V<T>& f , OPR opr );
+template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f );
+template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f );
+template <typename T , template <typename...> typename V> inline T Max( const V<T>& f );
+template <typename T , template <typename...> typename V> inline T Min( const V<T>& f );
 
 // init * ( t ^ exponent )を返す
 template <typename T , typename UINT> T Power( T t , UINT exponent , T init = 1 );
