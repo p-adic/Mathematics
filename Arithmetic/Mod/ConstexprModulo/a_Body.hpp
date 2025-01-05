@@ -45,11 +45,11 @@ template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M> Mo
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Mod<M>::operator-() const noexcept { return move( Mod<M>( *this ).SignInvert() ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::SignInvert() noexcept { m_n > 0 ? m_n = M - m_n : m_n; return *this; }
 
-template <INT_TYPE_FOR_MOD M> inline Mod<M>& Mod<M>::Invert() { assert( m_n != 0 ); INT_TYPE_FOR_MOD m_n_neg; return m_n < Constants::g_memory_length ? ( m_n = Inverse( m_n ).m_n , *this ) : ( ( m_n_neg = M - m_n ) < Constants::g_memory_length ) ? ( m_n = M - Inverse( m_n_neg ).m_n , *this ) : NonNegativePower( Constants::g_order_minus_1 ); }
+template <INT_TYPE_FOR_MOD M> inline Mod<M>& Mod<M>::Invert() { assert( m_n != 0 ); INT_TYPE_FOR_MOD m_n_neg; return m_n < Constants::g_memory_length ? ( m_n = Inverse( m_n ).m_n , *this ) : ( ( m_n_neg = M - m_n ) < Constants::g_memory_length ) ? ( m_n = M - Inverse( m_n_neg ).m_n , *this ) : NonNegativePower( Constants::g_order_minus ); }
 
 template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::PositivePower( INT exponent ) noexcept { Mod<M> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
 template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::NonNegativePower( INT exponent ) noexcept { return exponent == 0 ? ( m_n = 1 , *this ) : PositivePower( move( exponent ) ); }
-template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::Power( INT exponent ) { bool neg = exponent < 0; assert( !( neg && m_n == 0 ) ); return neg ? PositivePower( ll( move( exponent %= ( Constants::g_order_minus_1 + 1 ) ) ) * Constants::g_order_minus_1_neg % ( Constants::g_order_minus_1 + 1 ) ) : NonNegativePower( move( exponent ) ); }
+template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::Power( INT exponent ) { bool neg = exponent < 0; assert( !( neg && m_n == 0 ) ); return NonNegativePower( move( neg ? ( exponent %= Constants::g_order ) == 0 ? exponent : exponent += Constants::g_order : exponent ) ); }
 
 template <INT_TYPE_FOR_MOD M> inline constexpr void Mod<M>::swap( Mod<M>& n ) noexcept { std::swap( m_n , n.m_n ); }
 

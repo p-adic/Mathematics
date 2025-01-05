@@ -18,6 +18,5 @@ private:
   static constexpr INT_TYPE_FOR_MOD g_M_minus = M - 1;
   static constexpr int g_order = g_M_minus;
   static constexpr int g_order_minus = g_order - 1;
-  static constexpr int g_order_minus_neg = -g_order_minus;
 
 };
