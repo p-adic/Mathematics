@@ -1,0 +1,5 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Cumulative/a_Body.hpp"
+#else
+TE <TY T,TE <TY...> TY V,TY MONOID>T MonoidalProd(MONOID M,V<T> f){if(f.empty()){f.push_back(M.One());}auto EN = f.EN();WH(f.SZ()> 1){auto IT = f.BE();WH(IT != EN){auto& t = *IT;IT++;if(IT != EN){t = M.Product(MO(t),*IT);IT = f.erase(IT);}}}RE MO(f.front());}TE <TY T,TE <TY...> TY V> IN T Sum(V<T> f){RE MonoidalProd(AdditiveMonoid<T>(),MO(f));}TE <TY T,TE <TY...> TY V> IN T Prod(V<T> f,T unit = 1){RE MonoidalProd(MultiplicativeMonoid<T>(unit),MO(f));}TE <TY INT> IN INT ArithmeticProgressionSum(CO INT& l,INT r,CO INT& d = 1){AS(l <= r);CO INT c =(r - l)/ d;RE(c & 1)== 0?(c + 1)*(l + d *(c >> 1)):((c + 1)>> 1)*((l << 1)+ d * c);}TE <TY INT> IN INT ArithmeticProgressionSum(CO INT& r){RE ArithmeticProgressionSum(INT{},r);}
+#endif
