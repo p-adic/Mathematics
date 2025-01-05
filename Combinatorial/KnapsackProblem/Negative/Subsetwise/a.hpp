@@ -1,7 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Negative/Subsetwise/a.hpp
 
 #pragma once
-
+// verify:
+// https://yukicoder.me/submissions/974416（N=20）
 
 // 入力の範囲内で要件
 // (1) M1はoperator<(const U1&,const U1&)に関してUの全順序可換モノイド構造である。
