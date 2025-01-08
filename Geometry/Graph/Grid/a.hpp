@@ -20,7 +20,7 @@ public:
 int H , W , H_minus , W_minus;
 ll HW;
 vector<string> grid;
-char walkable = '.' , unwalkable = '#';
+char walkable = '.';
 
 inline T2<int> EnumHW( const int& v );
 inline int EnumHW_inv( const T2<int>& ij );
