@@ -1,90 +1,98 @@
 class ModB:
 	B = 998244353
-	length_max = 10**6 #ユーザー定義
+	length_bound = 10**6 #User definition
+	length_max = min( length_bound , B )
 	inverse=None
 	factorial=None
 	factorial_inverse=None
 	def SetModulo(B):
 		ModB.B = int(B)
-		inverse = [None,ModB(1)]
-		factorial = [ModB(1)]
-		factorial_inverse = [ModB(1)]
+		assert(ModB.B > 0)
+		ModB.length_max = min( ModB.length_bound , ModB.B )
+		ModB.inverse = [None,1 if ModB.B>1 else 0]
+		ModB.factorial = [1 if ModB.B>1 else 0]
+		ModB.factorial_inverse = [1 if ModB.B>1 else 0]
 
 	def __init__(self,val,valid = False):
 		self.val = int(val)
-		if not valid:self.val %= ModB.B
+		if not valid and not(0 <= self.val < ModB.B):self.val %= ModB.B
+	def ref(n):
+		return n if n.__class__ == __class__ else ModB(n,True)
+	def get(n):
+		return n.val if n.__class__ == __class__ else n
 	def copy(self):
 		return ModB(self.val,True)
+
+	def __str__(self):
+		return str(self.val)
 
 	def __eq__(self,x):
 		return x==self.val
 	def __ne__(self,other):
 		return not( self == other )
 
+	def __iadd__(self,x):
+		self.val += ModB.ref(x).val
+		if self.val >= ModB.B:self.val -= ModB.B
+		return self
 	def __add__(self,x):
-		val = self.val + x #__radd__を使用
-		if val >= ModB.B:val -= ModB.B
-		return ModB(val,True)
-	def __iadd__(self,other):
-		self = self + other
-		return self
+		a = self.copy()
+		a += x
+		return a
+	def __radd__(self,x):
+		return ModB(x + self.val)
 
-	def __sub__(self,x):
-		val = self.val - x #__rsub__を使用
-		if val < 0:val += ModB.B
-		return ModB(val,True)
-	def __isub__(self,other):
-		self = self - other
-		return self
 	def __neg__(self):
 		return ModB(ModB.B - self.val if self.val else 0,True)
+	def __isub__(self,x):
+		self.val -= ModB.ref(x).val
+		if self.val < 0:self.val += ModB.B
+		return self
+	def __sub__(self,x):
+		a = self.copy()
+		a -= x
+		return a
+	def __rsub__(self,x):
+		return ModB(x - self.val)
 
 	def __mul__(self,x):
-		val = self.val * x % ModB.B #__mod__を使用
-		return ModB(val,True)
+		return ModB.get(x) * self
 	def __rmul__(self,x):
-		return ModB(x * self.val)
-	def __imul__(self,x):
-		self = self * x
-		return self
+		return ModB(self.val * x)
 
-	def __pow__(self,n):
-		if n < 0:n *= Mod.B - 2 #Bが素数でval!=0の場合のみサポート
+	def __pow__(self,n): #Supported only if n>=0.
 		answer = ModB(1)
 		power = self.copy()
 		while n > 0:
-			if n&1:answer *= power
-			power *= power
+			if n&1:answer *= power.val
+			power *= power.val
 			n >>= 1
 		return answer
+	def __xor__(self,n): #Supported only if B is a prime and val!=0, or n>=0.
+		return self ** ( ( n * (2 - ModB.B) )if n < 0 else n )
 
-	def Inverse(n): #Bが素数の場合のみサポート
+	def Inverse(n): #Supported only if B is a prime.
 		if n < ModB.length_max:
-			while len(ModB.inverse) <= n:ModB.inverse+=[ModB(ModB.B - ModB.inverse[ModB.B % len(ModB.inverse)].val * ( ModB.B // len(ModB.inverse) ) % ModB.B,True)]
-			return ModB.inverse[n]
+			while len(ModB.inverse) <= n:ModB.inverse+=[ModB.B - ModB.inverse[ModB.B % len(ModB.inverse)] * ( ModB.B // len(ModB.inverse) ) % ModB.B]
+			return ModB(ModB.inverse[n],True)
 		else:return ModB(n) ** ( ModB.B - 2 )
+	def __truediv__(self,x):
+		return ModB.Inverse(x) * self
 	def __rtruediv__(self,x):
 		return x * ModB.Inverse(self.val)
-	def __itruediv__(self,other):
-		self *= ModB.Inverse(other.val)
-		return self
 
 	def Factorial(n):
-		while len(ModB.factorial) <= n:ModB.factorial+=[ModB.factorial[-1] * len(ModB.factorial)]
-		return ModB.factorial[n]
-	def FactorialInverse(n): #Bが素数の場合のみサポート
-		while len(ModB.factorial_inverse) <= n:ModB.factorial_inverse+=[ModB.factorial_inverse[-1] * ModB.Inverse( len(ModB.factorial_inverse) )]
-		return ModB.factorial[n]
-	def Combination(n,m): #Bが素数の場合のみサポート
-		return ModB.Factorial(n) * ModB.FactorialInverse(m) * ModB.FactorialInverse(n-m)if 0<=m<=n else ModB(0)
+		while len(ModB.factorial) <= n:ModB.factorial+=[ModB.factorial[-1] * len(ModB.factorial) % ModB.B]
+		return ModB(ModB.factorial[n],True)
+	def FactorialInverse(n): #Supported only if B is a prime.
+		while len(ModB.factorial_inverse) <= n:ModB.factorial_inverse+=[ModB.factorial_inverse[-1] * ModB.Inverse( len(ModB.factorial_inverse) ).val % ModB.B]
+		return ModB(ModB.factorial_inverse[n],True)
+	def Combination(n,m): #Supported only if B is a prime.
+		return ModB.Factorial(n) * (ModB.FactorialInverse(m).val * ModB.FactorialInverse(n-m).val)if 0<=m<=n else ModB(0,True)
+ModB.inverse = [None,1 if ModB.B>1 else 0]
+ModB.factorial = [1 if ModB.B>1 else 0]
+ModB.factorial_inverse = [1 if ModB.B>1 else 0]
 
-	#private:
-	def __radd__(self,x): #__add__オーバーロード用
-		return x + self.val
-	def __rsub__(self,x): #__sub__オーバーロード用
-		return x - self.val	
-	def __mod__(self,x): #__mul__オーバーロード用
-		return self.val
-ModB.inverse = [None,ModB(1)]
-ModB.factorial = [ModB(1)]
-ModB.factorial_inverse = [ModB(1)]
+#Bが素数でない時用の二項係数計算（O(N^2)）
+C=[]
+for i in R(N):C+=[[1]+[sum(C[-1][j:j+2])%B for j in R(i)]]
