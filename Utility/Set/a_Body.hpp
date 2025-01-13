@@ -12,3 +12,8 @@ template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITER
 template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr ) { itr = S.erase( itr ); itr == S.begin() ? itr = S.end() : --itr; }
 
 template <typename SET , typename T> inline bool In( const SET& S , const T& t ) { return S.count( t ) == 1; }
+
+DEFINITION_OF_POP_FOR_SET( set<T> );
+DEFINITION_OF_POP_FOR_SET( unordered_set<T> );
+DEFINITION_OF_POP_FOR_SET( multiset<T> );
+DEFINITION_OF_POP_FOR_SET( unordered_multiset<T> );

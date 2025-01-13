@@ -36,3 +36,8 @@ template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITER
 template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr );
 
 template <typename SET , typename T> inline bool In( const SET& S , const T& t );
+
+DECRALATION_OF_POP_FOR_SET( set<T> );
+DECRALATION_OF_POP_FOR_SET( unordered_set<T> );
+DECRALATION_OF_POP_FOR_SET( multiset<T> );
+DECRALATION_OF_POP_FOR_SET( unordered_multiset<T> );
