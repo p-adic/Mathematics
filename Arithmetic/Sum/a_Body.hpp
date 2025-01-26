@@ -9,6 +9,9 @@ template <typename T , template <typename...> typename V> inline T Prod( const V
 template <typename T , template <typename...> typename V> inline T Max( const V<T>& f ) { return *max_element( f.begin() , f.end() ); }
 template <typename T , template <typename...> typename V> inline T Min( const V<T>& f ) { return *min_element( f.begin() , f.end() ); }
 
+template <typename T , typename U> inline T SetMax( T& n , const U& m ) { return n < m ? n = m : n; }
+template <typename T , typename U> inline T SetMin( T& n , const U& m ) { return n > m ? n = m : n; }
+
 template <typename T , typename UINT>
 T Power( T t , UINT exponent , T init )
 {
