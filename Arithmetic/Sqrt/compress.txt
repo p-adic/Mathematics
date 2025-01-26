@@ -1,5 +1,5 @@
 #ifdef DEBUG
   #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Sqrt/a_Body.hpp"
 #else
-TE <TY INT>INT RoundDownSqrt(CO INT& n){AS(n >= 0);if(n <= 1){RE n;}INT l = 1,r = n;WH(l < r - 1){CO INT m =(l + r)>> 1;(m <= n / m?l:r)= m;}RE l;}TE <TY INT>INT RoundUpSqrt(CO INT& n){AS(n >= 0);if(n <= 2){RE n;}CO INT n_minus = n - 1;INT l = 1,r = n;WH(l + 1 < r){CO INT m =(l + r)>> 1;(m <= n_minus / m?l:r)= m;}RE r;}
+TE <TY INT>INT RoundDownSqrt(CO INT& n){ST_AS(is_same_v<INT,int> || is_same_v<INT,uint> || is_same_v<INT,ll> || is_same_v<INT,ull>);AS(n >= 0);if(n <= 1){RE n;}CE INT r_max = is_same_v<INT,int>?46341:is_same_v<INT,uint>?65536:is_same_v<INT,ll>?3037000500:4294967296;INT l = 1,r = min(r_max,n);WH(l < r - 1){CO INT m =(l + r)>> 1;(m <= n / m?l:r)= m;}RE l;}TE <TY INT>INT RoundUpSqrt(CO INT& n){ST_AS(is_same_v<INT,int> || is_same_v<INT,uint> || is_same_v<INT,ll> || is_same_v<INT,ull>);AS(n >= 0);if(n <= 2){RE n;}CE INT r_max = is_same_v<INT,int>?46341:is_same_v<INT,uint>?65536:is_same_v<INT,ll>?3037000500:4294967296;CO INT n_minus = n - 1;INT l = 1,r = min(r_max,n);WH(l + 1 < r){CO INT m =(l + r)>> 1;(m <= n_minus / m?l:r)= m;}RE r;}
 #endif
