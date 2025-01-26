@@ -31,7 +31,8 @@ AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::AbstractUnionFindForest( GRAPH& G
   }
 
 }
-template <typename U> inline UnionFindForest<U>::UnionFindForest( const int& size ) : AbstractUnionFindForest<int,LinearGraph,U,AdditiveGroup<U>>( LinearGraph( size , 0 ) , AdditiveGroup<U>() ) {}
+
+template <typename U> inline UnionFindForest<U>::UnionFindForest( const int& size ) : LinearGraph( size , 0 ) , AbstractUnionFindForest<int,LinearGraph,U,AdditiveGroup<U>>( *this , AdditiveGroup<U>() ) {}
 
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP>
 const decltype( ( declval<GRAPH>().Enumeration(0) ) ) AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::RootOfNode( const T& t )
@@ -92,7 +93,9 @@ U AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Potential( const T& t0 , const 
 
 }
 
-template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> inline const int& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::size( const bool& node ) const noexcept { return node ? m_G.size() : m_root_size; }
+template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> inline const int& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::NodeSize() const noexcept { return m_G.size(); }
+
+template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> inline const int& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::RootSize() const noexcept { return m_root_size; }
 
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP>
 bool AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const T& t1 , const U& w )

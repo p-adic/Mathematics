@@ -1,61 +1,114 @@
 #愚直
-p=list(R(N))
+P=list(R(N))
 def r(i):
-	while i!=p[i]:i=p[i]
+	while i!=P[i]:i=P[i]
 	return i
-for i in R(M):
-	A,B=map(int,input().split())
-	A,B=r(A-1),r(B-1)
-	p[A]=B
+for i in R(M):u,v=map(int,input().split());u,v=r(u-1),r(v-1);P[u]=v
+
+#連結成分数取得
+c=N
+P=list(R(N))
+def r(i):
+	while i!=P[i]:i=P[i]
+	return i
+for i in R(M):u,v=map(int,input().split());u,v=r(u-1),r(v-1);P[u]=v;c-=u!=v
+
 
 #根探索時の各ノードの根更新あり
-p=list(R(N))
+P=list(R(N))
 def r(i):
-	m=p[i]
-	while i!=m:
-		p[i]=i=p[m]
-		m=p[i]
+	m=P[i]
+	while i!=m:P[i]=i=P[m];m=P[i]
 	return i
-for i in R(M):
-	A,B=map(int,input().split())
-	A,B=r(A-1),r(B-1)
-	p[A]=B
+for i in R(M):u,v=map(int,input().split());u,v=r(u-1),r(v-1);P[u]=v
+
+#連結成分数取得
+c=N
+P=list(R(N))
+def r(i):
+	m=P[i]
+	while i!=m:P[i]=i=P[m];m=P[i]
+	return i
+for i in R(M):u,v=map(int,input().split());u,v=r(u-1),r(v-1);P[u]=v;c-=u!=v
+
 
 #重み付けあり
-p,h=list(R(N)),[0]*N
+P=list(R(N))
+H=[0]*N
 def r(i):
-	m=p[i]
-	while i!=m:
-		p[i]=i=p[m]
-		m=p[i]
+	m=P[i]
+	while i!=m:P[i]=i=P[m];m=P[i]
 	return i
 for i in R(M):
-	A,B=map(int,input().split())
-	A,B=r(A-1),r(B-1)
-	if h[B]<h[A]:A,B=B,A
-	if h[A]==h[B]:h[B]+=1
-	p[A]=B
+	u,v=map(int,input().split());u,v=r(u-1),r(v-1)
+	if H[v]<H[u]:u,v=v,u
+	H[v]+=H[u]==H[v];P[u]=v
+
+#連結成分数取得
+c=N
+P=list(R(N))
+H=[0]*N
+def r(i):
+	m=P[i]
+	while i!=m:P[i]=i=P[m];m=P[i]
+	return i
+for i in R(M):
+	u,v=map(int,input().split());u,v=r(u-1),r(v-1)
+	if H[v]<H[u]:u,v=v,u
+	H[v]+=H[u]==H[v];P[u]=v;c-=u!=v
+
 
 #verify: https://atcoder.jp/contests/abc087/submissions/48988855
 #重み付けあり、ポテンシャル付き
-#w[A]-w[B]=Wになるようにポテンシャルを更新
-p,h=list(R(N)),[0]*N
-w=h[:]
+#W[u]-W[v]=wになるようにポテンシャルを更新
+x=0
+P=list(R(N))
+H=[0]*N
+W=H[:]
 def r(i):
-	m=p[i]
-	while m!=p[m]:
-		w[i]+=w[m]
-		m=p[i]=p[m]
+	m=P[i]
+	while m!=P[m]:W[i]+=W[m];m=P[i]=P[m]
 	return m
 for i in R(M):
-	A,B,W=map(int,input().split())
-	A,B=A-1,B-1
-	a,b=r(A),r(B)
-	if a==b:
-		assert(w[a]-w[b]==W)
+	u,v,w=map(int,input().split());a,b=r(u-1),r(v-1)
+	if a==b:x|=W[a]-W[b]!=w
 	else:
-		W=w[B]+W-w[A]
-		if h[b]<h[a]:a,b,W=b,a,-W
-		if h[a]==h[b]:h[b]+=1
-		p[a],w[a]=b,W
+		w+=W[v-1]-W[u-1]
+		if H[b]<H[a]:a,b,w=b,a,-w
+		H[b]+=H[a]==H[b];P[a],W[a]=b,w
+print("YNeos"[x::2])
 
+#連結成分数取得
+c=N
+x=0
+P=list(R(N))
+H=[0]*N
+W=H[:]
+def r(i):
+	m=P[i]
+	while m!=P[m]:W[i]+=W[m];m=P[i]=P[m]
+	return m
+for i in R(M):
+	u,v,w=map(int,input().split());a,b=r(u-1),r(v-1)
+	if a==b:x|=W[a]-W[b]!=w
+	else:
+		w+=W[v-1]-W[u-1]
+		if H[b]<H[a]:a,b,w=b,a,-w
+		H[b]+=H[a]==H[b];P[a],W[a]=b,w;c-=a!=b
+print("YNeos"[x::2])
+
+class UnionFindForest:
+	def __init__(__self__,N):
+		__self__.c=__self__.N=N
+		__self__.P=list(R(N))
+		__self__.H=[0]*N
+	def RootOfNode(__self__,i):
+		m=__self__.P[i]
+		while i!=m:__self__.P[i]=__self__.P[m];i=__self__.P[i];m=__self__.P[i]
+		return i
+	def Graft(__self__,u,v):
+		u,v=__self__.RootOfNode(u),__self__.RootOfNode(v)
+		if __self__.H[v]<__self__.H[u]:u,v=v,u
+		__self__.H[v]+=__self__.H[u]==__self__.H[v];__self__.P[u]=v;__self__.c-=u!=v
+	def NodeSize(__self__):return __self__.N
+	def RootSize(__self__):return __self__.c

@@ -50,8 +50,10 @@ public:
   // Graftと整合的な解xが存在する時のx[t0]-x[t1]の取得と等価。
   inline U Potential( const T& t0 , const T& t1 );
 
-  // nodeかrootのサイズを返す。
-  inline const int& size( const bool& node = true ) const noexcept;
+  // 頂点数を返す
+  inline const int& NodeSize() const noexcept;
+  // 連結成分数を返す
+  inline const int& RootSize() const noexcept;
 
   // t1からt0へ符号付き重みwの有向辺を結ぶ操作と整合的に
   // なるようにrootを接合。符号付き重みの整合性が取れない場合はfalseを返す。
@@ -64,6 +66,7 @@ template <typename GRAPH , typename ABEL_GROUP> AbstractUnionFindForest( GRAPH& 
 
 template <typename U = int>
 class UnionFindForest :
+  public LinearGraph ,
   public AbstractUnionFindForest<int,LinearGraph,U,AdditiveGroup<U>>
 {
 
