@@ -1,0 +1,13 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/PlainSort/a_Body.hpp"
+#else
+TE <TY INT>VO PlainSortBody(CO VE<pair<INT,INT>>& xy,CO pair<INT,INT>& xy_mid,CO INT& L,VE<int>& index){if(L <= 2 || index.SZ()<= 4){RE;}auto&[x_mid,y_mid]= xy_mid;VE<int> index_sub[2][2]{};for(auto& i:index){auto&[x,y]= xy[i];index_sub[x < x_mid?0:1][y < y_mid?0:1].push_back(i);}int num = 0;
+
+// 非乱択版
+// for(int px = 0;px < 2;px++){for(int py = 0;py < 2;py++){PlainSortBody(xy,pair<INT,INT>{x_mid +((px == 0?-L:L)>> 1),y_mid +((py == 0?-L:L)>> 1)},L >> 1,index_sub[px][py]);for(auto& i:index_sub[px][py]){index[num++]= i;}index_sub[px][py].clear();}}
+
+// ヒューリスティック用の乱択版
+int rand = GetRand(0,23);LI<pair<int,int>> rest ={{0,0},{0,1},{1,0},{1,1}};for(int b = 4;b > 0;b--){int r = rand % b;rand /= b;auto IT = rest.BE();WH(r-- > 0){++IT;}auto&[px,py]= *IT;PlainSortBody(xy,pair<INT,INT>{x_mid +((px == 0?-L:L)>> 1),y_mid +((py == 0?-L:L)>> 1)},L >> 1,index_sub[px][py]);for(auto& i:index_sub[px][py]){index[num++]= i;}index_sub[px][py].clear();rest.erase(IT);}
+
+RE;}TE <TY INT> IN VE<int> PlainSort(CO VE<pair<INT,INT>>& xy,CO pair<INT,INT>& xy_mid,CO INT& L){CO int SZ = xy.SZ();VE<int> index(SZ);for(int i = 0;i < SZ;i++){index[i]= i;}PlainSortBody(xy,xy_mid,L,index);RE index;}
+#endif

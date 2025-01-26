@@ -1,8 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Distance/Linear/a.hpp
 
 #pragma once
-//verify:
-// https://yukicoder.me/submissions/977275（Distance）
+// verify:
+// https://yukicoder.me/submissions/1002390（Distance）
 
 // 数直線上の点と点群の距離（O(log #x1)）
 template <typename INT> INT Distance( const INT& x0 , const set<INT>& x1 );

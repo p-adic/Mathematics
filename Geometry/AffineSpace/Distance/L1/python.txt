@@ -1,0 +1,3 @@
+def L1(v):return abs(v[0])+abs(v[1])
+def L1_Distance(u,v):return L1([u[0]-v[0],u[1]-v[1]])
+def L1_LongestEdge(u,v,w):return L1_Distance(u,v)>=max(L1_Distance(u,w),L1_Distance(w,v))

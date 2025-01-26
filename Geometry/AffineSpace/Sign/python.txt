@@ -1,0 +1,1 @@
+def sign(n):return[-1,1][n>0]if n else 0

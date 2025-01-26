@@ -1,0 +1,4 @@
+def L22(v):return v[0]**2+v[1]**2
+def L22_Distance(u,v):return L22([u[0]-v[0],u[1]-v[1]])
+def L2_Distance(u,v):return L22_Distance(u,v)**0.5
+def L2_LongestEdge(u,v,w):return L22_Distance(u,v)>=max(L22_Distance(u,w),L22_Distance(w,v))
