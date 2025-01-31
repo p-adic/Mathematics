@@ -5,7 +5,7 @@
 
 #include "../a.hpp"
 
-#include "a_Alias.hpp"
+#include "../../../Utility/Tuple/a.hpp"
 
 template <typename E>
 class GridGraph :
@@ -26,7 +26,7 @@ inline T2<int> EnumHW( const int& v );
 inline int EnumHW_inv( const T2<int>& ij );
 
 vector<T2<int>> EdgeOnGrid( const T2<int>& v );
-vector<pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v );
+vector<Pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v );
 
 inline void SetWallStringOnGrid( const int& i , vector<string>& S );
 

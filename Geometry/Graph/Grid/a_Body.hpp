@@ -5,6 +5,8 @@
 
 #include "../a_Body.hpp"
 
+#include "../../../Utility/Tuple/a_Body.hpp"
+
 #include "../../../../Utility/StdStream/a_Body.hpp"
 
 inline T2<int> EnumHW( const int& v ) { return { v / W , v % W }; }
@@ -50,9 +52,9 @@ vector<T2<int>> EdgeOnGrid( const T2<int>& v )
 
 }
 
-vector<pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v ){
+vector<Pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v ){
 
-  vector<pair<T2<int>,ll>> answer{};
+  vector<Pair<T2<int>,ll>> answer{};
   auto& [i,j] = v;
 
   if( grid[i][j] == walkable ){
