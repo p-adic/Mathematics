@@ -28,11 +28,9 @@
 #define DECLARATION_OF_UNION_FOR_SET( SET )                             \
   template <typename T> inline SET& operator|=( SET& S0 , const SET& S1 ); \
   template <typename T> inline SET operator|( SET S0 , const SET& S1 ); \
-  template <typename T> inline int len( const SET& S );                                       \
 
 #define DEFINITION_OF_UNION_FOR_SET( SET )                              \
   template <typename T> inline SET& operator|=( SET& S0 , const SET& S1 ) { for( auto& t : S1 ){ S0 += t; } return S0; } \
   template <typename T> inline SET operator|( SET S0 , const SET& S1 ) { return move( S0 |= S1 ); } \
-  template <typename T> inline int len( const SET& S ) { return S.size(); } \
 
 

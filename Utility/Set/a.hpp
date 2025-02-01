@@ -35,7 +35,7 @@ template <typename SET , typename T> inline typename SET::const_iterator Minimum
 template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITERATOR& itr );
 template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr );
 
-template <typename SET , typename T> inline bool In( const SET& S , const T& t );
+template <template <typename...> typename SET , typename T , typename...Args> inline bool In( const SET<T,Args...>& S , const T& t );
 
 DECRALATION_OF_POP_FOR_SET( set<T> );
 DECRALATION_OF_POP_FOR_SET( unordered_set<T> );
