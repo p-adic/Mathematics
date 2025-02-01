@@ -38,7 +38,8 @@
   DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , % );			\
   DECLARATION_OF_INCREMENT_FOR_VECTOR( V , ++ );			\
   DECLARATION_OF_INCREMENT_FOR_VECTOR( V , -- );			\
-  template <typename T> inline V<T> operator*( const T& scalar , V<T> v ) \
+  template <typename T> inline V<T> operator*( const T& scalar , V<T> v ); \
+  template <typename T> inline T pop( V<T>& a )                  \
 
 #define DEFINITION_OF_ARITHMETICS_FOR_VECTOR( V )			\
   template <typename T> inline V<T>& operator+=( V<T>& a , const T& t ) { a.push_back( t ); return a; } \
@@ -53,5 +54,6 @@
   DEFINITION_OF_INCREMENT_FOR_VECTOR( V , ++ );				\
   DEFINITION_OF_INCREMENT_FOR_VECTOR( V , -- );				\
   template <typename T> inline V<T> operator*( const T& scalar , V<T> v ) { for( auto& t : v ){ t *= scalar; } return move( v ); } \
+  template <typename T> inline T pop( V<T>& a ) { assert( !a.empty() ); T answer = move( a.back() ); a.pop_back(); return answer; } \
 
 
