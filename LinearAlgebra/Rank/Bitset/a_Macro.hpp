@@ -6,7 +6,7 @@
   const size_t M_N = M + N;						\
   assert( M_N <= bound_M_N );						\
   size_t rank = RowEchelonForm( A , M_N );				\
-  bool solvable = true;							\
+  vector<bool> solvable( N , true );                                    \
   size_t i = rank;							\
 									\
   while( --i < rank ){							\
@@ -28,7 +28,13 @@
 									\
     if( j == M ){							\
 									\
-      solvable = false;							\
+      while( j < M_N ){							\
+									\
+	solvable[j] = solvable[j] && A_i[j] == 0;                       \
+        j++;                                                            \
+									\
+      }									\
+                                                                        \
       rank--;								\
 									\
     } else {								\

@@ -51,7 +51,7 @@ size_t RowEchelonForm( vector<bitset<bound_M>>& A  , const size_t& M )
 }
 
 template <size_t bound_M_N>
-pair<size_t,vector<bool>> ExtendedReducedRowEchelonForm( vector<bitset<bound_M_N>>& A , const size_t& M , const size_t& N )
+pair<size_t,vector<bool>> ExtendedReducedRowEchelonForm( vector<bitset<bound_M_N>>& A , const size_t& M )
 {
 
   const int L = A.size();
@@ -80,7 +80,7 @@ pair<size_t,vector<bool>> ExtendedReducedRowEchelonForm( vector<bitset<bound_M_N
 }
 
 template <size_t bound_N , size_t bound_M_N>
-tuple<size_t,vector<bool>,vector<bitset<bound_N>>> ExtendedReducedRowEchelonForm( vector<bitset<bound_M_N>>& A , const size_t& M , const size_t& N )
+tuple<size_t,vector<bool>,vector<bitset<bound_N>>> MultiExtendedReducedRowEchelonForm( vector<bitset<bound_M_N>>& A , const size_t& M , const size_t& N )
 {
 
   assert( N <= bound_N );
@@ -94,7 +94,7 @@ tuple<size_t,vector<bool>,vector<bitset<bound_N>>> ExtendedReducedRowEchelonForm
 
     const bitset<bound_M_N>& A_i = A[i];
     const size_t& j = left[i];
-    bitset<bound_N>& solution_j = solutions[j];
+    bitset<bound_N>& solutions_j = solutions[j];
       
     for( size_t k = 0 ; k < N ; k++ ){
 
@@ -108,10 +108,12 @@ tuple<size_t,vector<bool>,vector<bitset<bound_N>>> ExtendedReducedRowEchelonForm
 
 }
 
-template <size_t bound_M> inline size_t ReducedRowEchelonForm( vector<bitset<bound_M>>& A , const size_t& M ) { return MultiExtendedReducedRowEchelonForm( A , M , 0 ).first; }
+template <size_t bound_M> inline size_t ReducedRowEchelonForm( vector<bitset<bound_M>>& A , const size_t& M ) { return get<0>( MultiExtendedReducedRowEchelonForm<0>( A , M , 0 ) ); }
+
+template <size_t bound_M> inline size_t Rank( vector<bitset<bound_M>> A , const size_t& M ) { return ReducedRowEchelonForm( A , M ); }
 
 template <size_t bound_L>
-bool Invertible( const vector<bitset<bound_L>>& A , vector<bitset<bound_L>>& A_inv )
+pair<bool,vector<bitset<bound_L>>> Inverse( const vector<bitset<bound_L>>& A )
 {
 
   const size_t L = A.size();
@@ -136,12 +138,28 @@ bool Invertible( const vector<bitset<bound_L>>& A , vector<bitset<bound_L>>& A_i
     
   }
 
-  return ExtendedReducedRowEchelonForm( A_copy , A_inv , L , L ).second;
+  size_t rank = ExtendedReducedRowEchelonForm( A_copy , L , L ).first;
+  vector<bitset<bound_L>> A_inv( rank == L ? L : 0 );
+
+  for( size_t i = 0 ; i < L ; i++ ){
+
+    bitset<bound_L>& A_inv_i = A_inv[i];
+    const bitset<bound_L + bound_L>& A_copy_i = A_copy[i];
+
+    for( size_t j = 0 ; j < L ; j++ ){
+
+      A_inv_i[j] = A_copy_i[L+j];
+
+    }
+    
+  }
+
+  return { rank == L , move( A_inv ) };  
 
 }
 
 template <size_t bound_L , size_t bound_M>
-vector<bool> LinearRelation( const vector<bitset<bound_M>>& A , const size_t& M )
+pair<int,vector<bool>> LinearRelation( const vector<bitset<bound_M>>& A , const size_t& M )
 {
 
   const size_t L = A.size();
