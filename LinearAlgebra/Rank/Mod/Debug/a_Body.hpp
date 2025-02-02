@@ -227,6 +227,8 @@ tuple<int,vector<bool>,vector<vector<MODINT>>> MultiExtendedReducedRowEchelonFor
 
 template <typename MODINT> inline int ReducedRowEchelonForm( vector<vector<MODINT>>& A ) { return get<0>( MultiExtendedReducedRowEchelonForm( A , 0 ) ); }
 
+template <typename MODINT> inline int Rank( vector<vector<MODINT>> A ) { return ReducedRowEchelonForm( A ); }
+
 template <typename MODINT>
 vector<vector<MODINT>> Inverse( const vector<vector<MODINT>>& A )
 {
@@ -253,7 +255,8 @@ vector<vector<MODINT>> Inverse( const vector<vector<MODINT>>& A )
     
   }
 
-  auto [rank,solvable,answer] = MultiExtendedReducedRowEchelonForm( A_copy , answer , L );
+  auto [rank,solvable,answer] = MultiExtendedReducedRowEchelonForm( A_copy , L );
+
   if( rank != L ){
 
     answer.clear();
