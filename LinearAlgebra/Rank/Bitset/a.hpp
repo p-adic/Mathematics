@@ -54,7 +54,7 @@ template <size_t bound_M> inline size_t Rank( vector<bitset<bound_M>> A , const 
 // AがF_2係数L次正方行列である場合にのみサポート。
 // {Aの正則性,Aが正則?Aの逆行列:0 \times L行列}を返す。（O(bound_L L^2)）
 template <size_t bound_L>
-pair<bool,vector<bitset<bound_L>>> Inverse( const vector<bitset<bound_L>>& A );
+vector<bitset<bound_L>> Inverse( const vector<bitset<bound_L>>& A );
 
 
 // 一次関係式計算

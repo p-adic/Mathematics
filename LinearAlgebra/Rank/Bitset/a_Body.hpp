@@ -113,7 +113,7 @@ template <size_t bound_M> inline size_t ReducedRowEchelonForm( vector<bitset<bou
 template <size_t bound_M> inline size_t Rank( vector<bitset<bound_M>> A , const size_t& M ) { return ReducedRowEchelonForm( A , M ); }
 
 template <size_t bound_L>
-pair<bool,vector<bitset<bound_L>>> Inverse( const vector<bitset<bound_L>>& A )
+vector<bitset<bound_L>> Inverse( const vector<bitset<bound_L>>& A )
 {
 
   const size_t L = A.size();
@@ -138,23 +138,15 @@ pair<bool,vector<bitset<bound_L>>> Inverse( const vector<bitset<bound_L>>& A )
     
   }
 
-  size_t rank = ExtendedReducedRowEchelonForm( A_copy , L , L ).first;
-  vector<bitset<bound_L>> A_inv( rank == L ? L : 0 );
+  auto [rank,solvable,answer] = MultiExtendedReducedRowEchelonForm( A_copy , L , L );
 
-  for( size_t i = 0 ; i < L ; i++ ){
+  if( rank != L ){
 
-    bitset<bound_L>& A_inv_i = A_inv[i];
-    const bitset<bound_L + bound_L>& A_copy_i = A_copy[i];
-
-    for( size_t j = 0 ; j < L ; j++ ){
-
-      A_inv_i[j] = A_copy_i[L+j];
-
-    }
+    answer.clear();
     
   }
 
-  return { rank == L , move( A_inv ) };  
+  return answer;  
 
 }
 
