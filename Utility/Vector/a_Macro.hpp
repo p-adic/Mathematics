@@ -10,7 +10,7 @@
   template <typename T> inline V<T>& operator OPR ## = ( V<T>& a , const T& t ); \
 
 #define DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , OPR )			\
-  template <typename T> inline V<T>& operator OPR ## = ( V<T>& a , const T& t ) { for( auto& s : a ){ a OPR ## = t; } return a; } \
+  template <typename T> inline V<T>& operator OPR ## = ( V<T>& a , const T& t ) { for( auto& s : a ){ s OPR ## = t; } return a; } \
 
 #define DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , OPR )			\
   template <typename T> inline V<T>& operator OPR ## = ( V<T>& a0 , const V<T>& a1 ); \
