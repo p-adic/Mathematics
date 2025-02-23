@@ -28,6 +28,8 @@
 
 #define DECLARATION_OF_ARITHMETICS_FOR_VECTOR( V )			\
   template <typename T> inline V<T>& operator+=( V<T>& a , const T& t ); \
+  template <typename T> inline V<T>& operator<<=( V<T>& a , const T& t ); \
+  template <typename T> inline V<T> operator<<( V<T>& a , const T& t ); \
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , * );			\
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , / );			\
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , % );			\
@@ -43,6 +45,8 @@
 
 #define DEFINITION_OF_ARITHMETICS_FOR_VECTOR( V )			\
   template <typename T> inline V<T>& operator+=( V<T>& a , const T& t ) { a.push_back( t ); return a; } \
+  template <typename T> inline V<T>& operator<<=( V<T>& a , const T& t ) { return a += t; } \
+  template <typename T> inline V<T> operator<<( V<T> a , const T& t ) { return move( a +~ t ); } \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , * );                      \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , / );                      \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , % );                      \
