@@ -12,6 +12,7 @@ public:
   static vector<vector<MOD>> a;
   
   // mode
+  bool initialising;
   int mode;
 
   // temporary parameter
@@ -24,11 +25,11 @@ public:
   // FOR‚â‘¼‚Ì•Ï”‚Æ¬‚´‚è‚»‚¤‚È‚à‚Ì‚Ím‚ğ‚Â‚¯‚éB
   int mj;
   int md;
-  vector<MOD> mA;
+  vector<MOD> mC;
   T2<int> mij;
   int diff_max;
 
-  SimulatedAnnealing() : mode{ 0 } , C( a[N-1] ) , C_opt( C ) , mj() , md( -1 ) , mC( C ) , mij() , diff_max()
+  SimulatedAnnealing() : initialising( true ) , mode{ 0 } , C( a[N-1] ) , C_opt( C ) , mj() , md( -1 ) , mC( C ) , mij() , diff_max()
   {
   }
 
@@ -93,16 +94,17 @@ public:
   {
     int mode_num = 0;
     if( mode == mode_num++ ){
-      if( current_time > 1600 ){
+      if( current_time > 1000 ){
         OptimiseTemporary();
         CERR( "" );
         CERR( "Changed mode:" , mode , "->" , mode_num );
         CERR( "Current score:" , ComputeScore() );
         CERR( "" );
+        initialising = false;
         mode = mode_num;
       }
     } else if( mode == mode_num++ ){
-      // if( current_time > 1900 ){
+      // if( current_time > 1600 ){
       //   OptimiseTemporary();
       //   CERR( "" );
       //   CERR( "Changed mode:" , mode , "->" , mode_num );
@@ -191,7 +193,7 @@ public:
   
   bool Updatable( const int& updatability_scale , const score_type& score , const score_type& score_local_opt , const double& log_temparature_min , const double& time , const int& time_lim )
   {
-    return score > score_local_opt || GetRand( 0 , updatability_scale ) < exp( ( score - score_local_opt ) / Temparature( log_temparature_min , time , time_lim ) + log_updatability_scale );
+    return score > score_local_opt || ( !initialising && GetRand( 0 , updatability_scale ) < exp( ( score - score_local_opt ) / Temparature( log_temparature_min , time , time_lim ) + log_updatability_scale ) );
   }
 
   void Execute( const double& log_temparature_min , const double& start_time , const double& final_time , const int& updatability_scale )
