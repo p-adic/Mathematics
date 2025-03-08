@@ -1,0 +1,5 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Costfree/FixedSize/a_Body.hpp"
+#else
+TE <TY U,TY COMM_GROUP>VE<U> AbstractCostfreeFixedSizeInitialSegmentwiseKnapsack(COMM_GROUP G,CO VE<U>& value,CRI subset_SZ){CO int SZ = value.SZ();U temp = G.Zero();VE<U> AN(SZ,temp);if(0 < subset_SZ && subset_SZ <= SZ){multiset<U> subset{};for(int i = 0;i < subset_SZ;i++){subset.insert(value[i]);temp = G.Sum(MO(temp),value[i]);}AN[subset_SZ-1]= temp;for(int i = subset_SZ;i < SZ;i++){subset.insert(value[i]);auto IT = subset.BE();AN[i]= temp = G.Sum(MO(temp),G.Sum(G.Inverse(*IT),value[i]));subset.erase(IT);}}RE AN;}TE <TY INT> IN VE<INT> CostfreeFixedSizeInitialSegmentwiseKnapsack(CO VE<INT>& value,CRI subset_SZ){RE AbstractCostfreeFixedSizeInitialSegmentwiseKnapsack(AdditiveGroup<INT>(),value,subset_SZ);}
+#endif
