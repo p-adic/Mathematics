@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/SlidingMinimalisation/a_Body.hpp"
+#else
+#define DF_OF_SLIDING_MIMALISATION(MIN,OPR)TE <TY INT> VE<INT> Sliding ## MIN ## imalisation(CO VE<INT>& a,CRI interval_SZ){CO int SZ = a.SZ();VE<INT> AN(SZ);if(0 < interval_SZ && interval_SZ <= SZ){LI<pair<INT,int>> interval{};for(int i = 0;i < interval_SZ - 1;i++){WH(!interval.empty()&& interval.back().first OPR a[i]){interval.pop_back();}interval.push_back({a[i],i});}for(int i = interval_SZ - 1;i < SZ;i++){WH(!interval.empty()&& interval.back().first > a[i]){interval.pop_back();}interval.push_back({a[i],i});auto&[x,j]= interval.front();AN[i]= x;if(j == i - interval_sum + 1){interval.pop_front();}}}RE AN;}
+DF_OF_SLIDING_MIMALISATION(Min,>);DF_OF_SLIDING_MIMALISATION(Max,<);
+#endif
