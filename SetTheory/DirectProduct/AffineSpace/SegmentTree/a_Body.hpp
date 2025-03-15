@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../../../Algebra/Monoid/a_Body.hpp"
+#include "../../../../Algebra/Monoid/Semilattice/a_Body.hpp"
 
 template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::AbstractSegmentTree( MONOID M , const int& size ) : AbstractSegmentTree( M , vector<U>( size , M.One() ) ) {}
 
@@ -11,6 +11,7 @@ template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::Ab
 {
 
   static_assert( is_same_v<U,inner_t<MONOID>> );
+  
   while( m_size > m_power ){
 
     m_power <<= 1;
@@ -28,13 +29,13 @@ template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::Ab
   for( int j = m_power - 1 ; j >= 1 ; j-- ){
 
     int j2 = j << 1;
-    m_a[j] = m_M.Product( m_a[j2] , m_a[j2+1] );
+    m_a[j] = m_M.Product( m_a[j2] , m_a[j2 | 1] );
 
   }
 
 }
 
-template <typename U> template <typename...Args> inline SegmentTree<U>::SegmentTree( const U& one_U , const Args&... args ) : AbstractSegmentTree<U,MultiplicativeMonoid<U>>( MultiplicativeMonoid<U>( one_U ) , args... ) {}
+template <typename U> template <typename...Args> inline SegmentTree<U>::SegmentTree( const U& zero_U , const Args&... args ) : AbstractSegmentTree<U,MaxSemilattice<U>>( MaxSemilattice<U>( zero_U ) , args... ) {}
 
 template <typename U , typename MONOID> template <typename...Args> inline void AbstractSegmentTree<U,MONOID>::Initialise( const Args&... args ) { *this = AbstractSegmentTree( move( m_M ) , args... ); }
 
@@ -49,7 +50,7 @@ void AbstractSegmentTree<U,MONOID>::Set( const int& i , const U& u )
   while( ( j >>= 1 ) >= 1 ){
     
     int j2 = j << 1;
-    m_a[j] = m_M.Product( m_a[j2] , m_a[j2+1] );
+    m_a[j] = m_M.Product( m_a[j2] , m_a[j2 | 1] );
 
   }
 
@@ -57,7 +58,7 @@ void AbstractSegmentTree<U,MONOID>::Set( const int& i , const U& u )
 
 }
 
-template <typename U , typename MONOID> inline const U& AbstractSegmentTree<U,MONOID>::operator[]( const int& i ) const { assert( 0 <= i && i < m_size ); return m_a[m_power + i]; }
+template <typename U , typename MONOID> inline const U& AbstractSegmentTree<U,MONOID>::operator[]( const int& i ) const { assert( 0 <= i && i < m_size ); return m_a[m_power | i]; }
 template <typename U , typename MONOID> inline const U& AbstractSegmentTree<U,MONOID>::Get( const int& i ) const { return operator[]( i ); }
 
 template <typename U , typename MONOID>
@@ -81,3 +82,5 @@ U AbstractSegmentTree<U,MONOID>::IntervalProduct( const int& i_start , const int
   return m_M.Product( answer0 , answer1 );
 
 }
+
+template <typename U> inline U SegmentTree<U>::IntervalMax( const int& i_start , const int& i_final ) { return this->IntervalProduct( i_start , i_final ); }

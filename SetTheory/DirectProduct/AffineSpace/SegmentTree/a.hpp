@@ -1,11 +1,11 @@
 // c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SegmentTree/a.hpp
 
 #pragma once
-#include "../../../../Algebra/Monoid/a.hpp"
+#include "../../../../Algebra/Monoid/Semilattice/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/959653（Abstract、配列による初期化、一点更新、区間積取得）
-// https://yukicoder.me/submissions/947852（配列による初期化、一点更新、区間積取得）
+// https://yukicoder.me/submissions/1053217（配列による初期化、区間最大値取得）
 
 // M.One()による初期化O(size)
 // 配列による初期化O(N)
@@ -17,6 +17,7 @@
 template <typename U , typename MONOID>
 class AbstractSegmentTree
 {
+  
 private:
   MONOID m_M;
   int m_size;
@@ -39,10 +40,14 @@ template <typename MONOID , typename...Args> AbstractSegmentTree( MONOID M , con
 
 template <typename U>
 class SegmentTree :
-  public AbstractSegmentTree<U,MultiplicativeMonoid<U>>
+  public AbstractSegmentTree<U,MaxSemilattice<U>>
 {
 
 public:
-  template <typename...Args> inline SegmentTree( const U& one_U , const Args&... args );
+  template <typename...Args> inline SegmentTree( const U& zero_U , const Args&... args );
+
+  inline U IntervalMax( const int& i_start , const int& i_final );
 
 };
+// 加法はBITで良いので、最大値に特殊化したものを扱う。
+// IntervalMaxBITより一点更新が速い。
