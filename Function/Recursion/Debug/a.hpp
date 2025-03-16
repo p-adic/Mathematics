@@ -3,7 +3,7 @@
 #pragma once
 #include "a_Macro.hpp"
 
-#include "../../../../Utility/Tuple/a.hpp"
+#include "../../../Utility/Tuple/a.hpp"
 
 // デバッグ用に関数名を付すように変更したもの。
 

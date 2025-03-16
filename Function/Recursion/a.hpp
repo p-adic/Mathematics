@@ -3,7 +3,7 @@
 #pragma once
 #include "a_Macro.hpp"
 
-#include "../../../Utility/Tuple/a.hpp"
+#include "../../Utility/Tuple/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/998766ÅiRecursionÅj
