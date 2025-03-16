@@ -4,10 +4,12 @@
 #include "a.hpp"
 
 template <typename T , template <typename...> typename V , typename OPR> T LeftConnectiveProd( const V<T>& f , OPR opr ) { assert( !f.empty() ); auto itr = f.begin() , end = f.end(); T answer = *( itr++ ); while( itr != end ){ answer = opr( move( answer ) , *( itr++ ) ); } return answer; }
-template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f ) { return LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 += t1 ); } ); }
-template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f ) { return LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 *= t1 ); } ); }
+template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f ) { return f.empty() ? T{} : LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 += t1 ); } ); }
+template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f ) { return f.empty() ? T{1} : LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 *= t1 ); } ); }
 template <typename T , template <typename...> typename V> inline T Max( const V<T>& f ) { return *max_element( f.begin() , f.end() ); }
+template <typename T , typename...Args> inline T Max( const T& t0 , const T& t1 , const Args&... args ) { return Max( vector<T>{ t0 , t1 , args... } ); }
 template <typename T , template <typename...> typename V> inline T Min( const V<T>& f ) { return *min_element( f.begin() , f.end() ); }
+template <typename T , typename...Args> inline T Min( const T& t0 , const T& t1 , const Args&... args ) { return Min( vector<T>{ t0 , t1 , args... } ); }
 
 template <typename T , typename U> inline T SetMax( T& n , const U& m ) { return n < m ? n = m : n; }
 template <typename T , typename U> inline T SetMin( T& n , const U& m ) { return n > m ? n = m : n; }

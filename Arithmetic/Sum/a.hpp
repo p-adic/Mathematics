@@ -11,7 +11,9 @@ template <typename T , template <typename...> typename V , typename OPR> T LeftC
 template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f );
 template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f );
 template <typename T , template <typename...> typename V> inline T Max( const V<T>& f );
+template <typename T , typename...Args> inline T Max( const T& t0 , const T& t1 , const Args&... args );
 template <typename T , template <typename...> typename V> inline T Min( const V<T>& f );
+template <typename T , typename...Args> inline T Min( const T& t0 , const T& t1 , const Args&... args );
 
 template <typename T , typename U> inline T SetMax( T& n , const U& m );
 template <typename T , typename U> inline T SetMin( T& n , const U& m );
