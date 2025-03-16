@@ -193,6 +193,6 @@ INT LeastSwapCount( const vector<INT>& P , const bool& zero_indexed )
 
 }
 
-template <typename INT> inline ll LeastSwapCount( const vector<INT>& P ){ return InversionNumber( P ); }
+template <typename INT> inline ll LeastAdjacentSwapCount( const vector<INT>& P ){ return InversionNumber( P ); }
 
 
