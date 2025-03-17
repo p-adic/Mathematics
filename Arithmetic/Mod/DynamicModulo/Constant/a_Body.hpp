@@ -4,6 +4,7 @@
 #include "a.hpp"
 
 template <int NUM> uint ConstantsForDynamicMods<NUM>::g_M = 0;
+template <int NUM> uint ConstantsForDynamicMods<NUM>::g_memory_length = 0;
 template <int NUM> uint ConstantsForDynamicMods<NUM>::g_M_minus = -1;
 template <int NUM> int ConstantsForDynamicMods<NUM>::g_order = 1;
 template <int NUM> int ConstantsForDynamicMods<NUM>::g_order_minus = 0;

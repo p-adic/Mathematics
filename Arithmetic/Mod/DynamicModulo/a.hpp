@@ -28,7 +28,8 @@ public:
   inline DynamicMods<NUM>& operator-=( const DynamicMods<NUM>& n ) noexcept;
   inline DynamicMods<NUM>& operator*=( const DynamicMods<NUM>& n ) noexcept;
   inline DynamicMods<NUM>& operator/=( DynamicMods<NUM> n );
-  // n>=0である場合のみサポート。計算量O(log n)で2^n倍する。
+  // n>=0である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
+  // 一般にはO(log n)で2^n倍を返す。
   template <typename INT> inline DynamicMods<NUM>& operator<<=( INT n );
   // n>=0かつMが奇数である場合のみサポート。計算量O(n)で2^{-n}倍する。
   template <typename INT> inline DynamicMods<NUM>& operator>>=( INT n );
@@ -61,7 +62,7 @@ public:
   inline DynamicMods<NUM>& SignInvert() noexcept;
   // -1乗する。
   inline DynamicMods<NUM>& Invert();
-  // exponent>=0である場合にのみサポート。exponent乗する。
+  // m_nが可逆であるか、またはexponent>=0である場合にのみサポート。exponent乗する。
   template <typename INT> inline DynamicMods<NUM>& Power( INT exponent );
   // グローバルスコープでswapを定義するためのもの。
   inline void swap( DynamicMods<NUM>& n ) noexcept;
@@ -72,10 +73,13 @@ public:
   
   // M==1であるか、または0 < n < MかつnがMと互いに素である場合のみサポート。
   static inline const DynamicMods<NUM>& Inverse( const uint& n );
+  // M==1であるか、または0 <= n < g_memory_lengthである場合のみサポート。
+  static inline const DynamicMods<NUM>& TwoPower( const uint& n );
+  // M==1であるか、または0 <= n < g_memory_lengthである場合のみサポート。
   static inline const DynamicMods<NUM>& Factorial( const uint& n );
-  // 0 < n < MかつMが素数である場合のみサポート。
+  // M==1であるか、または0 <= n < g_memory_lengthかつMが素数である場合のみサポート。
   static inline const DynamicMods<NUM>& FactorialInverse( const uint& n );
-  // 0 < n < MかつMが素数である場合のみサポート。
+  // M==1であるか、または0 <= n < g_memory_lengthかつMが素数である場合のみサポート。
   static inline DynamicMods<NUM> Combination( const uint& n , const uint& i );
 
   static inline const DynamicMods<NUM>& zero() noexcept;
