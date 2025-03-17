@@ -3,9 +3,11 @@
 #pragma once
 #include "a.hpp"
 
-template <typename T , template <typename...> typename V , typename OPR> T LeftConnectiveProd( const V<T>& f , OPR opr ) { assert( !f.empty() ); auto itr = f.begin() , end = f.end(); T answer = *( itr++ ); while( itr != end ){ answer = opr( move( answer ) , *( itr++ ) ); } return answer; }
-template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f ) { return f.empty() ? T{} : LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 += t1 ); } ); }
-template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f ) { return f.empty() ? T{1} : LeftConnectiveProd( f , []( T t0 , const T& t1 ){ return move( t0 *= t1 ); } ); }
+template <typename T , typename U , template <typename...> typename V , typename OPR> T LeftConnectiveProd( T t , const V<U>& f , OPR opr ) { for( auto& u : f ){ t = opr( move( t ) , u ); } return move( t ); }
+template <typename T , typename U , template <typename...> typename V> inline T Sum( T t , const V<U>& f ) { return LeftConnectiveProd( move( t ) , f , []( T t0 , const U& u1 ){ return move( t0 += u1 ); } ); }
+template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f ) { return Sum( T{} , f ); }
+template <typename T , typename U , template <typename...> typename V> inline T Prod( T t , const V<U>& f ) { return LeftConnectiveProd( move( t ) , f , []( T t0 , const U& u1 ){ return move( t0 *= u1 ); } ); }
+template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f ) { return Prod( T{ 1 } , f ); }
 template <typename T , template <typename...> typename V> inline T Max( const V<T>& f ) { return *max_element( f.begin() , f.end() ); }
 template <typename T , typename...Args> inline T Max( const T& t0 , const T& t1 , const Args&... args ) { return Max( vector<T>{ t0 , t1 , args... } ); }
 template <typename T , template <typename...> typename V> inline T Min( const V<T>& f ) { return *min_element( f.begin() , f.end() ); }

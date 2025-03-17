@@ -5,11 +5,12 @@
 // https://atcoder.jp/contests/abc379/submissions/61409472 (Sum, ArithmeticProgressionSum)
 // https://yukicoder.me/submissions/1015838 (GeometricProgressionLinearCombinationSum)
 
-// fが空でない場合にのみサポート。
-// Tの要素の列のopeに関する左結合的総乗を愚直に計算し、その結果を返す。
-template <typename T , template <typename...> typename V , typename OPR> T LeftConnectiveProd( const V<T>& f , OPR opr );
+// tとfのoprに関する左結合的総乗を愚直に計算し、その結果を返す。
+template <typename T , typename U , template <typename...> typename V , typename OPR> T LeftConnectiveProd( T t , const V<U>& f , OPR opr );
 template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f );
+template <typename T , typename U , template <typename...> typename V> inline T Sum( T t , const V<U>& f );
 template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f );
+template <typename T , typename U , template <typename...> typename V> inline T Prod( T t , const V<U>& f );
 template <typename T , template <typename...> typename V> inline T Max( const V<T>& f );
 template <typename T , typename...Args> inline T Max( const T& t0 , const T& t1 , const Args&... args );
 template <typename T , template <typename...> typename V> inline T Min( const V<T>& f );
