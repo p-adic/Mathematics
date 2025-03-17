@@ -19,7 +19,7 @@ template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator*=( const
 template <> inline constexpr Mod<998244353>& Mod<998244353>::operator*=( const Mod<998244353>& n ) noexcept { ull m_n_copy = m_n; m_n = move( ( m_n_copy *= n.m_n ) < 998244353 ? m_n_copy : Residue998244353( m_n_copy ) ); return *this; }
 
 template <INT_TYPE_FOR_MOD M> inline Mod<M>& Mod<M>::operator/=( Mod<M> n ) { return operator*=( n.Invert() ); }
-template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::operator<<=( INT n ) { assert( n >= 0 ); return *this *= Mod<M>( 2 ).NonNegativePower( move( n ) ); }
+template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::operator<<=( INT n ) { assert( n >= 0 ); return *this *= ( m_n < Constants::g_memory_length ? TwoPower( n ) : Mod<M>( 2 ).NonNegativePower( move( n ) ) ); }
 template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& Mod<M>::operator>>=( INT n ) { assert( n >=0 ); while( n-- > 0 ){ ( ( m_n & 1 ) == 0 ? m_n : m_n += M ) >>= 1; } return *this; }
 
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator++() noexcept { m_n < Constants::g_M_minus ? ++m_n : m_n = 0; return *this; }
@@ -53,7 +53,8 @@ template <INT_TYPE_FOR_MOD M> template <typename INT> inline constexpr Mod<M>& M
 
 template <INT_TYPE_FOR_MOD M> inline constexpr void Mod<M>::swap( Mod<M>& n ) noexcept { std::swap( m_n , n.m_n ); }
 
-template <INT_TYPE_FOR_MOD M> inline const Mod<M>& Mod<M>::Inverse( const INT_TYPE_FOR_MOD& n ) { assert( n < M ); static vector<Mod<M>> memory = { zero() , one() }; static INT_TYPE_FOR_MOD length_curr = 2; while( length_curr <= n ){ memory.push_back( Derepresent( M - memory[M % length_curr].m_n * ull( M / length_curr ) % M ) ); length_curr++; } return memory[n]; }
+template <INT_TYPE_FOR_MOD M> inline const Mod<M>& Mod<M>::Inverse( const INT_TYPE_FOR_MOD& n ) { assert( n < Constants::g_memory_length ); static vector<Mod<M>> memory = { zero() , one() }; static INT_TYPE_FOR_MOD length_curr = 2; while( length_curr <= n ){ memory.push_back( Derepresent( M - memory[M % length_curr].m_n * ull( M / length_curr ) % M ) ); length_curr++; } return memory[n]; }
+template <INT_TYPE_FOR_MOD M> inline const Mod<M>& Mod<M>::TwoPower( const INT_TYPE_FOR_MOD& n ) { assert( n < Constants::g_memory_length ); static vector<Mod<M>> memory = { one() }; static INT_TYPE_FOR_MOD length_curr = 1; while( length_curr <= n ){ memory.push_back( memory.back() + memory.back() ); length_curr++; } return memory[n]; }
 template <INT_TYPE_FOR_MOD M> inline const Mod<M>& Mod<M>::Factorial( const INT_TYPE_FOR_MOD& n ) { if( M <= n ){ return zero(); } static vector<Mod<M>> memory = { one() , one() }; static INT_TYPE_FOR_MOD length_curr = 2; while( length_curr <= n ){ memory.push_back( memory[length_curr - 1] * length_curr ); length_curr++; } return memory[n]; }
 template <INT_TYPE_FOR_MOD M> inline const Mod<M>& Mod<M>::FactorialInverse( const INT_TYPE_FOR_MOD& n ) { static vector<Mod<M>> memory = { one() , one() }; static INT_TYPE_FOR_MOD length_curr = 2; while( length_curr <= n ){ memory.push_back( memory[length_curr - 1] * Inverse( length_curr ) ); length_curr++; } return memory[n]; }
 template <INT_TYPE_FOR_MOD M> inline Mod<M> Mod<M>::Combination( const INT_TYPE_FOR_MOD& n , const INT_TYPE_FOR_MOD& i ) { return i <= n ? Factorial( n ) * FactorialInverse( i ) * FactorialInverse( n - i ) : zero(); }

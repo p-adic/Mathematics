@@ -54,7 +54,8 @@ public:
   DECLARATION_OF_ARITHMETIC_FOR_MOD( / , );
   // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
   template <typename INT> inline constexpr Mod<M> operator^( INT exponent ) const;
-  // n>=0である場合のみサポート。計算量O(log n)で2^n倍を返す。
+  // n>=0である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
+  // 一般にはO(log n)で2^n倍を返す。
   template <typename INT> inline constexpr Mod<M> operator<<( INT n ) const;
   // n>=0かつMが奇数である場合のみサポート。計算量O(n)で2^{-n}倍を返す。
   template <typename INT> inline constexpr Mod<M> operator>>( INT n ) const;
@@ -75,6 +76,10 @@ public:
   
   // Mが素数かつn < g_memory_lengthである場合のみサポート。
   static inline const Mod<M>& Inverse( const INT_TYPE_FOR_MOD& n );
+
+  // n < g_memory_lengthである場合のみサポート。
+  static inline const Mod<M>& TwoPower( const INT_TYPE_FOR_MOD& n );
+  
   // n < g_memory_lengthである場合のみサポート。
   static inline const Mod<M>& Factorial( const INT_TYPE_FOR_MOD& n );
   // Mが素数かつn < g_memory_lengthである場合のみサポート。
