@@ -31,7 +31,8 @@ public:
   inline constexpr Montgomery<M>& operator-=( const Montgomery<M>& n ) noexcept;
   inline constexpr Montgomery<M>& operator*=( const Montgomery<M>& n ) noexcept;
   inline Montgomery<M>& operator/=( Montgomery<M> n );
-  // n>=0である場合のみサポート。計算量O(log n)で2^n倍する。
+  // n>=0である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
+  // 一般にはO(log n)で2^n倍を返す。
   template <typename INT> inline constexpr Montgomery<M>& operator<<=( INT n );
   // n>=0かつMが奇数である場合のみサポート。計算量O(n)で2^{-n}倍する。
   template <typename INT> inline constexpr Montgomery<M>& operator>>=( INT n );
@@ -70,6 +71,10 @@ public:
 
   // Mが素数かつn < g_memory_lengthである場合のみサポート。
   static inline const Montgomery<M>& Inverse( const INT_TYPE_FOR_MONTGOMERY& n );
+
+  // n < g_memory_lengthである場合のみサポート。
+  static inline const Mod<M>& TwoPower( const INT_TYPE_FOR_MOD& n );
+  
   // n < g_memory_lengthである場合のみサポート。
   static inline const Montgomery<M>& Factorial( const INT_TYPE_FOR_MONTGOMERY& n );
   // Mが素数かつn < g_memory_lengthである場合のみサポート。
@@ -95,6 +100,8 @@ private:
   template <typename T> inline constexpr Montgomery<M>& Ref( T&& n ) noexcept;
   static inline constexpr INT_TYPE_FOR_MONTGOMERY& Normalise( INT_TYPE_FOR_MONTGOMERY& n ) noexcept;
 
+  using Constants = ConstantsForMontgomery<M>;
+
 };
 
 // Mが素数でありnが0でない場合にのみサポート。
@@ -111,4 +118,4 @@ template <INT_TYPE_FOR_MONTGOMERY M , class Traits> inline basic_istream<char,Tr
 template <INT_TYPE_FOR_MONTGOMERY M , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Montgomery<M>& n );
 
 #include "../../Hash/a.hpp"
-template <INT_TYPE_FOR_MOD M> DECLARATION_OF_HASH( Montgomery<M> );
+template <INT_TYPE_FOR_MONTGOMERY M> DECLARATION_OF_HASH( Montgomery<M> );
