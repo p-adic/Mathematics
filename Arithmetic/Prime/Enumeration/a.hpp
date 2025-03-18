@@ -5,7 +5,8 @@
 // verify:
 // https://yukicoder.me/submissions/971476（IsComposite）
 
-// val_limit >= 46342の時int型ではオーバーフローすることに注意。
+// エラトステネスの篩 O(L log log L)
+// 動的な素数列挙より計算量が悪いが除算を用いないので十分速い。
 
 // m_lengthの値は
 // val_limit = 316 -> 65

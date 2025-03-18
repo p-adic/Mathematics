@@ -10,13 +10,9 @@ inline HeapPrimeEnumeration::HeapPrimeEnumeration( const int& val_limit ) : m_va
 
     if( ! m_is_composite[i] ){
 
-      if( i <= ( m_val_limit - 1 ) / i ){
+      for( int j = ll( i ) * i ; j < val_limit ; j += i ){
 
-	for( int j = i * i ; j < val_limit ; j += i ){
-
-	  m_is_composite[j] = true;
-
-	}
+        m_is_composite[j] = true;
 
       }
 

@@ -2,8 +2,8 @@
 
 #pragma once
 
-// 1+i”Ô–Ú‚Ì‘f”‚ğ•Ô‚·
-template <typename INT> const INT& GetPrime( const INT& i ) noexcept;
+// ‡ŒvŒvZ—ÊO(p_i) = O(i log i)‚Å1+i”Ô–Ú‚Ì‘f”p_i‚ğ•Ô‚·
+int GetPrime( const int& i );
 
-// i<N‚Ì‚É1+i”Ô–Ú‚Ì‘f”‚ğ•Ô‚·
-template <typename INT , INT N> const INT& GetPrimeBounded( const INT& i );
+// T=20‚È‚Ç‚Æ‚µAO(T(log n)^3)‚ÅŒë”»’è—¦‚ğ4^{-T}‚É—}‚¦‚é
+bool MillerRabin( const int& n );

@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Prime/a_Body.hpp"
+#else
+int GetPrime(CRI i){AS(i >= 0);ST VE<int> P{2,3};ST int L = 2;WH(i >= L){int p = P.back();bool prime = false;WH(!prime){p += 2;prime = true;for(auto& q:P){if(!(prime =(p % q != 0))|| p <= q * q){break;}}}P.push_back(p);L++;}RE P[i];}bool MillerRabin(CRI n){CE int T = 20;AS(n > 0);if(n == 1){RE false;}int u = n - 1,v = 0;WH((u & 1)< 1){u >>= 1;++v;}for(int t = 0;t < T;t++){ll m = 1,s = GetRand(1,n - 1);int u_copy = u;WH(u_copy > 0){(u_copy & 1)== 0?m:(m *= s)%= n;(s *= s)%= n;u_copy >>= 1;}if(m != 1 && m != n - 1){for(int e = 1;e < v;e++){if(((m *= m)%= n)== n - 1){m = -1;break;}}if(m != -1){RE false;}}}RE true;}
+#endif
+

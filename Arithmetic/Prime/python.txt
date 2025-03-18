@@ -1,12 +1,46 @@
-# エラトステネスの篩O(L log log L)
-# PにL未満の素数を、Cに合成数か否かを、pにPi関数の値（引数以下の素数の個数）を格納する。
-L=11**5
+#エラトステネスの篩、O(L log log L)で
+#PにL未満の素数を、Cに合成数か否かを、pにPi関数の値（引数以下の素数の個数）を格納する。
+#L=9**6 #531441 (L*L=282429536481 > 10**10)
+#L=11**5 #161051 (L*L=25937424601 > 10**10)
+#L=10**5
+L=9**5 #59049 (L*L=3486784401 > 10**9)
 P=[]
 C=[0]*L
 p=[0]*L
 for i in R(2,L):
 	if C[i]<1:
-		P+=[i]
-		j=i*i
+		P+=[i];j=i*i
 		while j<L:C[j],j=1,j+i
 	p[i]=len(P)
+
+#動的な素数列挙、前計算量合計O(p_i)=O(i log i)でO(1)でp_iを返す
+#特に前計算量O(L)でL未満の素数を列挙する。
+P=[2,3]
+def GetPrime(i):
+	global P
+	while i>=len(P):
+		p,b=P[-1],1
+		while b:
+			p+=2;b=0
+			for q in P:
+				b|=p%q<1
+				if b or p<=q*q:break
+		P+=[p]
+	return P[i]
+
+#ミラー・ラビン法、O(T(log n)^3)で誤判定率を4^{-T}に抑える。
+import random
+def MillerRabin(n):
+	T=20
+	assert n>0
+	if n<2:return 0
+	u,v=n-1,0
+	while u&1<1:u>>=1;v+=1
+	for t in R(T):
+		m=pow(random.randint(1,n-1),u,n)
+		if m!=1:
+			for e in R(v):
+				if m==n-1:break
+				m=m*m%n
+			else:return 0
+	return 1

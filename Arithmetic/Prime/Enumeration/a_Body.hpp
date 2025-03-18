@@ -10,16 +10,12 @@ template <int val_limit , int length_max> inline constexpr PrimeEnumeration<val_
 
     if( ! m_is_composite[i] ){
 
-      if( i <= ( val_limit - 1 ) / i ){
+      for( int j = ll( i ) * i ; j < val_limit ; j += i ){
 
-	for( int j = i * i ; j < val_limit ; j += i ){
-
-	  m_is_composite[j] = true;
-
-	}
+        m_is_composite[j] = true;
 
       }
-
+      
       m_val[m_length++] = i;
 
       if( m_length >= length_max ){
