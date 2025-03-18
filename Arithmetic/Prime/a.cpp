@@ -47,7 +47,6 @@ int GetPrime( const int& i )
 bool MillerRabin( const int& n )
 {
 
-  constexpr int T = 20;
   assert( n > 0 );
 
   if( n == 1 ){
@@ -56,6 +55,32 @@ bool MillerRabin( const int& n )
 
   }
 
+  constexpr int T = 20;
+  vector<int> P = {2,3,5,7,11,13,17,19,23,29};
+  const int T_half = P.size();
+
+  for( auto& p : P ){
+
+    if( n == p ){
+
+      return true;
+
+    }
+
+    if( n % p == 0 ){
+
+      return false;
+
+    }
+
+  }
+
+  for( int t = T_half ; t < T ; t++ ){
+
+    P.push_back( GetRand( P[T_half - 1] + 1 , n - 1 ) );
+
+  }
+  
   int u = n - 1 , v = 0;
   
   while( ( u & 1 ) < 1 ){
@@ -67,7 +92,7 @@ bool MillerRabin( const int& n )
 
   for( int t = 0 ; t < T ; t++ ){
 
-    ll m = 1 , s = GetRand( 1 , n - 1 );
+    ll m = 1 , s = P[t];
     int u_copy = u;
 
     while( u_copy > 0 ){

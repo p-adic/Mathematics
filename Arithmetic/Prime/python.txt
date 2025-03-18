@@ -28,19 +28,45 @@ def GetPrime(i):
 		P+=[p]
 	return P[i]
 
-#ミラー・ラビン法、O(T(log n)^3)で誤判定率を4^{-T}に抑える。
-import random
+#verify: https://yukicoder.me/submissions/1053772
+#ミラー・ラビン法、O(len(P)(log n)^3)で誤判定率を4^{-len(P)}に抑える。
+P=[2,3,5,7,11,13,17,19,23,29]
 def MillerRabin(n):
-	T=20
 	assert n>0
 	if n<2:return 0
+	if n in P:return 1
+	if any(n%p<1 for p in P):return 0
 	u,v=n-1,0
 	while u&1<1:u>>=1;v+=1
-	for t in R(T):
-		m=pow(random.randint(1,n-1),u,n)
+	for p in P:
+		m=pow(p,u,n)
 		if m!=1:
 			for e in R(v):
 				if m==n-1:break
 				m=m*m%n
 			else:return 0
 	return 1
+
+#hack対策用
+import random
+def MillerRabin(n):
+	assert n>0
+	if n<2:return 0
+	P=[2,3,5,7,11,13,17,19,23,29]
+	if n in P:return 1
+	if any(n%p<1 for p in P):return 0
+	for t in range(10):P+=[random.randint(30,n-1)]
+	u,v=n-1,0
+	while u&1<1:u>>=1;v+=1
+	for p in P:
+		m=pow(p,u,n)
+		if m!=1:
+			for e in R(v):
+				if m==n-1:break
+				m=m*m%n
+			else:return 0
+	return 1
+
+
+
+
