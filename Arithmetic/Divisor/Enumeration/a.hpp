@@ -20,4 +20,5 @@ template <typename LD , typename INT> auto EnumerateDivisor( const LD& ld , INT 
 template <typename INT> vector<vector<INT>> TotalEnumerateDivisor( const INT& size ) noexcept;
 // O(size log size)（空間計算量はO(size)）
 // answer[i]に「initに対しiの約数dを昇順にわたらせてf(-,d)を適用したもの」を格納。
+// 約数ゼータ変換の一般化。
 template <typename INT , typename FUNC , typename U> vector<U> TotalEnumerateDivisor( const INT& size , FUNC f , const U& init ) noexcept;
