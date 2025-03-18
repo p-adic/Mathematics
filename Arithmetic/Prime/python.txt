@@ -13,7 +13,7 @@ for i in R(2,L):
 		while j<L:C[j],j=1,j+i
 	p[i]=len(P)
 
-#動的な素数列挙、前計算量合計O(p_i)=O(i log i)でO(1)でp_iを返す
+#動的な素数列挙、前計算量合計O(p_i)=O(i log i)でO(1)でp_iを返す。
 #特に前計算量O(L)でL未満の素数を列挙する。
 P=[2,3]
 def GetPrime(i):
@@ -29,7 +29,8 @@ def GetPrime(i):
 	return P[i]
 
 #verify: https://yukicoder.me/submissions/1053772
-#ミラー・ラビン法、O(len(P)(log n)^3)で誤判定率を4^{-len(P)}に抑える。
+#ミラー・ラビン法、O(len(P)log n)で誤判定率を4^{-len(P)}に抑える。
+#ただしカラツバ法の計算量を考慮する場合、計算量はO(len(P)(log n)^{1+log_2 3})となる。
 P=[2,3,5,7,11,13,17,19,23,29]
 def MillerRabin(n):
 	assert n>0
@@ -66,7 +67,4 @@ def MillerRabin(n):
 				m=m*m%n
 			else:return 0
 	return 1
-
-
-
 
