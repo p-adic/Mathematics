@@ -1,0 +1,5 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/IteratedArithmetic/Constexpr/Log/a_Body.hpp"
+#else
+TE <TY INT> CE INT Log(INT N){INT AN = 0,pw = 1;WH(N > pw){pw <<= 1;AN++;}RE AN;}
+#endif
