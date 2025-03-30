@@ -1,5 +1,0 @@
-#log_2 nˆÈã‚Å‚ ‚éÅ¬‚Ì”ñ•‰®”‚ğ‹‚ß‚éB
-def Log(n):
-	a=0
-	while n>1:n>>=1;a+=1
-	return a
