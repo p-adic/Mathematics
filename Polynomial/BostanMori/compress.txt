@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/BostanMori/a_Body.hpp"
+#else
+// ../FFT/compress.txtÇêÊÇ…ì\ÇÈÅB
+
+TE <TY T>T CoefficientEvaluation(PO<T> f,PO<T> g,ll i){int f_SZ = f.SZ();if(f_SZ > i + 1){f.resize(f_SZ = i + 1);}f.Reduce();f_SZ = f.SZ();if(f_SZ == 0){RE MO(f[0]);}int g_SZ = g.SZ();if(g_SZ > i + 1){g.resize(g_SZ = i + 1);}g.Reduce();g_SZ = g.SZ();for(int d = 0;d < g_SZ;d++){if(g[d]== 0){AS(d >= f_SZ || f[d]== 0);}else{if(d > 0){PO<T> f_new{};f_SZ < d?f_SZ = 0:f_SZ -= d;for(int e = 0;e < f_SZ;e++){f_new[e]= MO(f[e+d]);}f = MO(f_new);PO<T> g_new{};g_SZ -= d;for(int e = 0;e < g_SZ;e++){g_new[e]= MO(g[e+d]);}g = MO(g_new);}break;}}CO PO<T> f_div = f / g;f -= f_div * g;f.Reduce();f_SZ = f.SZ();AS(f_SZ <= g_SZ);T AN = i < f_SZ?f_div[i]:f.c_zero();WH(i > 0){PO<T> g_sym{};for(int d = 0;d < g_SZ;d++){(d & 1)== 0?g_sym[d]+= g[d]:g_sym[d]-= g[d];}f *= g_sym;g *= g_sym;if(i == 1){break;}CO int c = i & 1;i >>= 1;f_SZ = min(ll((f.SZ()+(c ^ 1))>> 1),i + 1);PO<T> f_new{};for(int d = 0;d < f_SZ;d++){f_new[d]= MO(f[(d << 1)| c]);}f = MO(f_new);g_SZ = min(ll(g_SZ),i + 1);PO<T> g_new{};for(int d = 0;d < g_SZ;d++){g_new[d]= MO(g[d << 1]);}g = MO(g_new);}RE MO(AN += f[i]/ g[0]);}
+#endif
+

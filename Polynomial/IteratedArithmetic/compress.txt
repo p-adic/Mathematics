@@ -1,0 +1,20 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/IteratorArithmetic/a_Body.hpp"
+#else
+// ../FFT/compress.txtÇêÊÇ…ì\ÇÈÅB
+
+#define DF_OF_PROD(RECURSION,UNIT,APPLY)if(f.empty()){f.push_back(UNIT);}if(f.SZ()== 1){RE f.front();}auto IT = f.BE(),EN = f.EN();WH(IT != EN){auto& t = *IT;IT++;if(IT != EN){APPLY;IT = f.erase(IT);}}RE RECURSION;
+
+#define EXPRESSION1_FOR_RATIONAL_SUM {PO<T>::zero(),PO<T>::one()}
+#define EXPRESSION2_FOR_RATIONAL_SUM {t.first * IT->second + t.second * IT->first,t.second * IT->second}
+// ëçòa
+TE <TY T,TE <TY...> TY V> PO<T>& Sum(V<PO<T>>& f){DF_OF_PROD(Sum(f),PO<T>::zero(),t += *IT);}
+// óLóùéÆÇÃëçòa
+TE <TY T,TE <TY...> TY V> pair<PO<T>,PO<T>>& RationalSum(V<pair<PO<T>,PO<T>>>& f){DF_OF_PROD(RationalSum(f),EXPRESSION1_FOR_RATIONAL_SUM,t = EXPRESSION2_FOR_RATIONAL_SUM);}
+
+// ëçèÊ
+TE <TY T,TE <TY...> TY V> PO<T>& Prod(V<PO<T>>& f){DF_OF_PROD(Prod(f),PO<T>::one(),t *= *IT);}
+
+// ôpèÊ
+TE <TY T>PO<T> PW(PO<T> f,int e){PO<T> AN = Polynomial<T>::one();WH(e > 0){(e & 1)== 0?AN:AN *= f;f *= f;e >>= 1;}RE AN;}
+#endif

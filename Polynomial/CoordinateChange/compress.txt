@@ -1,0 +1,14 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/CoordinateChange/a_Body.hpp"
+#else
+// ../FFT/compress.txtを先に貼る。
+
+// 平行移動
+TE <TY T>VO Shift(PO<T>& f,CO T& t,CO bool& EXial = false){f.Reduce();CRI SZ = f.SZ();if(SZ > 0 && t != f.c_zero()){FPS<T> exp_t_TP{SZ * 2};T pw_t = f.c_one();for(int d = 0;d < SZ;d++){exp_t_TP[SZ - 1 - d]= pw_t * T::FactorialInverse(d);pw_t *= t;}if(EXial){exp_t_TP *= f;for(int d = 0;d < SZ;d++){f[d]= exp_t_TP[d + SZ - 1];}}else{for(int d = 0;d < SZ;d++){f[d]*= T::Factorial(d);}exp_t_TP *= f;for(int d = 0;d < SZ;d++){f[d]= exp_t_TP[d + SZ - 1]* T::FactorialInverse(d);}}}RE;}
+
+// アフィン変換
+TE <TY T>VO AffineTransformation(PO<T>& f,CO T& t,CO T& u,CO bool& EXial){Shift(f,u,EXial);CRI SZ = f.SZ();T pw = f.c_one();for(int d = 0;d < SZ;d++){f[d]*= pw;pw *= t;}RE;}
+
+// メビウス変換
+TE <TY T>tuple<PO<T>,T,T,int> MoeviusTransformation(PO<T> f,T a,T b,T c,T d){CO T& zero = f.c_zero();CO T& one = f.c_one();if(c == zero){d = one / d;AffineTransformation(f,a *= d,b *= d);RE{MO(f),zero,one,0};}a /= c;b -= a * d;if(b == zero){RE{f(a),zero,one,0};}b = one / b;c *= b;d *= b;Shift(f,a);CRI SZ = f.SZ();f.TP(SZ);AffineTransformation(f,c,d);RE{MO(f),MO(c),MO(d),SZ - 1};}
+#endif

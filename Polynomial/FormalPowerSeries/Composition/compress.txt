@@ -1,0 +1,24 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/FormalPowerSeries/Composition/a_Body.hpp"
+#else
+// ../../FFT/compress.txtを先に貼る。
+
+// 一般の合成
+TE <TY T>FPS<T> Composite(CO FPS<T>& f,CO FPS<T>& g){CRI N = f.GetTruncation();AS(N > 0 && g[0]== PO<T>::c_zero());CO int N_minus = N - 1;if(N_minus == 0){RE *TH;}CO int H = sqrt(N_minus);CO int K = N_minus / H;VE<FPS<T> > g_pw(K < 2?2:K);(g_pw[1]= g).SetTruncation(N);for(int k = 2;k < K;k++){g_pw[k]= g_pw[k-1]* g_pw[1];}VE<FPS<T> > g_pw2(H + 1);g_pw2[1]= K < 2?g_pw[1]:g_pw[K-1]* g_pw[1];for(int h = 2;h <= H;h++){g_pw2[h]= g_pw2[h-1]* g_pw2[1];}int k = 0;int h = 0;int n_max = N_minus;FPS<T> AN{N};FPS<T> AN_h{N};for(int d = 0;d < N;d++){for(int n = k;n <= n_max;n++){AN_h[n]+= k == 0?n == 0?f[d]:T{}:f[d]* g_pw[k][n];}if(++k == K || d == N_minus){AN += h == 0?AN_h:AN_h *= g_pw2[h];k = 0;h++;n_max -= K;AN_h = FPS<T>(N);}}RE AN;}
+
+// メビウス変換のN次打ち切り（反転のN次打ち切りを使用）
+TE <TY T>FPS<T> MoeviusComposition(CRI N,PO<T> f,T a,T b,T c,T d){CO T& zero = PO<T>::c_zero();CO T& one = PO<T>::c_one();if(c == zero){d = one / d;AffineTransformation(f,a *= d,b *= d);}else{a /= c;b -= a * d;if(b == zero){f = f(a);}else{b = one / b;c *= b;d *= b;Shift(f,a);CRI SZ = f.SZ();if(SZ > 0){f.TP(SZ);AffineTransformation(f,c,d);FPS<T> g{N};g[0]= MO(d);g[1]= MO(c);g = Inverse(Power(g,SZ - 1));g *= f;f = MO(g);}}}RE FPS<T>(N,f);}
+
+// exp(x)の合成のN次打ち切り
+TE <TY T>FPS<T> ExponentialComposition(CRI N,CO PO<T>& f,CO T& t){CRI SZ = f.SZ();LI<pair<T,T>> coef{};T temp = PO<T>::c_zero();for(int d = 0;d < SZ;d++){coef.push_back({f[d],temp});temp += t;}RE ExponentialSum(N,coef);}
+
+// メビウス変換（次数打ち切りなし！）後にexp(x)の合成のN次打ち切り（メビウス変換とExponentialCompositionを使用）
+TE <TY T>FPS<T> MoeviusExponentialComposition(CRI N,CO PO<T>& f,T a,T b,T c,T d,CO T& t){auto[h,u,v,e]= MoeviusComposition(f,MO(a),MO(b),MO(c),MO(d));FPS<T> g{ExponentialComposition(N,h,t)};h.resize(2);h[0]= MO(v);h[1]= MO(u);FPS<T> r{ExponentialComposition(N,h,t)};r = Power(r,e);RE MO(g /= r);}
+
+// ../../MultipointEvaluation/compress.txtを先に貼る。（商と評価点に対するSetPartialFractionDecompositionを使用）
+// t log(1-x)の合成のN次打ち切り
+TE <TY T>FPS<T> LogarithmComposition(CRI N,PO<T> f,CO T& t){CRI f_SZ = f.SZ();if(f_SZ == 0){RE FPS<T>(N);}CO T& zero = PO<T>::c_zero();if(t == zero){RE FPS<T>(N,f(t));}CO int SZ = max(f_SZ,N);LI<T> point{};VE<T> coef{};for(int d = 0;d < f_SZ;d++){f[d]*= T::Factorial(d);}for(int d = 1;d < SZ;d++){point.push_back(t * T::Inverse(d));}SetPartialFractionDecomposition(SZ,f,point,coef);point.clear();f = MO(coef);CO T& one = PO<T>::c_one();CO T t_inv_minus = -one / t;T temp = t_inv_minus;for(int d = 1;d < SZ;d++){f[d]*= temp;temp += t_inv_minus;}Shift(f,one);RE FPS<T>(N,MO(f));}
+
+// t log(x)の合成後に0を1に移すメビウス変換のN次打ち切り
+TE <TY T>FPS<T> MoeviusLogarithmComposition(CRI N,PO<T> f,T a,T b,T c,CO T& t){CO T& zero = PO<T>::c_zero();AS(b != zero);f = LogarithmComposition(N,MO(f),t);a -= c;RE MoeviusComposition(N,f,a,zero,c,b);}
+#endif
