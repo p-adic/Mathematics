@@ -1,0 +1,7 @@
+#O(min(m,n-m))
+def C(n,m):
+	if m<0 or n<m:return 0
+	m=min(m,n-m)
+	a=1
+	for i in R(m):a=a*(n-i)//(i+1)
+	return a
