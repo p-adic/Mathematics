@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Power/a_Body.hpp"
+#else
+TE <TY INT>CL PowerCalculator{PU:VE<INT> m_base;VE<VE<INT>> m_val;TE <TY VEC> IN PowerCalculator(CO VEC& base);IN INT Get(CRI i,CRI j)NE;};
+TE <TY INT> TE <TY VEC> IN PowerCalculator<INT>::PowerCalculator(CO VEC& base):m_base(),m_val(){for(auto& n:base){m_base.push_back(n);m_val.push_back({1});}}TE <TY INT> IN INT PowerCalculator<INT>::Get(CRI i,CRI j)NE{WH(int(m_val[i].SZ())<= j){m_val[i].push_back(m_val[i].back()* m_base[i]);}RE m_val[i][j];}
+#endif
