@@ -1,8 +1,11 @@
 // c:/Users/user/Documents/Programming/Mathematics/Arithmetic/IteratedArithmetic/a.hpp
 
 #pragma once
+#include "a_Macro.hpp"
+
 // verify:
-// https://atcoder.jp/contests/abc379/submissions/61409472 (Sum, ArithmeticProgressionSum)
+// https://atcoder.jp/contests/abc379/submissions/61409472 (Sum, ArithmeticProgressionSum<ll>)
+// https://yukicoder.me/submissions/1064893 (ArithmeticProgressionSum<MP>)
 // https://yukicoder.me/submissions/1015838 (GeometricProgressionLinearCombinationSum)
 
 // tとfのoprに関する左結合的総乗を愚直に計算し、その結果を返す。
@@ -27,7 +30,7 @@ template <typename T , typename UINT> T Power( T t , UINT exponent , T init = 1 
 // 初項l交差dの等差数列のr以下までの総和を取る。
 // 0 <= l , r <= 4e9ならばINT = llでオーバーフローを避けられる。
 // 0 <= l , r <= 6e9ならばINT = ullでオーバーフローを避けられる。
-template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , INT r , const INT& d = 1 );
+template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d = 1 );
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& r );
 
 

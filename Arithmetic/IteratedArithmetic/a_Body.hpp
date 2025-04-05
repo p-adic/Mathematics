@@ -36,7 +36,12 @@ T Power( T t , UINT exponent , T init )
 
 }
 
-template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , INT r , const INT& d ) { assert( l <= r ); const INT c = ( r - l ) / d; return ( c & 1 ) == 0 ? ( c + 1 ) * ( l + d * ( c >> 1 ) ) : ( ( c + 1 ) >> 1 ) * ( ( l << 1 ) + d * c ); }
+template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d ) { return ( l + r ) * ( r - l + 1 ) / 2; }
+template <typename INT> inline INT SpecialisedArithmeticProgressionSum( const INT& l , const INT& r , const INT& d ) { assert( l <= r ); const INT c = ( r - l ) / d; return ( c & 1 ) == 0 ? ( c + 1 ) * ( l + d * ( c >> 1 ) ) : ( ( c + 1 ) >> 1 ) * ( ( l << 1 ) + d * c ); }
+SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( int );
+SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( uint );
+SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( ll );
+SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( ull );
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& r ) { return ArithmeticProgressionSum( INT{} , r ); }
 
 template <typename T , typename UINT> inline T GeometricProgressionSum( T rate , UINT exponent_max , const T& init ) { T rate_minus = rate - 1; return rate_minus == 0 ? init * ++exponent_max : ( Power( move( rate ) , move( ++exponent_max ) ) - 1 ) / move( rate_minus ) * init; }

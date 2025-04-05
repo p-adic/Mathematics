@@ -24,3 +24,6 @@
 
 #endif
 
+#define SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( TYPE ) \
+  template <> inline TYPE ArithmeticProgressionSum( const TYPE& l , const TYPE& r , const TYPE& d ) { return SpecialisedArithmeticProgressionSum( l , r , d ); } \
+
