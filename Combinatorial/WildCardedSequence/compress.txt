@@ -1,0 +1,5 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/WildCardedSequence/a_Body.hpp"
+#else
+TE <TY U,TY INT0,TE <TY...> TY PAIR,TY INT1 = INT0>PAIR<U,INT0> WildCardedSequenceSum(CO VE<PAIR<U,INT0>>& sum_count,CO INT1& base = 10){PAIR<U,INT0> AN{0,1};auto&[sum,count]= AN;for(auto&[sum_i,count_i]:sum_count){sum =(sum * base)* count_i + count * sum_i;count = count * count_i;}RE AN;}
+#endif
