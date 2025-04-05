@@ -1,0 +1,11 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Algebra/Monoid/DirectProduct/ProductLength/a_Body.hpp"
+#else
+TE <TY MONOID0,TY MONOID1,TY TYPE = pair<TY MONOID0::type,TY MONOID1::type>>CL DirectProductMonoid:VI PU VirtualMonoid<TYPE>,PU PointedSet<TYPE>{PU:MONOID0 m_M0;MONOID1 m_M1;TYPE m_one;IN DirectProductMonoid(MONOID0 M0,MONOID1 M1);IN TYPE Product(TYPE t0,CO TYPE& t1);IN CO TYPE& Point();};
+TE <TY MONOID0,TY MONOID1,TY TYPE> IN DirectProductMonoid<MONOID0,MONOID1,TYPE>::DirectProductMonoid(MONOID0 M0,MONOID1 M1):PointedSet<TYPE>(m_one),m_M0(MO(M0)),m_M1(MO(M1)),m_one(m_M0.One(),m_M1.One()){ST_AS(is_same_v<TYPE,pair<TY MONOID0::type,TY MONOID1::type>>);}TE <TY MONOID0,TY MONOID1,TY TYPE> IN TYPE DirectProductMonoid<MONOID0,MONOID1,TYPE>::Product(TYPE t0,CO TYPE& t1){RE{m_M0.Product(MO(t0.first),t1.first),m_M1.Product(MO(t0.second),t1.second)};}TE <TY MONOID0,TY MONOID1,TY TYPE> IN CO TYPE& DirectProductMonoid<MONOID0,MONOID1,TYPE>::Point(){RE m_one;}
+
+TE <TY MONOID,TY INT = int,TY TYPE = TY DirectProductMonoid<MONOID,INT>::type>CL AbstractProductLengthMonoid:PU DirectProductMonoid<MONOID,AdditiveMonoid<INT>>{PU:IN AbstractProductLengthMonoid(MONOID M);ST TYPE ProductLength(TY MONOID::type t);ST IN TYPE SumLength(TY MONOID::type t);};TE <TY U,TY INT = int>CL ProductLengthMonoid:PU AbstractProductLengthMonoid<MultiplicativeMonoid<U>INT>{PU:IN ProductLengthMonoid(U e_U);};
+TE <TY U,TY INT = int>US SumLengthMonoid = ProductLengthMonoid<AdditiveMonoid<U>,INT>;
+TE <TY MONOID,TY INT,TY TYPE> IN AbstractProductLengthMonoid<MONOID,INT,TYPE>::AbstractProductLengthMonoid(MONOID M):DirectProductMonoid<MONOID,AdditiveMonoid<INT>>(MO(M)){ST_AS(is_same_v<TYPE,TY DirectProductMonoid<MONOID,INT>::type>);}TE <TY U,TY INT> IN ProductLengthMonoid<U,INT,TYPE>::ProductLengthMonoid(U e_U):AbstractProductLengthMonoid<Multiplicative<U>,AdditiveMonoid<INT>>(MultiplicativeMonoid<U>(MO(e_U))){}TE <TY MONOID,TY INT,TY TYPE> TYPE AbstractProductLengthMonoid<MONOID,INT,TYPE>::ProductLength(TY MONOID::type t){RE{MO(t),1};}TE <TY MONOID,TY INT,TY TYPE> IN TYPE AbstractProductLengthMonoid<MONOID,INT,TYPE>::SumLength(TY MONOID::type t){RE ProductLength(MO(t));}
+#endif
+
