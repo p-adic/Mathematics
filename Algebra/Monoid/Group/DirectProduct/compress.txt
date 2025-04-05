@@ -1,0 +1,10 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Algebra/Monoid/Group/DirectProduct/a_Body.hpp"
+#else
+TE <TY MONOID0,TY MONOID1,TY TYPE = pair<TY MONOID0::type,TY MONOID1::type>>CL DirectProductMonoid:VI PU VirtualMonoid<TYPE>,PU PointedSet<TYPE>{PU:MONOID0 m_M0;MONOID1 m_M1;TYPE m_one;IN DirectProductMonoid(MONOID0 M0,MONOID1 M1);IN TYPE Product(TYPE t0,CO TYPE& t1);IN CO TYPE& Point();};
+TE <TY MONOID0,TY MONOID1,TY TYPE> IN DirectProductMonoid<MONOID0,MONOID1,TYPE>::DirectProductMonoid(MONOID0 M0,MONOID1 M1):PointedSet<TYPE>(m_one),m_M0(MO(M0)),m_M1(MO(M1)),m_one(m_M0.One(),m_M1.One()){ST_AS(is_same_v<TYPE,pair<TY MONOID0::type,TY MONOID1::type>>);}TE <TY MONOID0,TY MONOID1,TY TYPE> IN TYPE DirectProductMonoid<MONOID0,MONOID1,TYPE>::Product(TYPE t0,CO TYPE& t1){RE{m_M0.Product(MO(t0.first),t1.first),m_M1.Product(MO(t0.second),t1.second)};}TE <TY MONOID0,TY MONOID1,TY TYPE> IN CO TYPE& DirectProductMonoid<MONOID0,MONOID1,TYPE>::Point(){RE m_one;}
+
+TE <TY GROUP0,TY GROUP1,TY TYPE = pair<TY GROUP0::type,TY GROUP1::type>>CL DirectProductGroup:VI PU VirtualGroup<TYPE>,PU DirectProductMonoid<GROUP0,GROUP1>{PU:IN DirectProductGroup(GROUP0 G0,GROUP1 G1);IN TYPE Transfer(CO TYPE& t);};
+TE <TY GROUP0,TY GROUP1,TY TYPE> IN DirectProductGroup<GROUP0,GROUP1,TYPE>::DirectProductGroup(GROUP0 G0,GROUP1 G1):DirectProductMonoid<GROUP0,GROUP1>(MO(G0),MO(G1)){ST_AS(is_same_v<TYPE,pair<TY GROUP0::type,TY GROUP1::type>>);}TE <TY GROUP0,TY GROUP1,TY TYPE> IN TYPE DirectProductGroup<GROUP0,GROUP1,TYPE>::Transfer(CO TYPE& t){RE{TH->m_M0.Transfer(t.first),TH->m_MG1.Transfer(t.first)};}
+#endif
+
