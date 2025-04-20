@@ -132,6 +132,59 @@ tuple<int,U,U> DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::WLCA( int i , int 
 
 }
 
+template <typename TREE , typename U , typename MONOID> inline tuple<int,int,U> DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::WDiameter()
+{
+
+  auto& V = this->size();
+  vector<pair<pair<int,U>,pair<int,U>>> dp( V );
+  int l0_opt = this->Root() , l1_opt = l0_opt;
+  U u_opt = this->m_M.One();
+
+  for( int i = 0 ; i < V ; i++ ){
+
+    auto& j = this->NodeNumber( i , true );
+    auto& [dpj0,dpj1] = dp[j];
+    dpj0 = dpj1 = {j,this->m_M.One()};
+    auto& [l0,u0] = dpj0;
+    auto& [l1,u1] = dpj1;
+    
+    for( auto& k : this->Children( j ) ){
+
+      auto& [l,u] = get<1>( dp[k] );
+      U temp = this->m_M.Product( m_wprev[k] , u );
+
+      if( u0 < temp ){
+
+        if( u1 < temp ){
+
+          dp[j] = { move( dpj1 ) , { l , move( temp ) } };
+
+        } else {
+
+          dp[j] = { { l , move( temp ) } , move( dpj1 ) };
+
+        }
+
+      }
+
+    }
+
+    U temp = this->m_M.Product( u0 , u1 );
+
+    if( u_opt < temp ){
+
+      u_opt = move( temp );
+      l0_opt = l0;
+      l1_opt = l1;
+
+    }
+
+  }
+
+  return { l0_opt , l1_opt , move( u_opt ) };
+  
+}
+
 template <typename TREE , typename U , typename MONOID>
 void DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::SetWDepth()
 {

@@ -35,7 +35,8 @@
 // 最近接共通先祖取得O(|V_T| digit)（二度目以降はO(digit)）
 template <typename TREE>
 class DepthFirstSearchOnTree :
-  public DepthFirstSearch<int,TREE>
+  public DepthFirstSearch<int,TREE> ,
+  public PointedSet<int>
 {
 
 protected:
@@ -125,6 +126,8 @@ public:
   // fはノードjごとのデータ（グラフ構造に依存しない）、gは有向辺b?(j,k):(k,j)ごとのデータに対応。
   // 例えば「パスの数」を求める時はm_Tが和、fが+1（葉かどうかに関係ない）、gがidでよい。
 
+  inline tuple<int,int,int> Diameter();
+  
 private:
   void SetChildren();
   void SetDepth();

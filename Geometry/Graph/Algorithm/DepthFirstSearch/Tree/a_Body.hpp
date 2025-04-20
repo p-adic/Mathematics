@@ -8,7 +8,7 @@
 // ファイル容量削減のため極力vectorの成分を参照するだけの変数を用いない。
 // 実行時間に優位差はなし。
 
-template <typename TREE> inline DepthFirstSearchOnTree<TREE>::DepthFirstSearchOnTree( TREE& T , const int& root , const int& digit ) : DepthFirstSearch<int,TREE>( T , -1 , root ) , m_node_num() , m_children() , m_set_children() , m_depth() , m_set_depth() , m_height_max() , m_height_min() , m_set_height() , m_heaviness() , m_set_heaviness() , m_digit( digit ) , m_doubling( m_digit ) , m_set_doubling() { static_assert( is_same_v<TREE,Graph<decldecay_t( declval<TREE>().edge() )>> ); assert( int( ( m_node_num = this->GetNodeEnumeration() ).size() ) == this->size() ); }
+template <typename TREE> inline DepthFirstSearchOnTree<TREE>::DepthFirstSearchOnTree( TREE& T , const int& root , const int& digit ) : DepthFirstSearch<int,TREE>( T , -1 , root ) , PointedSet<int>( root ) ,  m_node_num() , m_children() , m_set_children() , m_depth() , m_set_depth() , m_height_max() , m_height_min() , m_set_height() , m_heaviness() , m_set_heaviness() , m_digit( digit ) , m_doubling( m_digit ) , m_set_doubling() { static_assert( is_same_v<TREE,Graph<decldecay_t( declval<TREE>().edge() )>> ); assert( int( ( m_node_num = this->GetNodeEnumeration() ).size() ) == this->size() ); }
 
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::Root() const { return this->Point(); }
 
@@ -352,4 +352,44 @@ void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , ve
 
   return;
 
+}
+
+template <typename TREE> inline tuple<int,int,int> DepthFirstSearchOnTree<TREE>::Diameter()
+{
+
+  auto& V = this->size();
+  int i_opt[2] = {-1,-1};
+  int d_opt = size;
+
+  for( int i = 0 ; i < V ; i++ ){
+
+    auto& d = Depth( i );
+
+    if( d_opt > d ){
+
+      d_opt = d;
+      i_opt[0] = i;
+
+    }
+
+  }
+
+  DepthFirstSearchOnTree<TREE> dfs{ this->m_G , i_opt };
+  d_opt = size;
+  
+  for( int i = 0 ; i < V ; i++ ){
+
+    auto& d = dfs.Depth( i );
+
+    if( d_opt > d ){
+
+      d_opt = d;
+      i_opt[1] = i;
+
+    }
+
+  }
+  
+  return {i_opt[0],i_opt[1],d_opt};
+  
 }

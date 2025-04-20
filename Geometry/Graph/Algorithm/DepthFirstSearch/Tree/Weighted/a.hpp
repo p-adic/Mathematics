@@ -4,8 +4,9 @@
 #include "../a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/957446（重み不使用のWDepth,WHeaviness,WAncestor,WLCA）
-// https://yukicoder.me/submissions/957499（WLCA）
+// https://yukicoder.me/submissions/957446 (重み不使用のWDepth,WHeaviness,WAncestor,WLCA)
+// https://yukicoder.me/submissions/957499 (WLCA)
+// https://yukicoder.me/submissions/1078534 (WDiameter)
 
 // TREEはGraph<Edge>と表せる、木T=(V_T,E_T)に相当する型。特にV_Tの型はintに限られる。
 // E_Tは重み付き辺V_T -> (V_T \times U \times ...)^{< \omega}に相当する関数オブジェクト。
@@ -79,6 +80,8 @@ public:
   tuple<int,U,U> WLCA( int i , int j );
   // 更にLCAからi,j側に進める場合に進んだ先の頂点のラベルをi_prev,j_prevに格納する。
   tuple<int,U,U> WLCA( int i , int j , int& i_prev , int& j_prev );
+
+  tuple<int,int,U> WDiameter();
 
 private:
   void SetWDepth();
