@@ -27,9 +27,8 @@
   template <typename T> inline V<T>& operator INCR( V<T>& a ) { for( auto& i : a ){ INCR i; } return a; } \
 
 #define DECLARATION_OF_ARITHMETICS_FOR_VECTOR( V )			\
-  template <typename T> inline V<T>& operator+=( V<T>& a , const T& t ); \
-  template <typename T> inline V<T>& operator<<=( V<T>& a , const T& t ); \
-  template <typename T> inline V<T> operator<<( V<T>& a , const T& t ); \
+  template <typename T> inline V<T>& operator<<=( V<T>& a , T t );      \
+  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U u ); \
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , * );			\
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , / );			\
   DECLARATION_OF_SCALAR_ACTION_FOR_VECTOR( V , % );			\
@@ -44,9 +43,8 @@
   template <typename T> inline T pop( V<T>& a )                  \
 
 #define DEFINITION_OF_ARITHMETICS_FOR_VECTOR( V )			\
-  template <typename T> inline V<T>& operator+=( V<T>& a , const T& t ) { a.push_back( t ); return a; } \
-  template <typename T> inline V<T>& operator<<=( V<T>& a , const T& t ) { return a += t; } \
-  template <typename T> inline V<T> operator<<( V<T> a , const T& t ) { return move( a +~ t ); } \
+  template <typename T> inline V<T>& operator<<=( V<T>& a , T t ) { a.push_back( move( t ) ); return a; } \
+  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U u ) { return a <<= T{ move( u ) }; } \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , * );                      \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , / );                      \
   DEFINITION_OF_SCALAR_ACTION_FOR_VECTOR( V , % );                      \
