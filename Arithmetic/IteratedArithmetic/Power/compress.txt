@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/IteratedArithmetic/Power/a_Body.hpp"
+#else
+TE <TY INT>CL PowerMemoriser{PU:INT m_base;VE<INT> m_val;IN PowerMemoriser(CO INT& base = 0);IN INT OP[](CRI EX)NE;};
+TE <TY INT> IN PowerMemoriser<INT>::PowerMemoriser(CO INT& base):m_base(base),m_val(1){}TE <TY INT> IN INT PowerMemoriser<INT>::OP[](CRI EX)NE{WH(int(m_val.SZ())<= EX){m_val.push_back(m_val.back()* m_base);}RE m_val[EX];}
+#endif
+
