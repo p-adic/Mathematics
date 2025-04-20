@@ -197,9 +197,9 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , con
 template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler ){ const INT1 m_copy = move( m ); return CombinationFactorialValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : m_copy , factor , euler ); }
 
 // valutaiveは以下と併用する。
-#include "../../Arithmetic/Power/a_Body.hpp"
-// PowerMemoriser<MOD> pm{ factor };
-// pm.Get( i , j )でfactor[i]のj乗を取得。
+#include "../../Arithmetic/IteratedArithmetic/Power/a_Body.hpp"
+// vector<PowerMemoriser<MOD>> pm{}; RUN( factor , p ){ pm <<= PowerMemoriser<MOD>{ p }; }
+// pm[i][j]でfactor[i]のj乗を取得。
 
 #include "../../Arithmetic/Mod/Function/Euler/a_Body.hpp"
 // auto [euler,fuctor,exponent] = EulerFunction( pe , n )
