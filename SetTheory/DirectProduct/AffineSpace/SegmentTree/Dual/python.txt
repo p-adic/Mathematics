@@ -1,0 +1,44 @@
+#Supported under the conditions below:
+# For any x, a(e,x)==x
+# For any f, g, and x, a(m(f,g),x)==a(f,a(g,x))
+
+def rec_str(a):return"".join(["[",", ".join(rec_str(x)for x in a),"]"])if isinstance(a,list)else str(a)
+class DualSegmentTree:
+	def __init__(self,X):#O(N)
+		#User definition
+		self.e=1 #unit
+		self.m=lambda x,y:x*y #monoid structure of the acting monoid
+		self.a=self.m #monoid action
+
+		self.N=len(X);assert self.N
+		self.p=1
+		self.d=0
+		while self.p<=self.N:self.p<<=1;self.d+=1
+		self.h=self.p>>1
+		self.F=[self.e]*self.p+X+[X[0]]*(self.p-self.N)
+	def IntervalAct(self,l,r,f):#Action on [l,r], O(log N)
+		l,r=max(l,0),min(r,self.N)
+		if l>r:return
+		l,r,b,d=l|self.p,r|self.p,0,self.d+1
+		while d>1:
+			d-=1;L,R=l>>d,r>>d;b|=L!=R;self.Divide(L)
+			if b:
+				self.Divide(R);L,R=l>>d-1,r>>d-1
+				o=self.m if d>1 else self.a
+				if L&1<1:self.F[L|1]=o(f,self.F[L|1])
+				if R&1:self.F[R^1]=o(f,self.F[R^1])
+	def Act(self,i,f):assert 0<=i<self.N;IntervalAct(i,i,f)#O(log N)
+	def Set(self,i,x):#O(log N)
+		assert 0<=i<self.N;i|=self.p;self.d+=1
+		while d>1:d-=1;self.Divide(i>>d)
+		self.F[i]=x
+	def Get(self,i):#O(log N)
+		assert 0<=i<self.N;i|=self.p;x=self.F[i]
+		while i>1:i>>=1;x=self.a(self.F[i],x)
+		return x
+	def list(self):return[self.Get(i)for i in R(self.N)]
+	def __str__(self):return rec_str(self.list())
+
+	#private
+	def Divide(self,i):F,o=self.F,self.m if i<self.h else self.a;F[i],F[i<<1],F[i<<1|1]=self.e,o(F[i],F[i<<1]),o(F[i],F[i<<1|1])
+
