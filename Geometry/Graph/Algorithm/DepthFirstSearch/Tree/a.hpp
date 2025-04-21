@@ -109,7 +109,20 @@ public:
   // dp[j] = f(jの子ノードkを渡るdp[k]の列,j)
   // を満たす配列dpの根での値dp[root]をO(|V_T|)で求める。
   template <typename F> ret_t<F> RootingDP( F& f );
-
+  // - ノードiにU型の値A[i]が定まっておりその部分木和をdp[i]に格納する場合、
+  //   auto f = [&]( const vector<U>& u , const int& i ){
+  //     U answer = A[i];
+  //     for( auto& x : u ){ answer += x; }
+  //     return answer;
+  //   };
+  // - ノードiにU型の値A[i]が定まっており型Uの非可換モノイド構造Mが与えられノード番号の全順序ordが定義されておりiの子ノードをわたるノード番号jのord昇順のMに関するdp[j]の総乗をA[i]に右から掛けたものをdp[i]に格納する場合
+  //   auto f = [&]( vector<pair<U,int>>& u , const int& i ){
+  //     U answer = A[i];
+  //     sort( u.begin() , u.end() , [&]( const pair<U,int>& u0 , const pair<U,int>& u1 ){ return ord( get<1>( u0 ) , get<1>( u1 ) ); } );
+  //     for( auto& [x,j] : u ){ answer = M.Product( move( answer ) , x ); }
+  //     return pair{ move( answer ) , i };
+  //   };
+  
   // Uは適当な型、Fは写像f:U \times N ->Uに相当する型、
   // Eは写像g:U \times \{0,1\} \times N^2 -> Uに相当する型。
   // 入力の範囲内で要件
