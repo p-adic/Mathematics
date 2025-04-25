@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Interval/Costfree/UnboundedValueSum/Segmentwise/a_Body.hpp"
+#else
+TE <TY U,TY MONOID>VE<U> AbstractIntervalCostfreeUnboundedValueSumSegmentwiseKnapsack(MONOID M,CO VE<U>& value,CO bool& non_empty = true,CO bool& reversed = false){ST_AS(is_same_v<inner_t<MONOID>,U>);CO int N = value.SZ();CO U& one = M.One();VE<U> AN(N);if(N > 0){int i,d;if(reversed){i = N-1;d = -1;}else{i = 0;d = 1;}U temp = value[i];AN[i]= non_empty?temp:max(temp,one);for(int num = 1;num < N;num++){temp = M.Product(max(MO(temp),one),value[i += d]);AN[i]= max(AN[i-d],temp);}}RE AN;}TE <TY INT> IN VE<INT> IntervalCostfreeUnboundedValueSumSegmentwiseKnapsack(CO VE<INT>& value,CO bool& non_empty = true,CO bool& reversed = false){RE AbstractIntervalCostfreeUnboundedValueSumSegmentwiseKnapsack(AdditiveMonoid<INT>(),value,non_empty,reversed);}
+#endif
+
+

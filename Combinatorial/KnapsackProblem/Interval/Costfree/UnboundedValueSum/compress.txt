@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Interval/Costfree/UnboundedValueSum/a_Body.hpp"
+#else
+TE <TY U,TY MONOID>U AbstractIntervalCostfreeUnboundedValueSumKnapsack(MONOID M,CO VE<U>& value,CO bool& non_empty = true){ST_AS(is_same_v<inner_t<MONOID>,U>);CO int N = value.SZ();CO U& one = M.One();if(N == 0){AS(!non_empty);RE one;}U temp = value[0],AN = non_empty?temp:max(temp,one);for(int i = 1;i < N;i++){temp = M.Product(max(MO(temp),one),value[i]);AN = max(MO(AN),temp);}RE AN;}TE <TY INT> IN INT IntervalCostfreeUnboundedValueSumKnapsack(CO VE<INT>& value,CO bool& non_empty = true){RE AbstractIntervalCostfreeUnboundedValueSumKnapsack(AdditiveMonoid<INT>(),value,non_empty);}
+#endif
+
