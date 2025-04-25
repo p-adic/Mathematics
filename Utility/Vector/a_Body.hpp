@@ -20,3 +20,6 @@ template <typename T0 , typename T1> inline void Sort( vector<T0>& a , vector<T1
 template <typename T> inline vector<int> IndexSort( const vector<T>& a , const bool& reversed ) { auto index = id<int>( a.size() ); if( reversed ){ sort( index.begin() , index.end() , [&]( const int& i , const int& j ) { return a[j] < a[i]; } ); } else { sort( index.begin() , index.end() , [&]( const int& i , const int& j ) { return a[i] < a[j]; } ); } return index; }
 
 template <typename V> inline int len( const V& a ) { return a.size(); }
+
+template <typename T> inline void Reverse( vector<T>& a ) { const int size = len( a ) , half = size / 2; for( int i = 0 ; i < half ; i++ ){ swap( a[i] , a[size-1-i] ); } }
+template <typename T> inline vector<T> Reversed( vector<T> a ) { Reverse( a ); return move( a ); }

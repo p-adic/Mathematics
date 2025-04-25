@@ -27,3 +27,6 @@ template <typename T> inline vector<int> IndexSort( const vector<T>& a , const b
 template <typename V> inline int len( const V& a );
 
 template <typename T> inline T pop( vector<T>& a );
+
+template <typename T> inline void Reverse( vector<T>& a );
+template <typename T> inline vector<T> Reversed( vector<T> a );
