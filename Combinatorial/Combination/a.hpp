@@ -3,6 +3,7 @@
 #pragma once
 // verify:
 // https://yukicoder.me/submissions/1063416 (CombinationFactorialValuative, MOD=443*2253371)
+// https://yukicoder.me/submissions/1082026 (CombinationCumulativeProduct, RET=MP)
 
 // 主にINT1,INT2,INTはintやllを想定しているが、要件を満たせばModやDynamicModなどでも良い。
 // 例えばCombinationCumulativeProductはn,m次第でMod::Combinationより高速になる。
