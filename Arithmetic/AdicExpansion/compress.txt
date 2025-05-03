@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/AdicExpansion/a_Body.hpp"
+#else
+TE <TY INT>VE<int> AdicExpansion(INT n,CRI base){AS(n >= 0);VE<int> AN{};WH(n > 0){AN.push_back(n % base);n /= base;}Reverse(AN);RE AN;}
+#endif
+
