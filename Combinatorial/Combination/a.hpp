@@ -13,7 +13,7 @@
 // 要件
 // (1) INT1で[1,min(m,n-m)]の要素による商が実行できる。
 // のもとで均しO(1)（nごとに合計O(min(m,n-m))）で積と商の反復による計算をメモ化再帰する。
-template <typename INT1 , typename INT2> inline INT1 CombinationCumulativeProduct( const INT1& n , INT2 m , const bool& reset = false );
+template <typename RET , typename INT1 , typename INT2> inline RET CombinationCumulativeProduct( const INT1& n , INT2 m , const bool& reset = false );
 
 // 要件
 // (1) factorは相異なる素数の列（長さをLと置く）である。

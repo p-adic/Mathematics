@@ -6,11 +6,11 @@
 #include "../../Arithmetic/Iteration/a_Body.hpp"
 #include "../../Utility/Set/Map/a_Body.hpp"
 
-template <typename INT>
-INT CombinationCumulativeProductRecursion( const INT& n , const INT& m , const bool& reset )
+template <typename RET , typename INT>
+RET CombinationCumulativeProductRecursion( const INT& n , const INT& m , const bool& reset )
 {
 
-  static Map<INT,vector<INT>> memory{};
+  static Map<INT,vector<RET>> memory{};
   auto& memory_n = memory[n];
   
   if( memory_n.empty() ){
@@ -29,7 +29,7 @@ INT CombinationCumulativeProductRecursion( const INT& n , const INT& m , const b
 
   if( reset ){
 
-    INT answer = memory_n[m];
+    RET answer = memory_n[m];
     memory.erase( n );
     return answer;
 
@@ -39,7 +39,7 @@ INT CombinationCumulativeProductRecursion( const INT& n , const INT& m , const b
 
 }
 
-template <typename INT1 , typename INT2> inline INT1 CombinationCumulativeProduct( const INT1& n , INT2 m  , const bool& reset ){ const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? CombinationCumulativeProductRecursion( n , INT1{ 0 } , reset ) - 1 : CombinationCumulativeProductRecursion( n , min( m_copy , n - m_copy ) , reset ); }
+template <typename RET , typename INT1 , typename INT2> inline RET CombinationCumulativeProduct( const INT1& n , INT2 m  , const bool& reset ){ const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? CombinationCumulativeProductRecursion<RET>( n , INT1{ 0 } , reset ) - 1 : CombinationCumulativeProductRecursion<RET>( n , min( m_copy , n - m_copy ) , reset ); }
 
 template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const int& euler , const bool& reset )
 {
@@ -197,8 +197,6 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , con
 template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler ){ const INT1 m_copy = move( m ); return CombinationFactorialValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : m_copy , factor , euler ); }
 
 // valutaiveは以下と併用する。
-#include "../../Arithmetic/Iteration/Power/a_Body.hpp"
-// PowerMemoriser( facto[i] , j )でfactor[i]のj乗を取得。
-
 #include "../../Arithmetic/Mod/Function/Euler/a_Body.hpp"
-// auto [euler,fuctor,exponent] = EulerFunction( pe , n )
+// auto [euler,factor,exponent] = EulerFunction( pe , n )
+// PowerMemorisation( factor[i] , e ); // factor[i]のe乗を返す。
