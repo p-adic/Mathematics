@@ -7,10 +7,10 @@
 
 // includeìWäJèá:
 // Poynomial/a.hpp
-// FormalPowerSeries/a.hpp
+// FPS/a.hpp
 // FFT/a.hpp
 // FFT/a_Body.hpp
-// FormalPowerSeries/a_Body.hpp
+// FPS/a_Body.hpp
 // Poynomial/a_Body.hpp
 
 template <typename T> inline constexpr const int LimitOfPowerForFFT;

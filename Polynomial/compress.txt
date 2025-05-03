@@ -1,7 +1,7 @@
 #ifdef DEBUG
   #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/a_Body.hpp"
 #else
-// ../FormalPowerSeries/compress.txt‚©‚ç
+// ../FPS/compress.txt‚©‚ç
 // ‘S‚Ä‚ÌFFTŠÖŒW‚ğíœ‚µ‚½‚à‚ÌB
 #define PO Polynomial
 

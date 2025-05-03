@@ -7,7 +7,7 @@
 #include "../../Arithmetic/Mod/ConstexprModulo/Debug/a_Body.hpp"
 
 // FFT_ConvolutionÇ…ópÇ¢ÇÈÅB
-#include "../../Arithmetic/IteratedArithmetic/Constexpr/Log/a_Body.hpp"
+#include "../../Arithmetic/Iteration/Constexpr/Log/a_Body.hpp"
 
 template <typename T>
 void CooleyTukey( vector<T>& f , const int& N_shift , const int& N_input_start , const int& N_input_lim , const int& N_trunc , const int& two_power , const int& exponent , const T ( &PRT )[LimitOfPowerForFFT<T>] )
@@ -263,12 +263,12 @@ PARTIAL_SPECIALISATION_FOR_FFT( 167772161 , 26 , 17 , 29606852 , Mod );
 PARTIAL_SPECIALISATION_FOR_FFT( 469762049 , 27 , 30 , 15658735 , Mod );
 PARTIAL_SPECIALISATION_FOR_FFT( 754974721 , 25 , 362 , 415027540 , Mod );
 
-#include "../FormalPowerSeries/a_Body.hpp"
+#include "../FPS/a_Body.hpp"
 
 // includeìWäJèá:
 // Poynomial/a.hpp
-// FormalPowerSeries/a.hpp
+// FPS/a.hpp
 // FFT/a.hpp
 // FFT/a_Body.hpp
-// FormalPowerSeries/a_Body.hpp
+// FPS/a_Body.hpp
 // Poynomial/a_Body.hpp
