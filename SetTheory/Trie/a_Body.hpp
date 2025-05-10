@@ -3,57 +3,44 @@
 #pragma once
 #include "a.hpp"
 
-template <typename INT> inline TrieTree<INT>::TrieTree() : m_count( 1 ) , m_edge( 1 ) {}
+template <typename U , typename ABEL_GROUP> inline TrieTree<U,ABEL_GROUP>::TrieTree( ABEL_GROUP M ) : m_M( move( M ) ) , m_count{{m_M.Zero(),m_M.Zero()}} , m_edge( 1 ) { static_assert( is_same_v<U,inner_t<ABEL_GROUP>> ); }
 
-template <typename INT> template <typename V>
-void TrieTree<INT>::insert( const V& v , const INT& count )
+template <typename U , typename ABEL_GROUP> template <typename V>
+void TrieTree<U,ABEL_GROUP>::insert( const V& v , const U& count )
 {
 
-  if( count == 0 ){
+  const U& zero = m_M.Zero();
+  
+  if( count == zero ){
 
     return;
 
   }
 
-  assert( count > 0 );
-  DEFINITION_OF_SEARCH_IN_TRIE_TREE( node = edge[i] = m_count.size(); m_count.push_back( {0,0} ); m_edge.push_back( {} ) , m_count[node].second += count , m_count[node].first += count );
+  DEFINITION_OF_SEARCH_IN_TRIE_TREE( node = edge[i] = m_count.size(); m_count.push_back( {zero,zero} ); m_edge.push_back( {} ) , m_count[node].second = m_M.Sum( move( m_count[node].second ) , count ) , m_count[node].first = m_M.Sum( move( m_count[node].first ) , count ) );
 
 }
 
-template <typename INT> template <typename V> inline void TrieTree<INT>::erase( const V& v ) { auto&& val = ToArray( v ); erase( val , count( val ).first ); }
+template <typename U , typename ABEL_GROUP> template <typename V> inline void TrieTree<U,ABEL_GROUP>::erase( const V& v ) { auto&& val = ToArray( v ); erase( val , count( val ).first ); }
+template <typename U , typename ABEL_GROUP> template <typename V> inline void TrieTree<U,ABEL_GROUP>::erase( const V& v , const U& count ) { insert( v , m_M.Inverse( count ) ); }
 
-template <typename INT> template <typename V>
-void TrieTree<INT>::erase( const V& v , const INT& count )
-{
+template <typename U , typename ABEL_GROUP> inline void TrieTree<U,ABEL_GROUP>::clear() { m_count.resize( 1 ); m_count[0] = {m_M.Zero(),m_M.Zero()}; m_edge.resize( 1 ); m_edge[0].clear(); }
 
-  if( count == 0 ){
+template <typename U , typename ABEL_GROUP> inline bool TrieTree<U,ABEL_GROUP>::empty() const noexcept { return size() == m_M.Zero(); }
+template <typename U , typename ABEL_GROUP> inline const U& TrieTree<U,ABEL_GROUP>::size() const noexcept { return m_count[0].second; }
 
-    return;
-
-  }
-
-  assert( count > 0 );
-  DEFINITION_OF_SEARCH_IN_TRIE_TREE( abort() , assert( ( m_count[node].second -= count ) >= 0 ) , assert( ( m_count[node].first -= count ) >= 0 ) );
-
-}
-
-template <typename INT> inline void TrieTree<INT>::clear() { m_count.resize( 1 ); m_count[0] = {0,0}; m_edge.resize( 1 ); m_edge[0].clear(); }
-
-template <typename INT> inline bool TrieTree<INT>::empty() const noexcept { return size() == 0; }
-template <typename INT> inline const INT& TrieTree<INT>::size() const noexcept { return m_count[0].second; }
-
-template <typename INT> template <typename V>
-pair<INT,INT> TrieTree<INT>::count( const V& v )
+template <typename U , typename ABEL_GROUP> template <typename V>
+pair<U,U> TrieTree<U,ABEL_GROUP>::count( const V& v )
 {
 
   bool found = true;
   DEFINITION_OF_SEARCH_IN_TRIE_TREE( found = false; break , , );
-  return found ? m_count[node] : pair<INT,INT>{0,0};
+  return found ? m_count[node] : pair<U,U>{m_M.Zero(),m_M.Zero()};
 
 }
 
-template <typename INT>
-void TrieTree<INT>::Increment( vector<int>& v ) const
+template <typename U , typename ABEL_GROUP>
+void TrieTree<U,ABEL_GROUP>::Increment( vector<int>& v ) const
 {
 
   int L = v.size();
@@ -65,10 +52,12 @@ void TrieTree<INT>::Increment( vector<int>& v ) const
 
   }
 
+  const U& zero = m_M.Zero();
+
   while( true ){
 
     auto& [count,count_is] = m_count[node[L]];
-    assert( count <= count_is );
+    assert( !( count_is < count ) );
     
     if( count != count_is ){
 
@@ -95,7 +84,7 @@ void TrieTree<INT>::Increment( vector<int>& v ) const
     v[L-1] = key;
     node[L] = val;
 
-    if( m_count[node[L]].first > 0 ){
+    if( zero < m_count[node[L]].first ){
 
       return;
 
@@ -107,7 +96,7 @@ void TrieTree<INT>::Increment( vector<int>& v ) const
       
   for( auto itr = edge.begin() , end = edge.end() ; itr != end ; itr++ ){
 
-    if( m_count[itr->second].second > 0 ){
+    if( zero < m_count[itr->second].second ){
 
       v.push_back( itr->first );
       int node_curr = itr->second;
@@ -122,8 +111,8 @@ void TrieTree<INT>::Increment( vector<int>& v ) const
 
 }
 
-template <typename INT>
-void TrieTree<INT>::Decrement( vector<int>& v ) const
+template <typename U , typename ABEL_GROUP>
+void TrieTree<U,ABEL_GROUP>::Decrement( vector<int>& v ) const
 {
 
   int L = v.size();
@@ -134,6 +123,8 @@ void TrieTree<INT>::Decrement( vector<int>& v ) const
     node[i+1] = m_edge[node[i]].at( v[i] );
 
   }
+
+  const U& zero = m_M.Zero();
 
   while( true ){
 
@@ -156,7 +147,7 @@ void TrieTree<INT>::Decrement( vector<int>& v ) const
     v[L-1] = key;
     node[L] = val;
 
-    if( m_count[node[L]].second > 0 ){
+    if( zero < m_count[node[L]].second ){
 
       break;
 
@@ -169,16 +160,17 @@ void TrieTree<INT>::Decrement( vector<int>& v ) const
 
 }
 
-template <typename INT> template <typename RANGE>
-void TrieTree<INT>::SetNextNode( const map<int,int>& edge , vector<int>& answer , int& node , RANGE range ) const
+template <typename U , typename ABEL_GROUP> template <typename RANGE>
+void TrieTree<U,ABEL_GROUP>::SetNextNode( const map<int,int>& edge , vector<int>& answer , int& node , RANGE range ) const
 {
 
   static_assert( is_invocable_v<RANGE,const map<int,int>&> );
   bool found = false;
+  const U& zero = m_M.Zero();
 
   for( auto [itr,end] = range( edge ) ; itr != end ; itr++ ){
 
-    if( m_count[itr->second].second != 0 ){
+    if( m_count[itr->second].second != zero ){
 
       found = true;
       answer.push_back( itr->first );
@@ -194,11 +186,11 @@ void TrieTree<INT>::SetNextNode( const map<int,int>& edge , vector<int>& answer 
 
 }
 
-template <typename INT> template <typename SEARCH , typename RANGE>
-void TrieTree<INT>::SetMaximum_Body( vector<int>& answer , int& node , SEARCH search , RANGE range ) const
+template <typename U , typename ABEL_GROUP> template <typename SEARCH , typename RANGE>
+void TrieTree<U,ABEL_GROUP>::SetMaximum_Body( vector<int>& answer , int& node , SEARCH search , RANGE range ) const
 {
 
-  static_assert( is_invocable_v<SEARCH,const pair<INT,INT>&> );
+  static_assert( is_invocable_v<SEARCH,const pair<U,U>&> );
 
   while( true ){
 
@@ -216,17 +208,18 @@ void TrieTree<INT>::SetMaximum_Body( vector<int>& answer , int& node , SEARCH se
 
 }
 
-template <typename INT> inline void TrieTree<INT>::SetMaximum( vector<int>& answer , int& node ) const { SetMaximum_Body( answer , node , [&]( const pair<INT,INT>& count ){ assert( count.first <= count.second ); return count.first == count.second; } , [&]( const map<int,int>& edge ){ return pair{ edge.rbegin() , edge.rend() }; } ); }
-template <typename INT> inline void TrieTree<INT>::SetMinimum( vector<int>& answer , int& node ) const { SetMaximum_Body( answer , node , [&]( const pair<INT,INT>& count ){ assert( count.first <= count.second ); return count.first > 0; } , [&]( const map<int,int>& edge ){ return pair{ edge.begin() , edge.end() }; } ); }
+template <typename U , typename ABEL_GROUP> inline void TrieTree<U,ABEL_GROUP>::SetMaximum( vector<int>& answer , int& node ) const { SetMaximum_Body( answer , node , [&]( const pair<U,U>& count ){ assert( !( count.second < count.first ) ); return count.first == count.second; } , [&]( const map<int,int>& edge ){ return pair{ edge.rbegin() , edge.rend() }; } ); }
+template <typename U , typename ABEL_GROUP> inline void TrieTree<U,ABEL_GROUP>::SetMinimum( vector<int>& answer , int& node ) const { SetMaximum_Body( answer , node , [&]( const pair<U,U>& count ){ assert( !( count.second , count.first ) ); return m_M.Zero() < count.first; } , [&]( const map<int,int>& edge ){ return pair{ edge.begin() , edge.end() }; } ); }
 
-template <typename INT> inline vector<int> TrieTree<INT>::Maximum() { vector<int> answer{}; int node = 0; SetMaximum( answer , node ); return answer; }
-template <typename INT> inline vector<int> TrieTree<INT>::Minimum() { vector<int> answer{}; int node = 0; SetMinimum( answer , node ); return answer; }
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::Maximum() { vector<int> answer{}; int node = 0; SetMaximum( answer , node ); return answer; }
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::Minimum() { vector<int> answer{}; int node = 0; SetMinimum( answer , node ); return answer; }
 
-template <typename INT> template <typename RANGE>
-void TrieTree<INT>::SetMaximumLeq_Body( const vector<int>& v , vector<int>& answer , int& node , bool& lt , RANGE range ) const
+template <typename U , typename ABEL_GROUP> template <typename RANGE>
+void TrieTree<U,ABEL_GROUP>::SetMaximumLeq_Body( const vector<int>& v , vector<int>& answer , int& node , bool& lt , RANGE range ) const
 {
 
   static_assert( is_invocable_v<RANGE,const map<int,int>&,const int&> );
+  const U& zero = m_M.Zero();
 
   for( auto& i : v ){
 
@@ -236,7 +229,7 @@ void TrieTree<INT>::SetMaximumLeq_Body( const vector<int>& v , vector<int>& answ
     
     for( auto [itr,end] = range( edge , i ) ; itr != end ; itr++ ){
 
-      if( m_count[itr->second].second != 0 ){
+      if( m_count[itr->second].second != zero ){
 
         found = true;
         answer.push_back( itr->first );
@@ -260,8 +253,8 @@ void TrieTree<INT>::SetMaximumLeq_Body( const vector<int>& v , vector<int>& answ
 
 }
 
-template <typename INT> template <typename V>
-vector<int> TrieTree<INT>::MaximumLeq( const V& v )
+template <typename U , typename ABEL_GROUP> template <typename V>
+vector<int> TrieTree<U,ABEL_GROUP>::MaximumLeq( const V& v )
 {
 
   auto&& val = ToArray( v );
@@ -274,7 +267,7 @@ vector<int> TrieTree<INT>::MaximumLeq( const V& v )
 
     SetMaximum( answer , node );
 
-  } else if( answer != vector{-1} && m_count[node].first == 0 ){
+  } else if( answer != vector{-1} && m_count[node].first == m_M.Zero() ){
 
     Decrement( answer );
 
@@ -285,8 +278,8 @@ vector<int> TrieTree<INT>::MaximumLeq( const V& v )
 
 }
 
-template <typename INT> template <typename V>
-vector<int> TrieTree<INT>::MinimumGeq( const V& v )
+template <typename U , typename ABEL_GROUP> template <typename V>
+vector<int> TrieTree<U,ABEL_GROUP>::MinimumGeq( const V& v )
 {
 
   auto&& val = ToArray( v );
@@ -309,7 +302,7 @@ vector<int> TrieTree<INT>::MinimumGeq( const V& v )
 
     }
 
-    if( lt || m_count[node].first == 0 ){
+    if( lt || m_count[node].first == m_M.Zero() ){
 
       Increment( answer );
 
@@ -322,11 +315,11 @@ vector<int> TrieTree<INT>::MinimumGeq( const V& v )
 
 }
 
-template <typename INT> template <typename V> inline vector<int> TrieTree<INT>::MaximumLt( const V& v ) { auto&& val = ToArray( v ); vector<int> answer = MaximumLeq( val ); if( answer != vector{-1} &&  val == answer ){ Decrement( answer ); assert( answer == vector{-1} || val > answer ); } return answer; }
-template <typename INT> template <typename V> inline vector<int> TrieTree<INT>::MinimumGt( const V& v ) { auto&& val = ToArray( v ); vector<int> answer = MinimumGeq( val ); if( answer != vector{-1} &&  val == answer ){ Increment( answer ); assert( answer == vector{-1} || val < answer ); } return answer; }
+template <typename U , typename ABEL_GROUP> template <typename V> inline vector<int> TrieTree<U,ABEL_GROUP>::MaximumLt( const V& v ) { auto&& val = ToArray( v ); vector<int> answer = MaximumLeq( val ); if( answer != vector{-1} && val == answer ){ Decrement( answer ); assert( answer == vector{-1} || val > answer ); } return answer; }
+template <typename U , typename ABEL_GROUP> template <typename V> inline vector<int> TrieTree<U,ABEL_GROUP>::MinimumGt( const V& v ) { auto&& val = ToArray( v ); vector<int> answer = MinimumGeq( val ); if( answer != vector{-1} && val == answer ){ Increment( answer ); assert( answer == vector{-1} || val < answer ); } return answer; }
 
-template <typename INT>
-vector<int> TrieTree<INT>::ReversedMaximum( const vector<bool>& v )
+template <typename U , typename ABEL_GROUP>
+vector<int> TrieTree<U,ABEL_GROUP>::ReversedMaximum( const vector<bool>& v )
 {
 
   if( empty() ){
@@ -358,12 +351,78 @@ vector<int> TrieTree<INT>::ReversedMaximum( const vector<bool>& v )
 
 }
 
-template <typename INT> inline vector<int> TrieTree<INT>::ReversedMinimum( vector<bool> v ) { v.flip(); return ReversedMaximum( v ); }
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::ReversedMinimum( vector<bool> v ) { v.flip(); return ReversedMaximum( v ); }
 
-template <typename INT> inline const vector<int>& TrieTree<INT>::ToArray( const vector<int>& v ) { return v; }
+template <typename U , typename ABEL_GROUP> template <typename V>
+void TrieTree<U,ABEL_GROUP>::swap( const V& v0 , const V& v1 )
+{
 
-template <typename INT>
-vector<int> TrieTree<INT>::ToArray( ll v , const int& M ) 
+  const U& zero = m_M.Zero();
+  vector<int> node0 = {0};
+
+  for( auto& i : v0 ){
+
+    auto& edge = m_edge[node0.back()];
+    
+    if( edge.count( i ) == 0 ){
+
+      node0.push_back( edge[i] = m_count.size() );
+      m_count.push_back( {zero,zero} );
+      m_edge.push_back( {} );
+
+    } else {
+
+      node0.push_back( edge[i] );
+
+    }
+
+  }
+  
+  vector<int> node1 = {0};
+
+  for( auto& i : v1 ){
+
+    auto& edge = m_edge[node1.back()];
+    
+    if( edge.count( i ) == 0 ){
+
+      node1.push_back( edge[i] = m_count.size() );
+      m_count.push_back( {zero,zero} );
+      m_edge.push_back( {} );
+
+    } else {
+
+      node1.push_back( edge[i] );
+
+    }
+
+  }
+
+  m_edge[node0.back()].swap( m_edge[node1.back()] );
+  U diff = m_M.Sum( m_count[node0.back()] , m_M.Inverse( m_count[node1.back()] ) );  
+
+  for( auto& node : node1 ){
+
+    m_count[node] = m_M.Sum( move( m_count[node] ) , diff );
+
+  }
+
+  diff = m_M.Inverse( diff );  
+
+  for( auto& node : node0 ){
+
+    m_count[node] = m_M.Sum( move( m_count[node] ) , diff );
+
+  }
+
+  return;
+
+}
+
+template <typename U , typename ABEL_GROUP> inline const vector<int>& TrieTree<U,ABEL_GROUP>::ToArray( const vector<int>& v ) { return v; }
+
+template <typename U , typename ABEL_GROUP>
+vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v , const int& M ) 
 {
 
   assert( v >= 0 );
@@ -389,8 +448,8 @@ vector<int> TrieTree<INT>::ToArray( ll v , const int& M )
 
 }
 
-template <typename INT>
-vector<int> TrieTree<INT>::ToArray( ll v , const int& M , const int& L )
+template <typename U , typename ABEL_GROUP>
+vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v , const int& M , const int& L )
 {
 
   assert( v >= 0 );
@@ -407,10 +466,10 @@ vector<int> TrieTree<INT>::ToArray( ll v , const int& M , const int& L )
 
 }
 
-template <typename INT> inline vector<int> TrieTree<INT>::ToArray( const char* const& v ) { return ToArray( string( v ) ); }
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::ToArray( const char* const& v ) { return ToArray( string( v ) ); }
 
-template <typename INT> template <typename V>
-vector<int> TrieTree<INT>::ToArray( const V& v )
+template <typename U , typename ABEL_GROUP> template <typename V>
+vector<int> TrieTree<U,ABEL_GROUP>::ToArray( const V& v )
 {
 
   const int L = v.size();
