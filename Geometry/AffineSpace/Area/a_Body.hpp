@@ -9,4 +9,6 @@ inline double Area( const double& x0 , const double& y0 , const double& x1 , con
 template <typename INT , template <typename...> typename PAIR> inline ll Area( const PAIR<INT,INT>& v0 , const PAIR<INT,INT>& v1 , const PAIR<INT,INT>& v2 ) { return CALL_DEFINITION_OF_AREA; }
 template <template <typename...> typename PAIR> inline double Area( const PAIR<double,double>& v0 , const PAIR<double,double>& v1 , const PAIR<double,double>& v2 ) { return CALL_DEFINITION_OF_AREA; }
 
+inline double Area( const double& l0 , const double& l1 , const double& l2 ) { const double s = ( l0 + l1 + l2 ) / 2; return sqrt( s * ( s - l0 ) ) * sqrt( ( s - l1 ) * ( s - l2 ) ); }
+
 template <typename INT , template <typename...> typename PAIR ,typename RET> inline RET Area( const vector<PAIR<INT,INT>>& v , RET dummy ) { const int& size = v.size(); assert( size > 2 ); for( int i = 2 ; i < size ; i++ ){ dummy += Area( v[0] , v[i-1] , v[i] ); } return move( dummy ); }
