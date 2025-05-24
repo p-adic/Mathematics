@@ -42,7 +42,7 @@ template <int NUM> inline ShiftedMods<NUM> ShiftedMods<NUM>::Derepresent( uint n
 
 template <int NUM> template <typename T> inline T ShiftedMods<NUM>::Residue( T n ){ assert( n >= 0 ); return move( n < T( Constants::g_KM ) ? n : ( ( n -= Constants::g_K ) %= Constants::g_M ) += Constants::g_K ); }
 
-template <int NUM> inline const ShiftedMods<NUM>& ShiftedMods<NUM>::Factorial( const uint& n ) { static vector<ShiftedMods<NUM>> memory = { one() , one() }; static uint length_curr = 2; while( length_curr <= n ){ memory.push_back( memory.back() * Derepresent( length_curr ) ); length_curr++; } return memory[n]; }
+template <int NUM> inline const ShiftedMods<NUM>& ShiftedMods<NUM>::Factorial( const int& n ) { assert( n >= 0 ); static vector<ShiftedMods<NUM>> memory = { one() , one() }; static int length_curr = 2; while( length_curr <= n ){ memory.push_back( memory.back() * Derepresent( length_curr ) ); length_curr++; } return memory[n]; }
 
 template <int NUM> inline const ShiftedMods<NUM>& ShiftedMods<NUM>::zero() noexcept { static const ShiftedMods<NUM> z{}; return z; }
 template <int NUM> inline const ShiftedMods<NUM>& ShiftedMods<NUM>::one() noexcept { static const ShiftedMods<NUM> o{ 1 }; return o; }

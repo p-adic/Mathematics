@@ -60,7 +60,7 @@ public:
   template <typename T> static inline T Residue( T n );
   
   // k!≡0(mod n)である場合のみサポート。
-  static inline const ShiftedMods<NUM>& Factorial( const uint& n );
+  static inline const ShiftedMods<NUM>& Factorial( const int& n );
 
   static inline const ShiftedMods<NUM>& zero() noexcept;
   static inline const ShiftedMods<NUM>& one() noexcept;

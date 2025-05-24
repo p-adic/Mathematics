@@ -75,16 +75,12 @@ public:
   // 0 <= n < Mの場合のみサポート。定数倍高速化のためにassertなし。
   static inline DynamicMods<NUM> Derepresent( uint n ) noexcept;
 
-  // M==1であるか、または0 < n < MかつnがMと互いに素である場合のみサポート。
-  static inline const DynamicMods<NUM>& Inverse( const uint& n );
-  // M==1であるか、または0 <= n < g_memory_lengthである場合のみサポート。
-  static inline const DynamicMods<NUM>& TwoPower( const uint& n );
-  // M==1であるか、または0 <= n < g_memory_lengthである場合のみサポート。
-  static inline const DynamicMods<NUM>& Factorial( const uint& n );
-  // M==1であるか、または0 <= n < g_memory_lengthかつMが素数である場合のみサポート。
-  static inline const DynamicMods<NUM>& FactorialInverse( const uint& n );
-  // M==1であるか、または0 <= n < g_memory_lengthかつMが素数である場合のみサポート。
-  static inline DynamicMods<NUM> Combination( const uint& n , const uint& i );
+  // 0 <= nである場合のみサポート。
+  static inline const DynamicMods<NUM>& Factorial( const ll& n );
+  // 0 <= nかつMが素数である場合のみサポート。
+  static inline const DynamicMods<NUM>& FactorialInverse( const ll& n );
+  // Mが素数である場合のみサポート。
+  static inline DynamicMods<NUM> Combination( const ll& n , const ll& i );
 
   static inline const DynamicMods<NUM>& zero() noexcept;
   static inline const DynamicMods<NUM>& one() noexcept;
@@ -95,6 +91,11 @@ public:
 private:
   template <typename INT> inline DynamicMods<NUM>& PositivePower( INT exponent ) noexcept;
   template <typename INT> inline DynamicMods<NUM>& NonNegativePower( INT exponent ) noexcept;
+
+  // M==1であるか、または0 < n < MかつnがMと互いに素である場合のみサポート。
+  static inline const DynamicMods<NUM>& Inverse( const int& n );
+  // M==1であるか、または0 <= n < g_memory_lengthである場合のみサポート。
+  static inline const DynamicMods<NUM>& TwoPower( const int& n );
 
   using Constants = ConstantsForDynamicMods<NUM>;
   

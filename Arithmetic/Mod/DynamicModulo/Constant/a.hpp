@@ -13,7 +13,7 @@ class ConstantsForDynamicMods
 private:
   ConstantsForDynamicMods() = delete;
   static uint g_M;
-  static constexpr const uint g_memory_bound = 1e6;
+  static constexpr const uint g_memory_bound = 2e6;
   static uint g_memory_length;
   static uint g_M_minus;
   static int g_order;
