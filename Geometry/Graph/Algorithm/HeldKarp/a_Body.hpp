@@ -9,15 +9,28 @@
 template <typename T , typename GRAPH , typename U , typename COMM_MONOID> inline AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::AbstractHeldKarp( GRAPH& G , COMM_MONOID M , const U& infty ) : PointedSet<U>( infty ) , m_G( G ) , m_M( move( M ) ) { static_assert( is_same_v<T,inner_t<GRAPH>> ); }
 template <typename T , typename GRAPH> inline HeldKarp<T,GRAPH>::HeldKarp( GRAPH& G , const ll& infty ) : AbstractHeldKarp<T,GRAPH,ll,AdditiveMonoid<ll>>( G , AdditiveMonoid<ll>() , infty ) {}
 
-template <typename T , typename GRAPH , typename U , typename COMM_MONOID> inline U AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start , const vector<T>& t_factor , const T& t_final , const bool& revisitable ) { return move( GetDistance( t_start , t_factor , revisitable )[m_G.Enumeration_inv( t_final )] ); }
+template <typename T , typename GRAPH , typename U , typename COMM_MONOID> inline U AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start , const vector<T>& t_factor , const T& t_final , const bool& revisitable , int factor_count_min , int factor_count_max ) { return move( GetDistance( t_start , t_factor , revisitable , factor_count_min , factor_count_max )[m_G.Enumeration_inv( t_final )] ); }
 
 template <typename T , typename GRAPH , typename U , typename COMM_MONOID>
-vector<U> AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start , const vector<T>& t_factor , const bool& revisitable )
+vector<U> AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start , const vector<T>& t_factor , const bool& revisitable , int factor_count_min , int factor_count_max )
 {
 
   const int& size = m_G.size();
-  const int& factor_size = t_factor.size();
+  const int factor_size = t_factor.size();
   assert( factor_size < 30 );
+
+  if( factor_count_min == -1 ){
+
+    factor_count_min = factor_size;
+
+  }
+
+  if( factor_count_max == -1 ){
+
+    factor_count_max = factor_size;
+
+  }
+
   vector<int> t_factor_inv( size , -1 );
 
   for( int i = 0 ; i < factor_size ; i++ ){
@@ -30,10 +43,25 @@ vector<U> AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start
   const int power = 1 << factor_size;
   const U& infty = this->Infty();
   vector dp( power , vector<U>( size , infty ) );
+  vector<int> valid_factorisation{};
   auto&& i_start = m_G.Enumeration_inv( t_start );
   dp[t_factor_inv[i_start] == -1 ? 0 : 1 << t_factor_inv[i_start]][i_start] = m_M.One();
 
   for( int S = 0 ; S < power ; S++ ){
+
+    int c = __builtin_popcount( S );
+
+    if( factor_count_max < c ){
+
+      continue;
+      
+    }
+
+    if( factor_count_min <= c ){
+
+      valid_factorisation.push_back( S );
+
+    }
 
     for( int i = 0 ; i < size ; i++ ){
 
@@ -63,7 +91,11 @@ vector<U> AbstractHeldKarp<T,GRAPH,U,COMM_MONOID>::GetDistance( const T& t_start
 
   for( int i = 0 ; i < size ; i++ ){
 
-    weight[i] = dp[power - 1][i];
+    for( auto& S : valid_factorisation ){
+
+      weight[i] = min( move( weight[i] ) , dp[S][i] );
+
+    }
 
   }
   

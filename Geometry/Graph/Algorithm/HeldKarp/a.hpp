@@ -4,6 +4,7 @@
 
 // verify:
 // https://atcoder.jp/contests/typical-algorithm/submissions/59801372
+// https://yukicoder.me/submissions/1088213
 
 #include "../../a.hpp"
 #include "../../../../Algebra/Monoid/a.hpp"
@@ -17,7 +18,7 @@
 // が成り立つ場合にのみサポート。
 
 // 経由点の個数をFと置く。
-// 単一始点多経由点全終点最短経路探索O((|V_G| + |E_G|)x 2^F)
+// 単一始点多経由点全終点最短経路探索O((|V_G| + |E_G|)2^F)
 template <typename T , typename GRAPH , typename U , typename COMM_MONOID>
 class AbstractHeldKarp :
   public PointedSet<U>
@@ -31,8 +32,11 @@ private:
 
 public:
   inline AbstractHeldKarp( GRAPH& G , COMM_MONOID M , const U& infty );
-  inline U GetDistance( const T& t_start , const vector<T>& t_factor , const T& t_final , const bool& revisitable );
-  vector<U> GetDistance( const T& t_start , const vector<T>& t_factor , const bool& revisitable );
+  // revisitable?経由点を再訪できる:できないとして、
+  // 経由した点の種類が[factor_count_min,factor_count_max]の範囲に収まる経路内で
+  // 最短経路長を求める。
+  inline U GetDistance( const T& t_start , const vector<T>& t_factor , const T& t_final , const bool& revisitable , int factor_count_min = -1 , int factor_count_max = -1 );
+  vector<U> GetDistance( const T& t_start , const vector<T>& t_factor , const bool& revisitable , int factor_count_min = -1 , int factor_count_max = -1 );
 
 };
 template <typename GRAPH , typename U , typename COMM_MONOID> AbstractHeldKarp( GRAPH& G , COMM_MONOID M , const U& infty ) -> AbstractHeldKarp<inner_t<GRAPH>,GRAPH,U,COMM_MONOID>;
@@ -48,8 +52,8 @@ public:
 };
 template <typename GRAPH , typename...ARGS> HeldKarp( GRAPH& G , const ARGS&... args ) -> HeldKarp<inner_t<GRAPH>,GRAPH>;
 
-// -頂点0以外一度ずつしか訪問できない場合はrevistable = falseとして
-//  vector<int> factor( N - 1 ); FOR( i , 1 , N ){ factor[i-1] = i; }
-// -頂点0も含めて一度ずつしか訪問できない場合はrevistable = falseとして
-//  vector<int> factor( N - 1 ); FOR( i , 1 , N ){ factor[i-1] = i; }
-// とする必要があることに注意。
+// - 頂点0を始点として、頂点0以外の各頂点を一度ずつしか訪問できない場合はrevistable = falseとして
+//   vector<int> factor( N - 1 ); FOR( i , 1 , N ){ factor[i-1] = i; }
+// - 各頂点を一度ずつしか訪問できない場合はrevistable = falseとして
+//   vector<int> factor( N - 1 ); FOR( i , 0 , N ){ factor[i] = i; }
+// とする。
