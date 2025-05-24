@@ -77,16 +77,12 @@ public:
   // 0 <= n < Mの場合のみサポート。定数倍高速化のためにassertなし。
   static inline constexpr Mod<M> Derepresent( INT_TYPE_FOR_MOD n ) noexcept;
   
-  // Mが素数かつn < g_memory_lengthである場合のみサポート。
-  static inline const Mod<M>& Inverse( const INT_TYPE_FOR_MOD& n );
-  // n < g_memory_lengthである場合のみサポート。
-  static inline const Mod<M>& TwoPower( const INT_TYPE_FOR_MOD& n );
-  // n < g_memory_lengthである場合のみサポート。
-  static inline const Mod<M>& Factorial( const INT_TYPE_FOR_MOD& n );
-  // Mが素数かつn < g_memory_lengthである場合のみサポート。
-  static inline const Mod<M>& FactorialInverse( const INT_TYPE_FOR_MOD& n );
-  // Mが素数かつn < g_memory_lengthである場合のみサポート。
-  static inline Mod<M> Combination( const INT_TYPE_FOR_MOD& n , const INT_TYPE_FOR_MOD& i );
+  // 0 <= nである場合のみサポート。
+  static inline const Mod<M>& Factorial( const ll& n );
+  // Mが素数かつ0 <= n < Mである場合のみサポート。
+  static inline const Mod<M>& FactorialInverse( const ll& n );
+  // Mが素数である場合のみサポート。
+  static inline Mod<M> Combination( const ll& n , const ll& i );
 
   static inline const Mod<M>& zero() noexcept;
   static inline const Mod<M>& one() noexcept;
@@ -95,6 +91,11 @@ public:
 
 private:
   template <typename INT> inline constexpr Mod<M>& PositivePower( INT exponent ) noexcept;
+  // Mが素数かつ0 < n < g_memory_lengthである場合のみサポート。
+  static inline const Mod<M>& Inverse( const int& n );
+  // 0 <= n < g_memory_lengthである場合のみサポート。
+  static inline const Mod<M>& TwoPower( const int& n );
+
   template <typename INT> inline constexpr Mod<M>& NonNegativePower( INT exponent ) noexcept;
 
   static constexpr ull GCD( ull n0 , ull n1_) noexcept;
