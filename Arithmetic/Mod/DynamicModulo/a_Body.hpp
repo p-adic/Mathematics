@@ -9,7 +9,7 @@
 template <int NUM> inline DynamicMods<NUM>::DynamicMods() noexcept : m_n() {}
 template <int NUM> inline DynamicMods<NUM>::DynamicMods( const DynamicMods<NUM>& n ) noexcept : m_n( n.m_n ) {}
 template <int NUM> inline DynamicMods<NUM>::DynamicMods( DynamicMods<NUM>&& n ) noexcept : m_n( move( n.m_n ) ) {}
-template <int NUM> template <typename T , SFINAE_FOR_DMOD> inline DynamicMods<NUM>::DynamicMods( T n ) noexcept : m_n( Residue( uint( move( n ) ) , Constants::g_M ) ) {}
+template <int NUM> template <typename T , SFINAE_FOR_DMOD> inline DynamicMods<NUM>::DynamicMods( T n ) noexcept : m_n( Residue( move( n ) , Constants::g_M ) ) {}
 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator=( DynamicMods<NUM> n ) noexcept { m_n = move( n.m_n ); return *this; }
 

@@ -9,7 +9,7 @@
 template <int NUM> inline DynamicMods<NUM>::DynamicMods() noexcept : m_non_negative( true ) , m_n() , m_d( 1 ) {}
 template <int NUM> inline DynamicMods<NUM>::DynamicMods( const DynamicMods<NUM>& n ) noexcept : m_non_negative( n.m_non_negative ) , m_n( n.m_n ) , m_d( n.m_d ) {}
 template <int NUM> inline DynamicMods<NUM>::DynamicMods( DynamicMods<NUM>&& n ) noexcept : m_non_negative( n.m_non_negative ) , m_n( move( n.m_n ) ) , m_d( move( n.m_d ) ) {}
-template <int NUM> template <typename T , SFINAE_FOR_DMOD> inline DynamicMods<NUM>::DynamicMods( T n ) noexcept : m_non_negative( n >= 0 ) , m_n( uint( move( ( m_non_negative ? n : n *= -1 ) %= Constants::g_M ) ) ) , m_d( Constants::g_M > 1 ? 1 : 0 ) { static_assert( is_constructible_v<uint,decay_t<T> > ); }
+template <int NUM> template <typename T , SFINAE_FOR_DMOD> inline DynamicMods<NUM>::DynamicMods( T n ) noexcept : m_non_negative( n >= 0 ) , m_n( uint( move( ( m_non_negative ? n : n *= -1 ) %= Constants::g_M ) ) ) , m_d( Constants::g_M > 1 ? 1 : 0 ) {}
 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator=( DynamicMods<NUM> n ) noexcept { m_non_negative = n.m_non_negative; m_n = move( n.m_n ); m_d = move( n.m_d ); return *this; }
 
