@@ -21,7 +21,7 @@ public:
   inline DynamicMods() noexcept;
   inline DynamicMods( const DynamicMods<NUM>& n ) noexcept;
   inline DynamicMods( DynamicMods<NUM>&& n ) noexcept;
-  template <typename T> inline DynamicMods( T n ) noexcept;
+  template <typename T , SFINAE_FOR_DMOD = nullptr> inline DynamicMods( T n ) noexcept;
 
   inline DynamicMods<NUM>& operator=( DynamicMods<NUM> n ) noexcept;
   inline DynamicMods<NUM>& operator+=( const DynamicMods<NUM>& n ) noexcept;
