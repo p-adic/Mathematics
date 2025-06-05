@@ -3,57 +3,71 @@
 #pragma once
 #include "a.hpp"
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>::Matrix() noexcept : m_M() {}
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>::Matrix( const T& t ) noexcept : m_M() { constexpr const uint minXY = Y < X ? Y : X; for( uint y = 0 ; y < minXY ; y++ ){ m_M[y][y] = t; }; }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>::Matrix( const int& t ) noexcept : Matrix( T( t ) ) {}
+template <typename T> inline Matrix<T>::Matrix( const int& Y , const int& X ) noexcept : m_Y( Y ) , m_X( X ) , m_M( Y , vector<T>( X ) ) {}
+template <typename T> inline Vector<T>::Vector( const int& Y ) noexcept : Matrix<T>( Y , 1 ) {}
+template <typename T> inline Matrix<T>::Matrix( const int& Y , const int& X , const T& t ) noexcept : Matrix( Y , X ) { const int minXY = min( X , Y ); for( int y = 0 ; y < minXY ; y++ ){ m_M[y][y] = t; }; }
 
-template <uint Y , uint X , typename T> template <typename Arg0 , typename Arg1 , typename... Args> inline Matrix<Y,X,T>::Matrix( Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept : m_M() { T array[Y * X] = { T( forward<Arg0>( t0 ) ) , T( forward<Arg1>( t1 ) ) , T( forward<Args>( args ) )... }; SetArray( m_M , move( array ) ); }
+template <typename T> template <typename Arg0 , typename Arg1 , typename... Args> inline Matrix<T>::Matrix( const int& Y , const int& X , Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept : Matrix( Y , X ) { vector<T> temp = { T( forward<Arg0>( t0 ) ) , T( forward<Arg1>( t1 ) ) , T( forward<Args>( args ) )... }; assert( int( temp.size() ) == X * Y ); int i = 0; for( int y = 0 ; y < Y ; y++ ){ for( int x = 0 ; x < X ; x++ ){ m_M[y][x] = move( temp[i++] ); } } }
+template <typename T> template <typename Arg0 , typename Arg1 , typename... Args> inline Vector<T>::Vector( Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept : Matrix<T>( 2 + sizeof...( args ) , 1 , forward<Arg0>( t0 ) , forward<Arg1>( t1 ) , forward<Args>( args )... ) {}
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>::Matrix( const Matrix<Y,X,T>& mat ) noexcept : m_M() { operator=( mat.m_M ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>::Matrix( Matrix<Y,X,T>&& mat ) noexcept : m_M() { swap( m_M , mat.m_M ); }
+template <typename T> inline Matrix<T>::Matrix( const Matrix<T>& mat ) noexcept : m_Y() , m_X() , m_M() { *this = mat.m_M; }
+template <typename T> inline Vector<T>::Vector( const Matrix<T>& vec ) noexcept : Matrix<T>( vec ) {}
+template <typename T> inline Matrix<T>::Matrix( Matrix<T>&& mat ) noexcept : m_Y() , m_X() , m_M() { *this = move( mat.m_M ); }
+template <typename T> inline Vector<T>::Vector( Matrix<T>&& vec ) noexcept : Matrix<T>( move( vec ) ) {}
 
-template <uint Y , uint X , typename T> template <typename... Args> inline Matrix<Y,X,T>::Matrix( const T ( &mat )[Y][X] ) noexcept : m_M() { operator=( mat ); }
-template <uint Y , uint X , typename T> template <typename... Args> inline Matrix<Y,X,T>::Matrix( T ( &&mat )[Y][X] ) noexcept : m_M() { swap( m_M , mat ); }
+template <typename T> inline Matrix<T>::Matrix( const vector<vector<T>>& mat ) noexcept : m_Y() , m_X() , m_M() { *this = mat; }
+template <typename T> inline Vector<T>::Vector( const vector<T>& vec ) noexcept : Matrix<T>() { *this = vec; }
+template <typename T> inline Matrix<T>::Matrix( vector<vector<T>>&& mat ) noexcept : m_Y() , m_X() , m_M() { *this = move( mat ); }
+template <typename T> inline Vector<T>::Vector( vector<T>&& vec ) noexcept : Matrix<T>() { *this = move( vec ); }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator=( const Matrix<Y,X,T>& mat ) noexcept { return operator=( mat.m_M ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator=( Matrix<Y,X,T>&& mat ) noexcept { return operator=( move( mat.m_M ) ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator=( const T ( &mat )[Y][X] ) noexcept { for( uint y = 0 ; y < Y ; y++ ){ T ( &m_M_y )[X] = m_M[y]; const T ( &mat_y )[X] = mat[y]; for( uint x = 0 ; x < X ; x++ ){ m_M_y[x] = mat_y[x]; } } return *this; }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator=( T ( &&mat )[Y][X] ) noexcept { swap( m_M , mat ); return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator=( const Matrix<T>& mat ) noexcept { return *this = mat.m_M; }
+template <typename T> inline Vector<T>& Vector<T>::operator=( const Matrix<T>& vec ) noexcept { assert( vec.m_X == 1 ); Matrix<T>& mat = *this; mat = vec; return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator=( Matrix<T>&& mat ) noexcept { return *this = move( mat.m_M ); }
+template <typename T> inline Vector<T>& Vector<T>::operator=( Matrix<T>&& vec ) noexcept { assert( vec.m_X == 1 ); Matrix<T>& mat = *this; mat = forward<Matrix<T>>( vec ); return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator=( vector<vector<T>> mat ) { m_M = move( mat ); m_X = ( m_Y = m_M.size() ) > 0 ? int( m_M[0].size() ) : 0; for( int y = 1 ; y < m_Y ; y++ ){ assert( int( m_M[y].size() ) == m_X ); } return *this; }
+template <typename T> inline Vector<T>& Vector<T>::operator=( const vector<T>& vec ) { this->m_M.resize( this->m_Y = vec.size() , vector<T>( this->m_X = 1 ) ); for( int y = 0 ; y < this->m_Y ; y++ ){ this->m_M[y][0] = vec[y]; } return *this; }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator+=( const Matrix<Y,X,T>& mat ) noexcept { for( uint y = 0 ; y < Y ; y++ ){ T ( &m_M_y )[X] = m_M[y]; T ( &mat_y )[X] = mat.m_M[y]; for( uint x = 0 ; x < X ; x++ ){ m_M_y[x] += mat_y[x]; } } return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator+=( const Matrix<T>& mat ) { assert( m_X == mat.m_X && m_Y == mat.m_Y ); for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; auto& mat_y = mat.m_M[y]; for( int x = 0 ; x < m_X ; x++ ){ m_M_y[x] += mat_y[x]; } } return *this; }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator-=( const Matrix<Y,X,T>& mat ) noexcept { for( uint y = 0 ; y < Y ; y++ ){ T ( &m_M_y )[X] = m_M[y]; T ( &mat_y )[X] = mat.m_M[y]; for( uint x = 0 ; x < X ; x++ ){ m_M_y[x] -= mat_y[x]; } } return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator-=( const Matrix<T>& mat ) { assert( m_X == mat.m_X && m_Y == mat.m_Y ); for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; auto& mat_y = mat.m_M[y]; for( int x = 0 ; x < m_X ; x++ ){ m_M_y[x] -= mat_y[x]; } } return *this; }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator*=( const T& scalar ) noexcept { for( uint y = 0 ; y < Y ; y++ ){ T ( &m_M_y )[X] = m_M[y]; for( uint x = 0 ; x < X ; x++ ){ m_M_y[x] *= scalar; } } return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator*=( const T& scalar ) noexcept { for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; for( int x = 0 ; x < m_X ; x++ ){ m_M_y[x] *= scalar; } } return *this; }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator*=( const Matrix<X,X,T>& mat ) noexcept { return operator=( move( *this * mat ) ); }
+template <typename T> inline Matrix<T>& Matrix<T>::operator*=( const Matrix<T>& mat ) { return operator=( move( *this * mat ) ); }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator/=( const T& scalar ) { return operator*=( T( 1 ) / scalar ); }
+template <typename T> inline Matrix<T>& Matrix<T>::operator/=( const T& scalar ) { return operator*=( T( 1 ) / scalar ); }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T>& Matrix<Y,X,T>::operator%=( const T& scalar ) { for( uint y = 0 ; y < Y ; y++ ){ T ( &m_M_y )[X] = m_M[y]; for( uint x = 0 ; x < X ; x++ ){ m_M_y[x] %= scalar; } } return *this; }
+template <typename T> inline Matrix<T>& Matrix<T>::operator%=( const T& scalar ) { for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; for( int x = 0 ; x < m_X ; x++ ){ m_M_y[x] %= scalar; } } return *this; }
 
-template <uint Y , uint X , typename T> template <uint Z> inline Matrix<Y,Z,T> Matrix<Y,X,T>::operator*( const Matrix<X,Z,T>& mat ) const noexcept { Matrix<Y,Z,T> prod{}; for( uint y = 0 ; y < Y ; y++ ){ const T ( &m_M_y )[X] = m_M[y]; T ( &prod_y )[Z] = prod.m_M[y]; for( uint x = 0 ; x < X ; x++ ){ const T &m_M_yx = m_M_y[x]; const T ( &mat_x )[Z] = mat.m_M[x]; for( uint z = 0 ; z < Z ; z++ ){ prod_y[z] += m_M_yx * mat_x[z]; } } } return prod; }
+template <typename T> template <typename INT> inline Matrix<T>& Matrix<T>::operator^=( INT exponent ) { assert( m_X == m_Y && exponent >= 0 ); Matrix<T> power{ m_X , m_Y , 1 }; while( exponent > 0 ){ ( exponent& 1 ) == 1 ? power *= *this : power; *this *= *this; exponent >>= 1; } return *this = move( power ); }
 
-template <uint Y , uint X , typename T> inline bool Matrix<Y,X,T>::operator==( const Matrix<Y,X,T>& mat ) const noexcept { for( uint y = 0 ; y < Y ; y++ ){ const T ( &m_M_y )[X] = m_M[y]; const T ( &mat_y )[X] = mat[y]; for( uint x = 0 ; x < X ; x++ ){ if( m_M_y[x] != mat_y[x] ){ return false; } } } return true; }
+template <typename T> inline bool Matrix<T>::operator==( const Matrix<T>& mat ) const noexcept { if( m_X != mat.m_X || m_Y != mat.m_Y ){ return false; } for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; auto& mat_y = mat[y]; for( int x = 0 ; x < m_X ; x++ ){ if( m_M_y[x] != mat_y[x] ){ return false; } } } return true; }
+template <typename T> inline bool Matrix<T>::operator!=( const Matrix<T>& mat ) const noexcept { return !( *this == mat ); }
 
-template <uint Y , uint X , typename T> inline Matrix<X,Y,T> Matrix<Y,X,T>::Transpose() const noexcept { Matrix<X,Y,T> M_t{}; for( uint x = 0 ; x < X ; x++ ){ const T ( &M_t_x )[Y] = M_t.m_M[x]; for( uint y = 0 ; y < Y ; y++ ){ M_t_x[y] = m_M[y][x]; } } return M_t; }
+template <typename T> inline Matrix<T> Matrix<T>::operator+( const Matrix<T>& mat ) const { return move( Matrix<T>( *this ) += mat ); }
+template <typename T> inline Matrix<T> Matrix<T>::operator-( const Matrix<T>& mat ) const { return move( Matrix<T>( *this ) -= mat ); }
+template <typename T> inline Matrix<T> Matrix<T>::operator*( const T& scalar ) const noexcept { return move( Matrix<T>( *this ) *= scalar ); }
+template <typename T> inline Matrix<T> Matrix<T>::operator*( const Matrix<T>& mat ) const { assert( m_X == mat.m_Y ); Matrix<T> prod{ m_Y , mat.m_X }; for( int y = 0 ; y < m_Y ; y++ ){ auto& m_M_y = m_M[y]; auto& prod_y = prod.m_M[y]; for( int x = 0 ; x < m_X ; x++ ){ auto& m_M_yx = m_M_y[x]; auto& mat_x = mat.m_M[x]; for( int z = 0 ; z < mat.m_X ; z++ ){ prod_y[z] += m_M_yx * mat_x[z]; } } } return prod; }
+template <typename T> inline Matrix<T> Matrix<T>::operator/( const T& scalar ) const { return move( Matrix<T>( *this ) /= scalar ); }
+template <typename T> inline Matrix<T> Matrix<T>::operator%( const T& scalar ) const { return move( Matrix<T>( *this ) %= scalar ); }
+template <typename T> template <typename INT> inline Matrix<T> Matrix<T>::operator^( INT exponent ) const { return move( Matrix<T>( *this ) %= move( exponent ) ); }
 
-template <uint Y , uint X , typename T> inline T Matrix<Y,X,T>::Trace() const noexcept { constexpr const uint minXY = Y < X ? Y : X; T answer{}; for( uint y = 0 ; y < minXY ; y++ ){ answer += m_M[y][y]; } return answer; }
+template <typename T> inline Matrix<T> Matrix<T>::Transpose() const noexcept { Matrix<T> M_t{ m_Y , m_X }; for( int x = 0 ; x < m_X ; x++ ){ auto& M_t_x = M_t.m_M[x]; for( int y = 0 ; y < m_Y ; y++ ){ M_t_x[y] = m_M[y][x]; } } return M_t; }
 
-template <uint Y , uint X , typename T> inline const T ( &Matrix<Y,X,T>::operator[]( const uint& y ) )[X] const { assert( y < Y ); return m_M[y]; }
-template <uint Y , uint X , typename T> inline T ( &Matrix<Y,X,T>::operator[]( const uint& y ) )[X]{ assert( y < Y ); return m_M[y]; }
+template <typename T> inline T Matrix<T>::Trace() const noexcept { constexpr const int minXY = min( m_X , m_Y ); T answer{}; for( int y = 0 ; y < minXY ; y++ ){ answer += m_M[y][y]; } return answer; }
 
-template <uint Y , uint X , typename T> inline const Matrix<Y,X,T>& Matrix<Y,X,T>::Zero() noexcept { static const Matrix<Y,X,T> zero{}; return zero; }
-template <uint Y , uint X , typename T> inline const Matrix<Y,X,T>& Matrix<Y,X,T>::One() noexcept { static const Matrix<Y,X,T> one{ 1 }; return one; }
+template <typename T> inline const int& Matrix<T>::GetCodomainDimension() const noexcept { return m_Y; }
+template <typename T> inline const int& Matrix<T>::GetDomainDimension() const noexcept { return m_X; }
+template <typename T> inline const vector<vector<T>>& Matrix<T>::GetEntry() const noexcept { return m_M; }
 
-template <uint Y , uint X , typename T> inline void Matrix<Y,X,T>::SetArray( T ( &M )[Y][X] , T ( &&array )[Y * X] ) noexcept { uint i = 0; for( uint y = 0 ; y < Y ; y++ ){ T ( &M_y )[X] = M[y]; for( uint x = 0 ; x < X ; x++ ){ M_y[x] = move( array[i + x] ); } i += X; } }
+template <typename T> inline const vector<T>& Matrix<T>::operator[]( const int& y ) const { assert( 0 <= y && y < m_Y ); return m_M[y]; }
+template <typename T> inline const T& Vector<T>::operator[]( const int& y ) const { assert( 0 <= y && y < this->m_Y ); return this->m_M[y][0]; }
+template <typename T> inline vector<T>& Matrix<T>::operator[]( const int& y ) { assert( 0 <= y && y < m_Y ); return m_M[y]; }
+template <typename T> inline T& Vector<T>::operator[]( const int& y ) { assert( 0 <= y && y < this->m_Y ); return this->m_M[y][0]; }
 
+template <typename T> inline Matrix<T> operator*( const T& scalar , const Matrix<T>& mat ) noexcept { return mat * scalar; }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator!=( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept { return !( mat1 == mat2 ); }
+template <typename T , typename INT> inline Matrix<T> Power( Matrix<T> mat , INT exponent ) { return move( mat ^= move( exponent ) ); }
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator+( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept { return move( Matrix<Y,X,T>( mat1 ) += mat2 ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator-( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept { return move( Matrix<Y,X,T>( mat1 ) -= mat2 ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator*( const Matrix<Y,X,T>& mat , const T& scalar ) noexcept { return move( Matrix<Y,X,T>( mat ) *= scalar ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator*( const T& scalar , const Matrix<Y,X,T>& mat ) noexcept { return move( Matrix<Y,X,T>( mat ) *= scalar ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator/( const Matrix<Y,X,T>& mat , const T& scalar ) { return move( Matrix<Y,X,T>( mat ) /= scalar ); }
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator%( const Matrix<Y,X,T>& mat , const T& scalar ) { return move( Matrix<Y,X,T>( mat ) %= scalar ); }
+template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , Matrix<T> v ) { assert( exponent >= 0 ); while( exponent > 0 ){ ( exponent & 1 ) == 0 ? v : v = mat * v; mat *= mat; exponent >>= 1; } return move( v ); }
+template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , const vector<T>& v ) { return Act( move( mat ) , move( exponent ) , Vector<T>( v ) ); }

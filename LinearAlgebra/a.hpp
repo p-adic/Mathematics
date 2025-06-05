@@ -1,65 +1,97 @@
 // c:/Users/user/Documents/Programming/Mathematics/LinearAlgebra/a.hpp
 
 #pragma once
-#include "a_Macro.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/964836（トロピカル半環上の4次正方行列）
+// https://yukicoder.me/submissions/990692 (^=)
+// https://yukicoder.me/submissions/1009307 (Act)
 
-template <uint Y , uint X , typename T>
+template <typename T>
 class Matrix
 {
 
-private:
-  T m_M[Y][X];
+protected:
+  int m_Y;
+  int m_X;
+  vector<vector<T>> m_M;
 
 public:
-  inline Matrix() noexcept;
+  inline Matrix( const int& Y = 0 , const int& X = 0 ) noexcept;
   // スカラー行列
-  inline Matrix( const T& t ) noexcept;
-  inline Matrix( const int& t ) noexcept;
-  template <typename Arg0 , typename Arg1 , typename... Args> inline Matrix( Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept;
+  inline Matrix( const int& Y , const int& X , const T& t ) noexcept;
+  template <typename Arg0 , typename Arg1 , typename... Args> inline Matrix( const int& Y , const int& X , Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept;
 
-  inline Matrix( const Matrix<Y,X,T>& mat ) noexcept;
-  inline Matrix( Matrix<Y,X,T>&& mat ) noexcept;
+  inline Matrix( const Matrix<T>& mat ) noexcept;
+  inline Matrix( Matrix<T>&& mat ) noexcept;
 
-  template <typename... Args> inline Matrix( const T ( &mat )[Y][X] ) noexcept;
-  template <typename... Args> inline Matrix( T ( &&mat )[Y][X] ) noexcept;
+  // {{...},{...},...,{...}}で渡すとambiguousになりうるので、
+  // vector<vector<T>>を明示するか{Y,X,...}で渡す。
+  inline Matrix( const vector<vector<T>>& mat ) noexcept;
+  inline Matrix( vector<vector<T>>&& mat ) noexcept;
 
-  inline Matrix<Y,X,T>& operator=( const Matrix<Y,X,T>& mat ) noexcept;
-  inline Matrix<Y,X,T>& operator=( Matrix<Y,X,T>&& mat ) noexcept;
-  inline Matrix<Y,X,T>& operator=( const T ( &mat )[Y][X] ) noexcept;
-  inline Matrix<Y,X,T>& operator=( T ( &&mat )[Y][X] ) noexcept;
+  inline Matrix<T>& operator=( const Matrix<T>& mat ) noexcept;
+  inline Matrix<T>& operator=( Matrix<T>&& mat ) noexcept;
+  inline Matrix<T>& operator=( vector<vector<T>> mat );
   
-  inline Matrix<Y,X,T>& operator+=( const Matrix<Y,X,T>& mat ) noexcept;
-  inline Matrix<Y,X,T>& operator-=( const Matrix<Y,X,T>& mat ) noexcept;
-  inline Matrix<Y,X,T>& operator*=( const T& scalar ) noexcept;
-  inline Matrix<Y,X,T>& operator*=( const Matrix<X,X,T>& mat ) noexcept;
-  inline Matrix<Y,X,T>& operator/=( const T& scalar );
-  inline Matrix<Y,X,T>& operator%=( const T& scalar );
+  inline Matrix<T>& operator+=( const Matrix<T>& mat );
+  inline Matrix<T>& operator-=( const Matrix<T>& mat );
+  inline Matrix<T>& operator*=( const T& scalar ) noexcept;
+  inline Matrix<T>& operator*=( const Matrix<T>& mat );
+  inline Matrix<T>& operator/=( const T& scalar );
+  inline Matrix<T>& operator%=( const T& scalar );
+  template <typename INT> inline Matrix<T>& operator^=( INT exponent );
 
-  inline bool operator==( const Matrix<Y,X,T>& mat ) const noexcept;
-  template <uint Z> inline Matrix<Y,Z,T> operator*( const Matrix<X,Z,T>& mat ) const noexcept;
-  inline Matrix<X,Y,T> Transpose() const noexcept;
+  inline bool operator==( const Matrix<T>& mat ) const noexcept;
+  inline bool operator!=( const Matrix<T>& mat ) const noexcept;
+
+  inline Matrix<T> operator+( const Matrix<T>& mat ) const;
+  inline Matrix<T> operator-( const Matrix<T>& mat ) const;
+  inline Matrix<T> operator*( const T& scalar ) const noexcept;
+  inline Matrix<T> operator*( const Matrix<T>& mat ) const;
+  inline Matrix<T> operator/( const T& scalar ) const;
+  inline Matrix<T> operator%( const T& scalar ) const;
+  template <typename INT> inline Matrix<T> operator^( INT exponent ) const;
+
+  inline Matrix<T> Transpose() const noexcept;
   inline T Trace() const noexcept;
   
-  inline const T ( &operator[]( const uint& y ) const )[X];
-  inline T ( &operator[]( const uint& y ) )[X];
-
-  static inline const Matrix<Y,X,T>& Zero() noexcept;
-  static inline const Matrix<Y,X,T>& One() noexcept;
-
-private:
-  static inline void SetArray( T ( &M )[Y][X] , T ( &&array )[Y * X] ) noexcept;
+  inline const int& GetCodomainDimension() const noexcept;
+  inline const int& GetDomainDimension() const noexcept;
+  inline const vector<vector<T>>& GetEntry() const noexcept;
+  inline vector<vector<T>>& RefEntry() noexcept;
+  inline const vector<T>& operator[]( const int& y ) const;
+  inline vector<T>& operator[]( const int& y );
 
 };
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator!=( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept;
+template <typename T>
+class Vector :
+  public Matrix<T>
+{
 
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator+( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept;
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator-( const Matrix<Y,X,T>& mat1 , const Matrix<Y,X,T>& mat2 ) noexcept;
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator*( const Matrix<Y,X,T>& mat , const T& scalar ) noexcept;
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator*( const T& scalar , const Matrix<Y,X,T>& mat ) noexcept;
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator/( const Matrix<Y,X,T>& mat , const T& scalar );
-template <uint Y , uint X , typename T> inline Matrix<Y,X,T> operator%( const Matrix<Y,X,T>& mat , const T& scalar );
+public:
+  inline Vector( const int& Y = 0 ) noexcept;
+  template <typename Arg0 , typename Arg1 , typename... Args> inline Vector( Arg0&& t0 , Arg1&& t1 ,  Args&&... args ) noexcept;
+
+  inline Vector( const Matrix<T>& vec ) noexcept;
+  inline Vector( Matrix<T>&& vec ) noexcept;
+
+  // {{...}}で渡すとambiguousになりうるので、vector<T>を明示するか
+  // {...}で渡す。
+  inline Vector( const vector<T>& vec ) noexcept;
+  inline Vector( vector<T>&& vec ) noexcept;
+
+  inline Vector<T>& operator=( const Matrix<T>& vec ) noexcept;
+  inline Vector<T>& operator=( Matrix<T>&& vec ) noexcept;
+  inline Vector<T>& operator=( const vector<T>& vec );
+  
+  inline const T& operator[]( const int& y ) const;
+  inline T& operator[]( const int& y );
+
+};
+
+template <typename T> inline Matrix<T> operator*( const T& scalar , const Matrix<T>& mat ) noexcept;
+template <typename T , typename INT> inline Matrix<T> Power( Matrix<T> mat , INT exponent );
+template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , Matrix<T> v );
+template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , const vector<T>& v );
 
