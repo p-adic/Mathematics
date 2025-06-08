@@ -25,7 +25,7 @@ template <typename T , typename U> inline T SetMin( T& n , const U& m );
 
 
 // init * ( t ^ exponent )‚ð•Ô‚·
-template <typename T , typename UINT> T Power( const T& t , const UINT& exponent , T init );
+template <typename T , typename UINT> T Power( const T& t , const UINT& exponent , T init = 1 );
 template <typename T> inline T PowerMemorisation( const T& t , const int& exponent );
 
 

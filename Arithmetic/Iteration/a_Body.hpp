@@ -20,7 +20,7 @@ template <typename T , typename UINT>
 T Power( const T& t , const UINT& exponent , T init )
 {
 
-  return exponent > 1 ? Power( t * t , exponent >> 1 , move( exponent & 1 ? init *= t : init ) ) : move( exponent > 0 ? init *= t : assert( exponent == 0 ) , init );
+  return exponent > 1 ? Power( t * t , exponent >> 1 , move( exponent & 1 ? init *= t : init ) ) : move( exponent > 0 ? init *= t : ( assert( exponent == 0 ) , init ) );
 
 }
 
