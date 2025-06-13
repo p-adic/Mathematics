@@ -88,10 +88,12 @@ public:
   inline const T& operator[]( const int& y ) const;
   inline T& operator[]( const int& y );
 
+  inline const int& size() const noexcept;
+
 };
 
 template <typename T> inline Matrix<T> operator*( const T& scalar , const Matrix<T>& mat ) noexcept;
 template <typename T , typename INT> inline Matrix<T> Power( Matrix<T> mat , INT exponent );
 template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , Matrix<T> v );
-template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , const vector<T>& v );
 
+template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Vector<T>& v );

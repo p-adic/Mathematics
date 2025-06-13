@@ -21,9 +21,9 @@ template <typename T> inline Matrix<T>::Matrix( vector<vector<T>>&& mat ) noexce
 template <typename T> inline Vector<T>::Vector( vector<T>&& vec ) noexcept : Matrix<T>() { *this = move( vec ); }
 
 template <typename T> inline Matrix<T>& Matrix<T>::operator=( const Matrix<T>& mat ) noexcept { return *this = mat.m_M; }
-template <typename T> inline Vector<T>& Vector<T>::operator=( const Matrix<T>& vec ) noexcept { assert( vec.m_X == 1 ); Matrix<T>& mat = *this; mat = vec; return *this; }
+template <typename T> inline Vector<T>& Vector<T>::operator=( const Matrix<T>& vec ) noexcept { Matrix<T>& mat = *this; mat = vec; assert( this->m_X == 1 ); return *this; }
 template <typename T> inline Matrix<T>& Matrix<T>::operator=( Matrix<T>&& mat ) noexcept { return *this = move( mat.m_M ); }
-template <typename T> inline Vector<T>& Vector<T>::operator=( Matrix<T>&& vec ) noexcept { assert( vec.m_X == 1 ); Matrix<T>& mat = *this; mat = forward<Matrix<T>>( vec ); return *this; }
+template <typename T> inline Vector<T>& Vector<T>::operator=( Matrix<T>&& vec ) noexcept { Matrix<T>& mat = *this; mat = move( vec ); assert( this->m_X == 1 ); return *this; }
 template <typename T> inline Matrix<T>& Matrix<T>::operator=( vector<vector<T>> mat ) { m_M = move( mat ); m_X = ( m_Y = m_M.size() ) > 0 ? int( m_M[0].size() ) : 0; for( int y = 1 ; y < m_Y ; y++ ){ assert( int( m_M[y].size() ) == m_X ); } return *this; }
 template <typename T> inline Vector<T>& Vector<T>::operator=( const vector<T>& vec ) { this->m_M.resize( this->m_Y = vec.size() , vector<T>( this->m_X = 1 ) ); for( int y = 0 ; y < this->m_Y ; y++ ){ this->m_M[y][0] = vec[y]; } return *this; }
 
@@ -59,6 +59,7 @@ template <typename T> inline T Matrix<T>::Trace() const noexcept { constexpr con
 template <typename T> inline const int& Matrix<T>::GetCodomainDimension() const noexcept { return m_Y; }
 template <typename T> inline const int& Matrix<T>::GetDomainDimension() const noexcept { return m_X; }
 template <typename T> inline const vector<vector<T>>& Matrix<T>::GetEntry() const noexcept { return m_M; }
+template <typename T> inline const int& Vector<T>::size() const noexcept { return this->m_Y; }
 
 template <typename T> inline const vector<T>& Matrix<T>::operator[]( const int& y ) const { assert( 0 <= y && y < m_Y ); return m_M[y]; }
 template <typename T> inline const T& Vector<T>::operator[]( const int& y ) const { assert( 0 <= y && y < this->m_Y ); return this->m_M[y][0]; }
@@ -70,4 +71,5 @@ template <typename T> inline Matrix<T> operator*( const T& scalar , const Matrix
 template <typename T , typename INT> inline Matrix<T> Power( Matrix<T> mat , INT exponent ) { return move( mat ^= move( exponent ) ); }
 
 template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , Matrix<T> v ) { assert( exponent >= 0 ); while( exponent > 0 ){ ( exponent & 1 ) == 0 ? v : v = mat * v; mat *= mat; exponent >>= 1; } return move( v ); }
-template <typename T , typename INT> inline Matrix<T> Act( Matrix<T> mat , INT exponent , const vector<T>& v ) { return Act( move( mat ) , move( exponent ) , Vector<T>( v ) ); }
+
+template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Vector<T>& v ) { auto& Y = v.size(); for( int y = 0 ; y < Y ; y++ ){ ( y == 0 ? os : os << ' ' ) << v[y]; } return os; }
