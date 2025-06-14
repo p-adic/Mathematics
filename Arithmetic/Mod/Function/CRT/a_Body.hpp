@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../../Prime/Divisor/GCD/a_Body.hpp"
+#include "../../../Divisor/GCD/a_Body.hpp"
 #include "../Residue/a_Body.hpp"
 
 template <typename INT>
@@ -48,6 +48,9 @@ INT PartitionOfUnity( const INT& b_0 , const INT& b_1 , INT& u_0 ,  INT& u_1 )
 
 }
 
+template <typename INT> inline INT ModularInverse( const INT& b , const INT& c )
+{ INT u_0 , u_1; const INT gcd = PartitionOfUnity( b , c % b , u_0 , u_1 ); assert( gcd == 1 ); return u_1; }
+
 template <typename INT>
 INT ChineseRemainderTheorem( const INT& b_0 , const INT& c_0 , const INT& b_1 , const INT& c_1 )
 {
@@ -68,5 +71,41 @@ INT ChineseRemainderTheorem( const INT& b_0 , const INT& c_0 , const INT& b_1 , 
   u_1 *= ( c_0 - c ) / gcd;
   u_1 = ( u_1 >= 0 ? u_1 % lcm : lcm - ( - u_1 - 1 ) % lcm - 1 );
   return ( c + u_0 * b_0 + u_1 * b_1 ) % lcm;
+
+}
+
+template <typename INT>
+INT Garner( const vector<INT>& b , const vector<INT>& c )
+{
+
+  const int size = b.size();
+  assert( int( c.size() ) == size );
+  vector<INT> coeff( size );
+
+  for( int i = 0 ; i < size ; i++ ){
+
+    INT temp = 0 , b_prod = 1 % b[i];
+
+    for( int j = 0 ; j < i ; j++ ){
+
+      temp += coeff[j] * b_prod % b[i];
+      b_prod = b_prod * b[j] % b[i];
+
+    }
+
+    ( coeff[i] = ( c[i] % b[i] - temp ) * ModularInverse( b[i] , b_prod ) % b[i] ) < 0 ? coeff[i] += b[i] : coeff[i];
+
+  }
+
+  INT answer = 0 , b_prod;
+
+  for( int i = 0 ; i < size ; i++ ){
+
+    i == 0 ? b_prod = 1 : b_prod *= b[i-1];
+    answer += coeff[i] * b_prod;
+
+  }
+
+  return answer;
 
 }
