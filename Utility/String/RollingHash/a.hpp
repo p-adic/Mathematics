@@ -30,7 +30,7 @@ public:
 
   inline const MODINT& r() const noexcept;
   inline const MODINT& r_inv() const noexcept;
-  inline const vector<MODINT>& r_power() const noexcept;
+  MODINT r_power( INT i ) const noexcept;
   
   // sを{ハッシュ,r^長さ,長さ}でコードする。（O(s.size())）
   template <typename STR> inline CODE Encode( const STR& s , const bool& reversed = false );
@@ -44,7 +44,7 @@ public:
   // {s[0:length]のコード,s[1:length+1]のコード,...}を返す。（O(s.size())）
   template <typename STR> inline vector<CODE> FixedLengthEncode( const STR& s , const int& length , const bool& reversed = false );
 
-  template <typename CHAR> inline CODE Replace( CODE code , const INT& i , const CHAR& c_prev , const CHAR& c_next ) const;
+  template <typename CHAR> inline CODE Replace( CODE code , INT i , const CHAR& c_prev , const CHAR& c_next ) const;
 
   template <typename CHAR> inline CODE PopFront( CODE code , const CHAR& c_prev ) const;
   template <typename CHAR> inline CODE PopBack( CODE code , const CHAR& c_prev ) const;
@@ -59,7 +59,7 @@ public:
 protected:
   MODINT GetRand();
   void CheckSize( const INT& size );
-  virtual MODINT Twist( const ll& c );
+  virtual MODINT Twist( const ll& c ) const;
 
 };
 

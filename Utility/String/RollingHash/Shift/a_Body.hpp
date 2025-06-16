@@ -30,7 +30,7 @@ template <typename MODINT , typename INT , typename CODE> inline ShiftableRollin
 
 template <typename MODINT , typename INT , typename CODE> inline CODE ShiftableRollingHash<MODINT,INT,CODE>::Shift( const Mod<26>& shift , CODE c ) const { get<0>( c ) *= m_power[shift.Represent()]; return move( c ); }
 
-template <typename MODINT , typename INT , typename CODE> MODINT ShiftableRollingHash<MODINT,INT,CODE>::Twist( const ll& c ) { assert( 'A' <= c && c <= 'z' ); return m_power[c - ( c < 'a' ? 'A' : 'a' )]; }
+template <typename MODINT , typename INT , typename CODE> MODINT ShiftableRollingHash<MODINT,INT,CODE>::Twist( const ll& c ) const { assert( 'A' <= c && c <= 'z' ); return m_power[c - ( c < 'a' ? 'A' : 'a' )]; }
 
 template <typename MODINT , typename INT , typename CODE>
 MODINT ShiftableRollingHash<MODINT,INT,CODE>::GetPrimitiveRoot()

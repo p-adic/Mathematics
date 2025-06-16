@@ -10,7 +10,32 @@ template <typename MODINT , typename INT , typename CODE> inline RollingHash<MOD
 
 template <typename MODINT , typename INT , typename CODE> inline const MODINT& RollingHash<MODINT,INT,CODE>::r() const noexcept { return m_r; }
 template <typename MODINT , typename INT , typename CODE> inline const MODINT& RollingHash<MODINT,INT,CODE>::r_inv() const noexcept { return m_r_inv; }
-template <typename MODINT , typename INT , typename CODE> inline const vector<MODINT>& RollingHash<MODINT,INT,CODE>::r_power() const noexcept { return m_r_power; }
+
+template <typename MODINT , typename INT , typename CODE>
+MODINT RollingHash<MODINT,INT,CODE>::r_power( INT i ) const noexcept
+{
+
+  if( i < m_size ){
+
+    return m_r_power[i];
+
+  }
+
+  MODINT answer = m_r_power[m_size - 1];
+  MODINT power = m_r;
+  i -= m_size - 1;
+
+  while( i > 0 ){
+
+    ( i & 1 ) == 0 ? answer : answer *= power;
+    power *= power;
+    i >>= 1;
+
+  }
+  
+  return answer;
+
+}
 
 template <typename MODINT , typename INT , typename CODE> template <typename STR> inline CODE RollingHash<MODINT,INT,CODE>::Encode( const STR& s , const bool& reversed )
 {
@@ -94,12 +119,12 @@ template <typename MODINT , typename INT , typename CODE> template <typename STR
   
 }
 
-template <typename MODINT , typename INT , typename CODE> template <typename CHAR> inline CODE RollingHash<MODINT,INT,CODE>::Replace( CODE code , const INT& i , const CHAR& c_prev , const CHAR& c_next ) const
+template <typename MODINT , typename INT , typename CODE> template <typename CHAR> inline CODE RollingHash<MODINT,INT,CODE>::Replace( CODE code , INT i , const CHAR& c_prev , const CHAR& c_next ) const
 {
 
   auto& [h,p,s] = code;
   assert( i < s );
-  h += ( Twist( c_next ) -= Twist( c_prev ) ) *= ( i < m_size ? m_r_power[i] : R_Power( m_r , i ) );
+  h += ( Twist( c_next ) -= Twist( c_prev ) ) *= r_power( move( i ) );
   return move( code );
 
 }
@@ -109,7 +134,7 @@ template <typename MODINT , typename INT , typename CODE> template <typename CHA
 
   auto& [h,p,s] = code;
   assert( s-- > 0 );
-  h -= Twist( c_prev ) * ( s < m_size ? m_r_power[s] : R_Power( m_r , s ) );
+  h -= Twist( c_prev ) * r_power( s );
   r *= m_r_inv;
   return move( code );
 
@@ -163,4 +188,4 @@ template <typename MODINT , typename INT , typename CODE> MODINT RollingHash<MOD
 
 template <typename MODINT , typename INT , typename CODE> void RollingHash<MODINT,INT,CODE>::CheckSize( const INT& size ) { while( m_size < size ){ m_r_power.push_back( m_r_power[m_size++ - 1] * m_r ); } }
 
-template <typename MODINT , typename INT , typename CODE> MODINT RollingHash<MODINT,INT,CODE>::Twist( const ll& c ) { return MODINT( c ); }
+template <typename MODINT , typename INT , typename CODE> MODINT RollingHash<MODINT,INT,CODE>::Twist( const ll& c ) const { return MODINT( c ); }

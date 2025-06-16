@@ -30,7 +30,7 @@ public:
   inline CODE Shift( const Mod<26>& shift , CODE c ) const;
 
 private:
-  MODINT Twist( const ll& c );
+  MODINT Twist( const ll& c ) const;
   static MODINT GetPrimitiveRoot();
   
 };
