@@ -24,10 +24,10 @@ template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Mod<M>::operator++( int ) 
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator--() noexcept { return *this -= 1; }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Mod<M>::operator--( int ) noexcept { Mod<M> n{ *this }; operator--(); return n; }
 
-template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator==( const Mod<M>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % M , n1 = n.m_n * ull( m_d ) % M; return m_non_negative == n.m_non_negative ? n0 == n1 : ( n0 == 0 && n1 == 0 ) || n0 + n1 == M; }
+template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator==( const Mod<M>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % M , n1 = n.m_n * ull( m_d ) % M; return ( m_non_negative || n0 == 0 ? n0 : M - n0 ) == ( n.m_non_negative || n1 == 0 ? n1 : M - n1 ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator!=( const Mod<M>& n ) const noexcept { return !( *this == n ); }
-template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator<( const Mod<M>& n ) const noexcept { return ( !m_non_negative && n.m_non_negative ) || ( m_non_negative == n.m_non_negative && m_non_negative == ( ull( m_n ) * n.m_d < n.m_n * ull( m_d ) ) ); }
-template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator<=( const Mod<M>& n ) const noexcept { return *this == n || *this < n; }
+template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator<( const Mod<M>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % M , n1 = n.m_n * ull( m_d ) % M; return ( m_non_negative || n0 == 0 ? n0 : M - n0 ) < ( n.m_non_negative || n1 == 0 ? n1 : M - n1 ); }
+template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator<=( const Mod<M>& n ) const noexcept { return !( n < *this ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator>( const Mod<M>& n ) const noexcept { return n < *this; }
 template <INT_TYPE_FOR_MOD M> inline constexpr bool Mod<M>::operator>=( const Mod<M>& n ) const noexcept { return n <= *this; }
 
