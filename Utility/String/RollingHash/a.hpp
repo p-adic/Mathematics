@@ -45,21 +45,23 @@ public:
   template <typename STR> inline vector<CODE> FixedLengthEncode( const STR& s , const int& length , const bool& reversed = false );
 
   template <typename CHAR> inline CODE Replace( CODE code , INT i , const CHAR& c_prev , const CHAR& c_next ) const;
+  template <typename CHAR> inline CODE swap( CODE code , INT i , INT j , const CHAR& c_i , const CHAR& c_j ) const;
 
   template <typename CHAR> inline CODE PopFront( CODE code , const CHAR& c_prev ) const;
   template <typename CHAR> inline CODE PopBack( CODE code , const CHAR& c_prev ) const;
   
   // codeでコードされる文字列がsに連続部分列として含まれる個数の推定値を返す。（O(s.size())）
-  template <typename STR> inline INT CountContain( const STR& s , const CODE& code , const bool& reversed = false );
+  template <typename STR> inline int CountContain( const STR& s , const CODE& code , const bool& reversed = false );
 
   // 文字列に対しては通常の連結、配列に対しては第1引数に第2引数を連結する演算をコードに翻訳。（O(1)）
   static inline CODE Concatenate( CODE code0 , const CODE& code1 );
   static inline CODE Fold( CODE code , INT n );
 
+  virtual MODINT Twist( const ll& c ) const;
+
 protected:
   MODINT GetRand();
   void CheckSize( const INT& size );
-  virtual MODINT Twist( const ll& c ) const;
 
 };
 

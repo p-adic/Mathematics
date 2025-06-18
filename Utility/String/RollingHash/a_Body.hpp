@@ -129,6 +129,8 @@ template <typename MODINT , typename INT , typename CODE> template <typename CHA
 
 }
 
+template <typename MODINT , typename INT , typename CODE> template <typename CHAR> inline CODE RollingHash<MODINT,INT,CODE>::swap( CODE code , INT i , INT j , const CHAR& c_i , const CHAR& c_j ) const { return Replace( Replace( move( code ) , move( i ) , c_i , c_j ) , move( j ) , c_j , c_i ); }
+
 template <typename MODINT , typename INT , typename CODE> template <typename CHAR> inline CODE RollingHash<MODINT,INT,CODE>::PopFront( CODE code , const CHAR& c_prev ) const
 {
 
@@ -151,10 +153,10 @@ template <typename MODINT , typename INT , typename CODE> template <typename CHA
 
 }
 
-template <typename MODINT , typename INT , typename CODE> template <typename STR> inline INT RollingHash<MODINT,INT,CODE>::CountContain( const STR& s , const CODE& code , const bool& reversed )
+template <typename MODINT , typename INT , typename CODE> template <typename STR> inline int RollingHash<MODINT,INT,CODE>::CountContain( const STR& s , const CODE& code , const bool& reversed )
 {
 
-  const INT size0 = s.size();
+  const int size0 = s.size();
   CheckSize( size0 );
   const MODINT& n = get<0>( code );
   const INT& size1 = get<2>( code );
@@ -167,12 +169,12 @@ template <typename MODINT , typename INT , typename CODE> template <typename STR
   
   CheckSize( size1 );
   const MODINT& r_power = m_r_power[size1 - 1];
-  INT answer = 0;
+  int answer = 0;
   MODINT temp = 0;
 
-  for( INT i = 0 ; i < size0 ; i++ ){
+  for( int i = 0 ; i < size0 ; i++ ){
 
-    ( i < size1 ? temp += e( s[reversed ? size0 - 1 - i : i] ) * m_r_power[i] : ( ( temp -= Twist( s[reversed ? size0 + size1 - 1 - i : i - size1] ) ) *= m_r_inv ) += Twist( s[reversed ? size0 - 1 - i : i] ) * r_power ) == n ? ++answer : answer;
+    ( i < size1 ? temp += Twist( s[reversed ? size0 - 1 - i : i] ) * m_r_power[i] : ( ( temp -= Twist( s[reversed ? size0 + size1 - 1 - i : i - size1] ) ) *= m_r_inv ) += Twist( s[reversed ? size0 - 1 - i : i] ) * r_power ) == n ? ++answer : answer;
 
   }
 
