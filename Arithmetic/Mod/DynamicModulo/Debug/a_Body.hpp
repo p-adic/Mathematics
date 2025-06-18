@@ -25,9 +25,9 @@ template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator++( int ) n
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator--() noexcept { return *this -= 1; }
 template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator--( int ) noexcept { DynamicMods<NUM> n{ *this }; operator--(); return n; }
 
-template <int NUM> inline bool DynamicMods<NUM>::operator==( const DynamicMods<NUM>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % Constants::g_M , n1 = n.m_n * ull( m_d ) % Constants::g_M; return ( m_non_negative || n0 == 0 ? n0 : Constants::g_M - n0 ) == ( n.m_non_negative || n1 == 0 : n1 : Constants::g_M - n1 ); }
+template <int NUM> inline bool DynamicMods<NUM>::operator==( const DynamicMods<NUM>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % Constants::g_M , n1 = n.m_n * ull( m_d ) % Constants::g_M; return ( m_non_negative || n0 == 0 ? n0 : Constants::g_M - n0 ) == ( n.m_non_negative || n1 == 0 ? n1 : Constants::g_M - n1 ); }
 template <int NUM> inline bool DynamicMods<NUM>::operator!=( const DynamicMods<NUM>& n ) const noexcept { return !( *this == n ); }
-template <int NUM> inline bool DynamicMods<NUM>::operator<( const DynamicMods<NUM>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % Constants::g_M , n1 = n.m_n * ull( m_d ) % Constants::g_M; return ( m_non_negative || n0 == 0 ? n0 : Constants::g_M - n0 ) < ( n.m_non_negative || n1 == 0 : n1 : Constants::g_M - n1 ); }
+template <int NUM> inline bool DynamicMods<NUM>::operator<( const DynamicMods<NUM>& n ) const noexcept { const uint n0 = ull( m_n ) * n.m_d % Constants::g_M , n1 = n.m_n * ull( m_d ) % Constants::g_M; return ( m_non_negative || n0 == 0 ? n0 : Constants::g_M - n0 ) < ( n.m_non_negative || n1 == 0 ? n1 : Constants::g_M - n1 ); }
 template <int NUM> inline bool DynamicMods<NUM>::operator<=( const DynamicMods<NUM>& n ) const noexcept { return !( n < *this ); }
 template <int NUM> inline bool DynamicMods<NUM>::operator>( const DynamicMods<NUM>& n ) const noexcept { return n < *this; }
 template <int NUM> inline bool DynamicMods<NUM>::operator>=( const DynamicMods<NUM>& n ) const noexcept { return n <= *this; }
