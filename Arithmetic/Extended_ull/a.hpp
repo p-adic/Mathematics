@@ -1,4 +1,4 @@
-// c:/Users/user/Documents/Programming/Utility/Extended_ull/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Extended_ull/a.hpp
 
 #pragma once
 #include "a_Macro.hpp"
@@ -8,6 +8,7 @@
 // https://atcoder.jp/contests/abc169/submissions/45786332
 
 // 静的にメモリを確保するため、桁数が大きすぎるとメモリが不足となる。
+// 負数と順序を両方扱う場合は代わりに__float128などを使う。
 template <typename UINT , int digit>
 class Extended_ull
 {
@@ -95,4 +96,4 @@ template <typename UINT , int digit , class Traits> inline basic_istream<char,Tr
 template <typename UINT , int digit> inline string to_string( Extended_ull<UINT,digit> n );
 template <typename UINT , int digit , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Extended_ull<UINT,digit>& n );
 
-#include a_alias.hpp
+#include "a_alias.hpp"

@@ -1,10 +1,7 @@
-// c:/Users/user/Documents/Programming/Utility/Extended_ull/a_Body.hpp
+// c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Extended_ull/a_Body.hpp
 
 #pragma once
 #include "a.hpp"
-
-#include "Constant/a_Body.hpp"
-
 
 template <typename UINT , int digit> inline constexpr Extended_ull<UINT,digit>::Extended_ull() noexcept : m_n() , m_is_zero( true ) { STATIC_ASSERT_FOR_EXTENDED_ULL; }
 template <typename UINT , int digit> template <SFINAE_FOR_EXTENDED_ULL()> inline constexpr Extended_ull<UINT,digit>::Extended_ull( T n0 ) noexcept : m_n{ UINT( n0 ) , UINT( 0 ) } , m_is_zero( n0 == 0 ) { STATIC_ASSERT_FOR_EXTENDED_ULL; }
