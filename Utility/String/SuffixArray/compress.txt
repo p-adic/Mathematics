@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Utility/String/SuffixArray/a_Body.hpp"
+#else
+TE <TY STR>VE<int> ManberMyers(CO STR& s){CO int N = s.SZ();US CHAR = decldecay_t(s[0]);map<CHAR,VE<int>> bucket{};for(int i = 0;i < N;i++){bucket[s[i]].push_back(i);}VE<int> order(N);int order_lb = 0;VE<VE<int>> interval{};for(auto&[c,v]:bucket){if(order_lb > 0){for(auto& i:v){order[i]= order_lb;}}CO int SZ = v.SZ();order_lb += SZ;if(SZ > 1){interval.push_back(MO(v));}}VE<VE<int>> ninterval{};int L = 1;WH(true){WH(!interval.empty()){bucket.clear();for(auto& i:interval.back()){CO int j = i + L;bucket[j < N?order[j]:-1].push_back(i);}interval.pop_back();int order_lb_diff = 0;for(auto&[c,v]:bucket){if(order_lb_diff > 0){for(auto& i:v){order[i]+= order_lb_diff;}}CO int SZ = v.SZ();order_lb_diff += SZ;if(SZ > 1){ninterval.push_back(MO(v));}}}if(ninterval.empty()){break;}swap(interval,ninterval);ninterval.clear();L <<= 1;}VE<int> AN(N);for(int i = 0;i < N;i++){AN[order[i]]= i;}RE AN;}
+#endif
+
