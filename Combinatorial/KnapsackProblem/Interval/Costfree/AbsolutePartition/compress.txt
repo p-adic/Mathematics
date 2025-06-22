@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Interval/Costfree/AbsolutePartition/a_Body.hpp"
+#else
+TE <TY INT>VE<INT> MaximisationIntervalSumAbsoluteSum(CO VE<INT>& value,CRI partition_SZ,CO VE<INT>& acs){CO int N = value.SZ();AS(int(acs.SZ())== N + 1);VE<INT> AN = acs;if(partition_SZ <= N){VE temp(N,VE<INT>(2,-1));temp[partition_SZ-1]={acs[partition_SZ-1]+ value[partition_SZ-1],acs[partition_SZ-1]- value[partition_SZ-1]};AN[partition_SZ]= max(temp[partition_SZ-1][0],temp[partition_SZ-1][1]);for(int i = partition_SZ;i < N;i++){temp[i]={max(temp[i-1][0],acs[i])+ value[i],max(temp[i-1][1],acs[i])- value[i]};AN[i+1]= max(temp[i][0],temp[i][1]);}}RE AN;}TE <TY INT>VE<INT> MaximisationIntervalSumAbsoluteSum(CO VE<INT>& value,CRI partition_SZ){AS(partition_SZ >= 1);CO int N = value.SZ();VE<INT> AN(N + 1);for(int i = 0;i < N;i++){AN[i+1]= AN[i]+ value[i];}for(int i = 0;i < N;i++){AN[i+1]= abs(AN[i+1]);}for(int p = 2;p <= partition_SZ;p++){AN = MaximisationIntervalSumAbsoluteSum(value,p,AN);}RE AN;}
+#endif
+
