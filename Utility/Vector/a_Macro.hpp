@@ -22,10 +22,18 @@
 #define DEFINITION_OF_INCREMENT_FOR_VECTOR( V , INCR )			\
   template <typename T> inline V<T>& operator INCR( V<T>& a ) { for( auto& i : a ){ INCR i; } return a; } \
 
-#define DECLARATION_OF_ARITHMETICS_FOR_VECTOR( V )			\
+#define DECLARATION_OF_SHIFT_FOR_VECTOR( V )    \
   template <typename T> inline V<T>& operator<<=( V<T>& a , T t );      \
   template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U u ); \
-  DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , + );			\
+  template <typename T> inline T pop( V<T>& a )                  \
+
+#define DEFINITION_OF_SHIFT_FOR_VECTOR( V )			\
+  template <typename T> inline V<T>& operator<<=( V<T>& a , T t ) { a.push_back( move( t ) ); return a; } \
+  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ) { return a <<= T{ forward<U>( u ) }; } \
+  template <typename T> inline T pop( V<T>& a ) { assert( !a.empty() ); T answer = move( a.back() ); a.pop_back(); return answer; } \
+
+#define DECLARATION_OF_ARITHMETICS_FOR_VECTOR( V )			\
+  DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , + );                        \
   DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , - );			\
   template <typename T> inline V<T> operator-( V<T> a );                \
   DECLARATION_OF_ARITHMETIC_FOR_VECTOR( V , * );			\
@@ -34,12 +42,11 @@
   DECLARATION_OF_INCREMENT_FOR_VECTOR( V , ++ );			\
   DECLARATION_OF_INCREMENT_FOR_VECTOR( V , -- );			\
   template <typename T> inline V<T> operator*( const T& t , V<T> v ); \
-  template <typename T> inline T pop( V<T>& a )                  \
+  DECLARATION_OF_SHIFT_FOR_VECTOR( V );                                 \
+
 
 #define DEFINITION_OF_ARITHMETICS_FOR_VECTOR( V )			\
-  template <typename T> inline V<T>& operator<<=( V<T>& a , T t ) { a.push_back( move( t ) ); return a; } \
-  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ) { return a <<= T{ forward<U>( u ) }; } \
-  DEFINITION_OF_ARITHMETIC_FOR_VECTOR( V , + );				\
+  DEFINITION_OF_ARITHMETIC_FOR_VECTOR( V , + );                         \
   DEFINITION_OF_ARITHMETIC_FOR_VECTOR( V , - );				\
   DEFINITION_OF_ARITHMETIC_FOR_VECTOR( V , * );				\
   DEFINITION_OF_ARITHMETIC_FOR_VECTOR( V , / );				\
@@ -48,6 +55,6 @@
   DEFINITION_OF_INCREMENT_FOR_VECTOR( V , -- );				\
   template <typename T> inline V<T> operator-( V<T> a ) { return move( a *= T( -1 ) );} \
   template <typename T> inline V<T> operator*( const T& t , V<T> v ) { return move( v *= t ); } \
-  template <typename T> inline T pop( V<T>& a ) { assert( !a.empty() ); T answer = move( a.back() ); a.pop_back(); return answer; } \
+  DEFINITION_OF_SHIFT_FOR_VECTOR( V );                                  \
 
 

@@ -14,6 +14,7 @@
 DECLARATION_OF_ARITHMETICS_FOR_VECTOR( vector );
 DECLARATION_OF_ARITHMETICS_FOR_VECTOR( list );
 template <typename T> inline operator*( const T& scalar , vector<T> v );
+DECLARATION_OF_SHIFT_FOR_VECTOR( basic_string );
 
 // 宣言だけでは型推論できないので宣言はコメントアウトする。
 // template <typename V> inline auto Get( V& a );
@@ -28,5 +29,5 @@ template <typename V> inline int len( const V& a );
 
 template <typename T> inline T pop( vector<T>& a );
 
-template <typename T> inline void Reverse( vector<T>& a );
-template <typename T> inline vector<T> Reversed( vector<T> a );
+template <typename V> inline void Reverse( V& a );
+template <typename V> inline V Reversed( V a );

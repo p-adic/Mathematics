@@ -11,6 +11,7 @@
 
 DEFINITION_OF_ARITHMETICS_FOR_VECTOR( vector );
 DEFINITION_OF_ARITHMETICS_FOR_VECTOR( list );
+DEFINITION_OF_SHIFT_FOR_VECTOR( basic_string );
 
 template <typename V> inline auto Get( V& a ) { return [&]( const int& i = 0 ) -> const decldecay_t( a[0] )& { return a[i]; }; }
 template <typename T> inline vector<T> id( const int& size ) { vector<T> answer( size ); for( int i = 0 ; i < size ; i++ ){ answer[i] = i; } return answer; }
@@ -21,5 +22,6 @@ template <typename T> inline vector<int> IndexSort( const vector<T>& a , const b
 
 template <typename V> inline int len( const V& a ) { return a.size(); }
 
-template <typename T> inline void Reverse( vector<T>& a ) { const int size = len( a ) , half = size / 2; for( int i = 0 ; i < half ; i++ ){ swap( a[i] , a[size-1-i] ); } }
-template <typename T> inline vector<T> Reversed( vector<T> a ) { Reverse( a ); return move( a ); }
+template <typename V> inline void Reverse( V& a ) { const int size = len( a ) , half = size / 2; for( int i = 0 ; i < half ; i++ ){ swap( a[i] , a[size-1-i] ); } }
+;
+template <typename V> inline V Reversed( V a ) { Reverse( a ); return move( a ); }
