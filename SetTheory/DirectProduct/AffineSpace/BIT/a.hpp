@@ -19,19 +19,19 @@
 // 配列による初期化O(size)
 
 // 一点取得O(log_2 size)
-// U.Sum()によるLSB切片和取得O(1)（a[j-(j&-j)]+...+a[j-1]）
-// U.Sum()による始切片和取得O(log_2 size)
-// U.Sum()による区間和取得O(log_2 size)
+// M.Sum()によるLSB切片和取得O(1)（a[j-(j&-j)]+...+a[j-1]）
+// M.Sum()による始切片和取得O(log_2 size)
+// M.Sum()による区間和取得O(log_2 size)
 
 // 一点代入O(log_2 size)
-// U.Sum()による一点加算O(log_2 size)
+// M.Sum()による一点加算O(log_2 size)
 
 // 以下は入力の範囲内で要件
 // (2) operator<(const U&,const U&)に関してMがUの全順序可換群構造である。
 // (3) 各成分がM.Zero()より小さくない。
 // を満たす場合にのみサポート。
-// U.Sum()による始切片和がu以上となる要素の添字の最小値の二分探索O(log_2 size)
-// 左端点を固定した時にU.Sum()による区間和がu以上となる要素の添字の最小値の二分探索O(log_2 size)
+// M.Sum()による始切片和がu以上となる要素の添字の最小値の二分探索O(log_2 size)
+// 左端点を固定した時にM.Sum()による区間和がu以上となる要素の添字の最小値の二分探索O(log_2 size)
 template <typename U , typename ABELIAN_GROUP>
 class AbstractBIT
 {

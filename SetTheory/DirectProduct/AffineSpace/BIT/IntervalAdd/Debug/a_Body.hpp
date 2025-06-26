@@ -47,17 +47,25 @@ template <typename U , typename Z_MODULE> inline void AbstractIntervalAddBIT<U,Z
 
   }
 
-  for( int i = max( 0 , i_start ) ; i <= min( i_final , m_size - 1 ) ; i++ ){
+  if( i_start > i_final ){
 
-    m_a[i] = m_M.Sum( move( m_a[i] ) , u );
+    DERR( i_start , ">" , i_final , "であるので更新は生じませんでした。" );
 
-  }
-
-  if( m_output_mode ){
+  } else {
     
-    DERR( "IntervalAddBITの更新後の成分：" );
-    DERR( *this );
-    DERR( "" );
+    for( int i = max( 0 , i_start ) ; i <= min( i_final , m_size - 1 ) ; i++ ){
+
+      m_a[i] = m_M.Sum( move( m_a[i] ) , u );
+
+    }
+
+    if( m_output_mode ){
+    
+      DERR( "IntervalAddBITの更新後の成分：" );
+      DERR( *this );
+      DERR( "" );
+
+    }
 
   }
   

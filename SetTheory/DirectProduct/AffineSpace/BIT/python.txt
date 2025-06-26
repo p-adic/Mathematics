@@ -52,21 +52,26 @@ class BIT:
 		a.F=__self__.F[:]
 		return a
 	def Add(self,i,u):
+		if i<0:return
 		i+=1
 		while i<=self.N:
 			self.F[i]+=u
 			i+=i&-i
 	def Set(self,i,u):self.Add(i,u-self.Get(i))
-	def Get(self,i):return self.IntervalSum(i,i)
+	def Get(self,i):
+		assert 0<=i<self.N
+		return self.IntervalSum(i,i)
 	def InitialSegmentSum(self,r):
-		assert(r>-2)
+		assert -2<r<self.N
 		a=0
 		i=min(r+1,self.N)
 		while i:
 			a+=self.F[i]
 			i-=i&-i
 		return a
-	def IntervalSum(self,l,r):return self.InitialSegmentSum(r)-self.InitialSegmentSum(l-1)
+	def IntervalSum(self,l,r):
+		l,r=max(0,l),min(r,self.N-1)
+		return(self.InitialSegmentSum(r)-self.InitialSegmentSum(l-1))if l<=r else 0
 	def list(self):return[self.Get(i)for i in R(self.N)]
 	def __str__(self):return rec_str(self.list())
 	def Search(self,u):#Computing minimum of j such that InitialSegmentSum(j)>=u or j==N

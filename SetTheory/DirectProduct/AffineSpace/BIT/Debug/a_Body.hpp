@@ -85,6 +85,13 @@ void AbstractBIT<U,ABELIAN_GROUP>::Add( const int& i , const U& u )
 
   }
 
+  if( i < 0 ){
+
+    DERR( i , "< 0‚È‚Ì‚Å‰½‚à‰ÁŽZ‚³‚ê‚Ü‚¹‚ñB" );
+    return;
+
+  }
+
   int j = i + 1;
 
   while( j <= m_size ){

@@ -13,10 +13,8 @@ template <typename U , typename ABELIAN_GROUP> inline AbstractBIT<U,ABELIAN_GROU
 
   for( int j = 1 ; j <= m_size ; j++ ){
 
-    U& fenwick_j = m_fenwick[j];
-    int i = j - 1;
-    fenwick_j = a[i];
-    int i_lim = j - ( j & -j );
+    int i = j - 1 , i_lim = j - ( j & -j );
+    U& fenwick_j = m_fenwick[j] = a[i];
 
     while( i > i_lim ){
 
@@ -50,6 +48,12 @@ template <typename U , typename ABELIAN_GROUP> inline void AbstractBIT<U,ABELIAN
 template <typename U , typename ABELIAN_GROUP>
 void AbstractBIT<U,ABELIAN_GROUP>::Add( const int& i , const U& u )
 {
+
+  if( i < 0 ){
+
+    return;
+
+  }
   
   int j = i + 1;
 
