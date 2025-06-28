@@ -5,12 +5,13 @@
 #include "../../../../../Algebra/Monoid/Group/Module/a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/982716（一点加算、区間加算、一点取得）
+// https://yukicoder.me/submissions/1101956（一点加算、区間加算、一点取得）
 
 // 入力の範囲内で要件
 // (1) MがUのZ加群構造である。
 // を満たす場合にのみサポート。
 
+// m_M.Zero()による初期化O(size)
 // 配列による初期化O(size)
 
 // 一点取得O(log_2 size)
@@ -40,7 +41,7 @@ protected:
   
 public:
   AbstractIntervalAddBIT( Z_MODULE M , const int& size = 0 );
-  AbstractIntervalAddBIT( Z_MODULE M , const vector<U>& a );
+  AbstractIntervalAddBIT( Z_MODULE M , vector<U> a );
 
   template <typename...Args> inline void Initialise( const Args&... args );
   inline void Set( const int& i , const U& u );

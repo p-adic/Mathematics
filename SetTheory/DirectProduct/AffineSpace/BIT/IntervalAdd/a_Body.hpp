@@ -7,29 +7,26 @@
 #include "../../../../../Algebra/Monoid/Group/Module/a_Body.hpp"
 
 template <typename U , typename Z_MODULE> AbstractIntervalAddBIT<U,Z_MODULE>::AbstractIntervalAddBIT( Z_MODULE M , const int& size ) : m_M( move( M ) ) , m_bit_0( m_M , size ) , m_bit_1( m_M , size ) {}
-template <typename U , typename Z_MODULE> AbstractIntervalAddBIT<U,Z_MODULE>::AbstractIntervalAddBIT( Z_MODULE M , const vector<U>& a ) : m_M( move( M ) ) , m_bit_0( m_M ) , m_bit_1( m_M )
+template <typename U , typename Z_MODULE> AbstractIntervalAddBIT<U,Z_MODULE>::AbstractIntervalAddBIT( Z_MODULE M , vector<U> a ) : m_M( move( M ) ) , m_bit_0( m_M ) , m_bit_1( m_M )
 {
 
   const int size = a.size();
-  vector<U> diff( size , m_M.Zero() );
-  diff[0] = a[0];
   
-  for( int i = 1 ; i < size ; i++ ){
+  for( int i = size - 1 ; i > 0 ; i-- ){
 
-    diff[i] = m_M.Sum( m_M.Inverse( a[i-1] ) , a[i] );
-
-  }
-
-  m_bit_1.Initialise( diff );
-
-  for( int i = 1 ; i < size ; i++ ){
-
-    U& diff_i = diff[i];
-    diff_i = m_M.ScalarProduct( 1 - i , move( diff_i ) );
+    a[i] = m_M.Sum( move( a[i] ) , m_M.Inverse( a[i-1] ) );
 
   }
 
-  m_bit_0.Initialise( diff );
+  m_bit_1.Initialise( a );
+
+  for( int i = 1 ; i < size ; i++ ){
+
+    a[i] = m_M.ScalarProduct( 1 - i , move( a_i ) );
+
+  }
+
+  m_bit_0.Initialise( a );
 
 }
 

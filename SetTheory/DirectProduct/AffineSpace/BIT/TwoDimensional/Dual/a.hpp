@@ -15,26 +15,27 @@
 // 一点代入O(log_2 X log_2 Y)
 // M.Sum()による矩形加算O(log_2 X log_2 Y)
 template <typename U , typename ABELIAN_GROUP>
-class AbstractTwoDimensionalDualBIT :
-  public AbstractTwoDimensionalBIT<U,ABELIAN_GROUP>
+class AbstractTwoDimensionalDualBIT
 {
 
+private:
+  ABELIAN_GROUP m_M;
+  // 階差数列（a_i - a_{i-1}）の２次元版を２次元BITで管理
+  AbstractTwoDimensionalBIT<U,ABELIAN_GROUP> m_fenwick;
+  
 public:
   inline AbstractTwoDimensionalDualBIT( ABELIAN_GROUP M , const int& X = 0 , const int& Y = 0 );
   inline AbstractTwoDimensionalDualBIT( ABELIAN_GROUP M , vector<vector<U>> a );
 
-  inline AbstractTwoDimensionalDualBIT<U,ABELIAN_GROUP>& operator=( AbstractTwoDimensionalDualBIT<U,ABELIAN_GROUP>&& bit );
   template <typename...Args> inline void Initialise( Args&&... args );
   inline void Set( const int& x , const int& y , const U& u );
   inline void Add( const int& x , const int& y , const U& u );
   void IntervalAdd( int x_start , int x_final , int y_start , int y_final , const U& u );
 
+  inline const int& X() const noexcept;
+  inline const int& Y() const noexcept;
   // const参照でないことに注意。
   inline U Get( const int& x , const int& y );
-
-private:
-  inline AbstractTwoDimensionalDualBIT( ABELIAN_GROUP& M , const vector<vector<U>>& a , const bool& dummy );
-  static vector<vector<U>> Differentiate( ABELIAN_GROUP& M , vector<vector<U>> a );
   
 };
 template <typename ABELIAN_GROUP , typename...Args> AbstractTwoDimensionalDualBIT( ABELIAN_GROUP M , const Args&... args ) -> AbstractTwoDimensionalDualBIT<inner_t<ABELIAN_GROUP>,ABELIAN_GROUP>;
