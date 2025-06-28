@@ -7,15 +7,15 @@
 // 入力の範囲内で要件
 // (1) MがUの可換群構造である。
 // を満たす場合にのみサポート。
-// ただしM.Inverse()を使うのはSetとRectangleSumのみなので、
-// AddとInitialRectangleSumしか使わない場合は
+// ただしM.Inverse()を使うのは配列初期化とSetとRectangleSumのみなので、
+// 零初期化とAddとInitialRectangleSumしか使わない場合は
 // M.Inverse()を好きに設定してMをUの可換モノイド構造として良い。
 
-// 零初期化O(X \times Y)
+// M.Zero()による初期化O(X \times Y)
 // 配列による初期化O(X \times Y)
 
 // 一点取得O(log_2 X log_2 Y)
-// M.Sum()によるLSB切片矩形和取得O(1)（[x-(x&-x),y-(y&-y)] \times [x-1][y-1]）
+// M.Sum()によるLSB切片矩形和取得O(1)（[x-(x&-x),x-1] \times [y-(y&-y),y-1]）
 // M.Sum()による始切片矩形和取得O(log_2 X log_2 Y)
 // M.Sum()による矩形和取得O(log_2 X log_2 Y)
 
