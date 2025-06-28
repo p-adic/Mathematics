@@ -12,10 +12,11 @@
 // 入力の範囲内で要件
 // (1) MがUの可換群構造である。
 // を満たす場合にのみサポート。
-// ただしM.Inverse()を使うのはSetとIntervalSumと単調関係に関する区間でのSearchのみなので、
-// AddとInitialSegmentSumとその他のSearchしか使わない場合は
+// ただしM.Inverse()を使うのは配列初期化とSetとIntervalSumと単調関係に関する区間での
+// Searchのみなので、零初期化AddとInitialSegmentSumとその他のSearchしか使わない場合は
 // M.Inverse()を好きに設定してMをUの可換モノイド構造として良い。
 
+// M.Zeroによる初期化O(size)
 // 配列による初期化O(size)
 
 // 一点取得O(log_2 size)
