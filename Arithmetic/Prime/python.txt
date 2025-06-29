@@ -13,8 +13,8 @@ for i in R(2,L):
 		while j<L:C[j],j=1,j+i
 	p[i]=len(P)
 
-#動的な素数列挙、前計算量合計O(p_i i)=O(i^2 log i)でO(1)でp_iを返す。
-#特に前計算量O(L^2/log L)でL未満の素数を列挙する。
+#動的な素数列挙、前計算量合計O((p_i/log p_i)^2)=O(i^2)でO(1)でp_iを返す。
+#特に前計算量O((L/log L)^2)でL未満の素数を列挙する。
 P=[2,3]
 def GetPrime(i):
 	global P

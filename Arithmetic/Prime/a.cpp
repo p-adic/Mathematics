@@ -21,7 +21,9 @@ int GetPrime( const int& i )
 
       p += 2;
       prime = true;
-    
+
+      // L + L(1-1/p_0) + L(1-1/p_0)(1-1/p_1) + ... 
+      // \approx (L/log L)^2
       for( auto& q : P ){
 
         // pが2^31付近でなければオーバーフローしない
