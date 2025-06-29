@@ -23,7 +23,7 @@
 // M.Sum()による一点加算O(log_2 X log_2 Y)
 
 // AbstractBITを二重にすれば実装できるが、
-// 演算の定義のために余計なfriend指定が必要なので直接実装する。
+// 各操作がO((log_2 X)Y)になることに注意。
 template <typename U , typename ABELIAN_GROUP>
 class AbstractTwoDimensionalBIT
 {
