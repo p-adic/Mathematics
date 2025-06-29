@@ -10,43 +10,45 @@ template <typename U , typename ABELIAN_GROUP> inline AbstractTwoDimensionalBIT<
 {
 
   static_assert( is_same_v<U,inner_t<ABELIAN_GROUP>> );
+  vector temp( m_X , vector<U>( m_Y + 1 , m_M.Zero() ) );
 
   for( int i = 1 ; i <= m_X ; i++ ){
 
-    auto& fenwick_i = m_fenwick[i];
-    int x = i - 1;
-    auto& a_x = a[x];
-    assert( int( a_x.size() ) == m_Y );
+    const int x = i - 1;
+    assert( int( a[x].size() ) == m_Y );
 
     for( int j = 1 ; j <= m_Y ; j++ ){
 
-      fenwick_i[j] = a_x[j-1];
+      int y = j - 1;
+      const int y_lim = j - ( j & -j );
+      m_fenwick[i][j] = a[x][y];
+
+      while( y > y_lim ){
+      
+        m_fenwick[i][j] = m_M.Sum( move( m_fenwick[i][j] ) , m_fenwick[i][y] );
+        y -= ( y & -y );
+        
+      }
 
     }
-    
-    int x_lim = i - ( i & -i );
+
+  }
+
+  for( int i = 1 ; i <= m_X ; i++ ){
+
+    int x = i - 1;
+    const int x_lim = i - ( i & -i );
 
     while( x > x_lim ){
 
-      auto& fenwick_x = m_fenwick[x];
-
       for( int j = 1 ; j <= m_Y ; j++ ){
 
-        U& fenwick_ij = fenwick_i[j];
-        int y = j - 1;
-        int y_lim = j - ( j & -j );
-
-        while( y > y_lim ){
-      
-          fenwick_ij = m_M.Sum( move( fenwick_ij ) , fenwick_x[y] );
-          y -= ( y & -y );
-          
-        }
-
-        x -= ( x & -x );
+        m_fenwick[i][j] = m_M.Sum( move( m_fenwick[i][j] ) , m_fenwick[x][j] );
 
       }
 
+      x -= ( x & -x );
+      
     }
 
   }
@@ -106,11 +108,11 @@ U AbstractTwoDimensionalBIT<U,ABELIAN_GROUP>::InitialRectangleSum( const int& x_
     while( j > 0 ){
 
       sum = m_M.Sum( move( sum ) , fenwick_i[j] );
-      j -= j & -j;
+      j -= ( j & -j );
     
     }
 
-    i -= i & -i;
+    i -= ( i & -i );
     
   }
 

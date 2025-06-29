@@ -12,11 +12,11 @@ template <typename U , typename ABELIAN_GROUP> inline AbstractTwoDimensionalDual
   const int m_X = a.size();
   const int m_Y = m_X == 0 ? 0 : a[0].size();
 
-  for( int x = m_X ; x >= 0 ; x-- ){
+  for( int x = m_X - 1 ; x >= 0 ; x-- ){
 
     if( x > 0 ){
       
-      for( int y = m_Y ; y >= 0 ; y-- ){
+      for( int y = 0 ; y < m_Y ; y++ ){
 
         a[x][y] = m_M.Sum( move( a[x][y] ) , m_M.Inverse( a[x-1][y] ) );
 
@@ -24,7 +24,7 @@ template <typename U , typename ABELIAN_GROUP> inline AbstractTwoDimensionalDual
 
     }
   
-    for( int y = m_Y ; y > 0 ; y-- ){
+    for( int y = m_Y - 1 ; y > 0 ; y-- ){
 
       a[x][y] = m_M.Sum( move( a[x][y] ) , m_M.Inverse( a[x][y-1] ) );
 
@@ -61,7 +61,7 @@ template <typename U , typename ABELIAN_GROUP> inline void AbstractTwoDimensiona
 
   const U u_inv = m_M.Inverse( u );
 
-  if( x_final + 1 < X && y_final + 1 < m_Y ){
+  if( x_final + 1 < m_X && y_final + 1 < m_Y ){
 
     m_fenwick.Add( x_final + 1 , y_final + 1 , u );
 
