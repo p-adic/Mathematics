@@ -106,11 +106,11 @@ template <typename QUERY> inline void Mo::BucketSort( const QUERY& query , const
 
 inline const vector<vector<tuple<int,int,int>>>& Mo::Get() const noexcept { return m_query; }
 
-template <typename F , typename DFx , typename DFy , typename G> vector<decay_t<ret_t<G,ret_t<F,int,int>,int>>> Mo::Solve( F& f , DFx& dfx , DFy& dfy , G& g ) const
+template <typename F , typename DFxp , typename DFxm , typename DFyp , typename DFym , typename G> vector<decay_t<ret_t<G,ret_t<F,int,int>,int>>> Mo::Solve( F& f , DFxp& dfxp , DFxm& dfxm , DFyp& dfyp , DFym& dfym , G& g ) const
 {
 
   using R1 = ret_t<F,int,int>;
-  static_assert( is_invocable_r_v<R1&,DFx,R1&,int,int,int> && is_invocable_r_v<R1&,DFy,R1&,int,int,int> );
+  static_assert( is_invocable_r_v<R1,DFxp,R1,int,int,int> && is_invocable_r_v<R1,DFxm,R1,int,int,int> && is_invocable_r_v<R1,DFyp,R1,int,int,int> && is_invocable_r_v<R1,DFym,R1,int,int,int> );
   using R2 = decay_t<ret_t<G,const R1&,int>>;
   vector<R2> answer( m_Q );
 
@@ -127,11 +127,11 @@ template <typename F , typename DFx , typename DFy , typename G> vector<decay_t<
     auto [x,y,q] = m_query[d][0];
     R1 temp = f( x , y );
     answer[q] = g( temp , q );
-    Solve_Body( answer , temp , x , y , dfx , dfy , d , 1 , g );
+    Solve_Body( answer , temp , x , y , dfxp , dfxm , dfyp , dfym , d , 1 , g );
 
     while( ++d < m_Y_d ){
 
-      Solve_Body( answer , temp , x , y , dfx , dfy , d , 0 , g );
+      Solve_Body( answer , temp , x , y , dfxp , dfxm , dfyp , dfym , d , 0 , g );
 
     }
 
@@ -141,9 +141,9 @@ template <typename F , typename DFx , typename DFy , typename G> vector<decay_t<
 
 }
 
-template <typename F , typename DFx , typename DFy> inline vector<ret_t<F,int,int>> Mo::Solve( F& f , DFx& dfx , DFy& dfy ) const { using R = ret_t<F,int,int>; auto id = [&]( const R& r , const int& ) -> const R& { return r; }; return Solve( f , dfx , dfy , id ); }
+template <typename F , typename DFxp , typename DFxm , typename DFyp , typename DFym> inline vector<ret_t<F,int,int>> Mo::Solve( F& f , DFxp& dfxp , DFxm& dfxm , DFyp& dfyp , DFym& dfym ) const { using R = ret_t<F,int,int>; auto id = [&]( R r , const int& ) { return move( r ); }; return Solve( f , dfxp , dfxm , dfyp , dfym , id ); }
 
-template <typename R , typename DFx , typename DFy , typename G> void Mo::Solve_Body( vector<R>& answer , R& temp , int& x , int& y , DFx& dfx , DFy& dfy , const int& d , const int& i_start , G& g ) const
+template <typename R , typename DFxp , typename DFxm , typename DFyp , typename DFym , typename G> void Mo::Solve_Body( vector<R>& answer , R& temp , int& x , int& y , DFxp& dfxp , DFxm& dfxm , DFyp& dfyp , DFym& dfym , const int& d , const int& i_start , G& g ) const
 {
 
   auto& m_query_d = m_query[d];
@@ -152,10 +152,31 @@ template <typename R , typename DFx , typename DFy , typename G> void Mo::Solve_
   for( int i = i_start ; i < size ; i++ ){
 
     auto& [x_next,y_next,q] = m_query_d[i];
-    temp = dfy( dfx( temp , x , y , x_next ) , x_next , y , y_next );
-    answer[q] = g( temp , q );
+
+    if( x < x_next ){
+      
+      temp = dfxp( move( temp ) , x , y , x_next );
+    
+    } else if( x > x_next ){
+
+      temp = dfxm( move( temp ) , x , y , x_next );
+
+    }
+
     x = x_next;
+
+    if( y < y_next ){
+      
+      temp = dfyp( move( temp ) , x , y , y_next );
+    
+    } else if( y > y_next ){
+
+      temp = dfym( move( temp ) , x , y , y_next );
+
+    }
+    
     y = y_next;
+    answer[q] = g( temp , q );
 
   }
 
