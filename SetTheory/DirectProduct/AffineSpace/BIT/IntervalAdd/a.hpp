@@ -53,7 +53,7 @@ public:
   inline U operator[]( const int& i );
   inline U Get( const int& i );
   inline U InitialSegmentSum( const int& i_final );
-  inline U IntervalSum( const int& i_start , const int& i_final );
+  inline U IntervalSum( int i_start , int i_final );
 
   // Fは積順序に関して単調な写像f:U \times int -> {0,1}に相当する型。
   // f( InitialSegmentSum( i ) , i )がtrueとなるiが存在する場合にその最小値を2進法で探索。

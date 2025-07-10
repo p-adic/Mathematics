@@ -93,7 +93,7 @@ U AbstractBIT<U,ABELIAN_GROUP>::InitialSegmentSum( const int& i_final )
   
 }
 
-template <typename U , typename ABELIAN_GROUP> inline U AbstractBIT<U,ABELIAN_GROUP>::IntervalSum( const int& i_start , const int& i_final ) { return m_M.Sum( m_M.Inverse( InitialSegmentSum( i_start - 1 ) ) , InitialSegmentSum( i_final ) ); }
+template <typename U , typename ABELIAN_GROUP> inline U AbstractBIT<U,ABELIAN_GROUP>::IntervalSum( int i_start , int i_final ) { i_start = max( 0 , i_start ); i_final = min( size() , i_final ); return i_start <= i_final ? m_M.Sum( m_M.Inverse( InitialSegmentSum( i_start - 1 ) ) , InitialSegmentSum( i_final ) ) : m_M.Zero(); }
 
 
 template <typename U , typename ABELIAN_GROUP> template <typename F , SFINAE_FOR_BIT_BS>
