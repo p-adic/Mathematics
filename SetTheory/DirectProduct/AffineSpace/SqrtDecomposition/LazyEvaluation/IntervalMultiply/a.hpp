@@ -97,3 +97,7 @@ private:
 
 };
 template <typename PT_MAGMA , typename RN_BIMODULE , typename...Args> IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , const Args&... args ) -> IntervalMultiplyLazySqrtDecomposition<inner_t<PT_MAGMA>,PT_MAGMA,inner_t<RN_BIMODULE>,RN_BIMODULE>;
+
+// 例えば
+// IntervalMultiplyLazySqrtDecomposition lsd{ RegularRSet( MultiplicativeMonoid<MP>( 1 ) ) , Module<MP,MP>() , move( a ) };
+// でMPによる区間スカラー倍更新、区間加算更新、区間和取得が可能。

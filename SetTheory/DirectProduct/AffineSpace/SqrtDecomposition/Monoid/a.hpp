@@ -19,7 +19,7 @@
 // 一点取得O(1)
 // M.Product()に関する右区間積取得O(N^{1/2})（IntervalProduct(l,r)でa[l]*...*a[r]を返す）
 
-// 一点代入O(N^{1/2})
+// 一点代入O(N^{1/2})（償却）
 
 // 以下入力の範囲内で要件
 // (2) bool operator<(const U&,const U&)に関してMがUの全順序モノイド構造である。
@@ -35,6 +35,7 @@ protected:
   MONOID m_M;
   vector<U> m_a;
   vector<U> m_b;
+  vector<bool> m_updated;
   
 public:
   template <typename...Args> inline MonoidSqrtDecomposition( MONOID M , const int& N = 0 , const Args&... args );
@@ -45,6 +46,7 @@ public:
 
   inline const U& operator[]( const int& i ) const;
   inline const U& Get( const int& i ) const;
+  inline const U& BucketProduct( const int& d );
   inline U IntervalProduct( const int& i_start , const int& i_final );
 
   // Fは積順序に関して単調な写像f:U \times int -> {0,1}に相当する型。
@@ -58,6 +60,7 @@ public:
 private:
   template <typename F> int Search_Body( const int& i_start , const F& f , U product_temp );
   template <typename F> int SearchReverse_Body( const int& i_final , const F& f , U product_temp );
+  void ComputeProduct( const int& d );
   
 };
 template <typename MONOID , typename...Args> MonoidSqrtDecomposition( MONOID M , Args&&...args ) -> MonoidSqrtDecomposition<inner_t<MONOID>,MONOID>;

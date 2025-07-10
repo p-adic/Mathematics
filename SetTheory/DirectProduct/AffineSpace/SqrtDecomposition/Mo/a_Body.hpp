@@ -3,11 +3,11 @@
 #pragma once
 #include "a.hpp"
 
-#include "../Sqrt/a_Body.hpp"
+#include "../../../../../Arithmetic/Sqrt/a_Body.hpp"
 
-inline Mo::Mo( const vector<pair<int,int>>& query , int y_dif_sqrt ) : Mo() { Set( query , y_dif_sqrt ); }
+template <typename QUERY> inline Mo::Mo( const QUERY& query , int y_dif_sqrt ) : Mo() { Set( query , y_dif_sqrt ); }
 
-inline void Mo::Set( const vector<pair<int,int>>& query , int y_dif_sqrt )
+template <typename QUERY> inline void Mo::Set( const QUERY& query , int y_dif_sqrt )
 {
 
   m_Q = query.size();
@@ -29,7 +29,7 @@ inline void Mo::Set( const vector<pair<int,int>>& query , int y_dif_sqrt )
     const int x_dif = x_final - x_start + 1;
     const int x_div = x_dif / m_Q;
     const int y_dif = y_final - y_start + 1;
-    y_dif_sqrt == 0 ? y_dif_sqrt = SqrtDecompositionCoordinate::Sqrt( y_dif ) : y_dif_sqrt;
+    y_dif_sqrt == 0 ? y_dif_sqrt = RoundUpSqrt( y_dif ) : y_dif_sqrt;
     m_query.resize( m_Y_d = y_dif / y_dif_sqrt + 1 );
 
     // ΔXとQ log_2 Qの比較を行ってソート方法を決定する。
@@ -49,7 +49,7 @@ inline void Mo::Set( const vector<pair<int,int>>& query , int y_dif_sqrt )
 
 }
 
-inline void Mo::IntroSort( const vector<pair<int,int>>& query , const int& y_start , const int& y_dif_sqrt )
+template <typename QUERY> inline void Mo::IntroSort( const QUERY& query , const int& y_start , const int& y_dif_sqrt )
 {
 
   vector<tuple<int,int,int>> intro_sort( m_Q );
@@ -74,14 +74,14 @@ inline void Mo::IntroSort( const vector<pair<int,int>>& query , const int& y_sta
 
 }
 
-inline void Mo::BucketSort( const vector<pair<int,int>>& query , const int& x_start , const int& x_dif , const int& y_start , const int& y_dif_sqrt )
+template <typename QUERY> inline void Mo::BucketSort( const QUERY& query , const int& x_start , const int& x_dif , const int& y_start , const int& y_dif_sqrt )
 {
 
   vector<vector<int>> bucket_sort( x_dif );
 
   for( int q = 0 ; q < m_Q ; q++ ){
 
-    bucket_sort[query[q].first - x_start].push_back( q );
+    bucket_sort[get<0>( query[q] ) - x_start].push_back( q );
 
   }
   
@@ -106,12 +106,13 @@ inline void Mo::BucketSort( const vector<pair<int,int>>& query , const int& x_st
 
 inline const vector<vector<tuple<int,int,int>>>& Mo::Get() const noexcept { return m_query; }
 
-template <typename F , typename DFx , typename DFy> vector<ret_t<F,int,int>> Mo::Solve( F& f , DFx& dfx , DFy& dfy ) const
+template <typename F , typename DFx , typename DFy , typename G> vector<decay_t<ret_t<G,ret_t<F,int,int>,int>>> Mo::Solve( F& f , DFx& dfx , DFy& dfy , G& g ) const
 {
 
-  using R = ret_t<F,int,int>;
-  static_assert( is_invocable_r_v<R,DFx,R,int,int,int> && is_invocable_r_v<R,DFy,R,int,int,int> );
-  vector<R> answer( m_Q );
+  using R1 = ret_t<F,int,int>;
+  static_assert( is_invocable_r_v<R1&,DFx,R1&,int,int,int> && is_invocable_r_v<R1&,DFy,R1&,int,int,int> );
+  using R2 = decay_t<ret_t<G,const R1&,int>>;
+  vector<R2> answer( m_Q );
 
   if( m_Q > 0 ){
     
@@ -123,13 +124,14 @@ template <typename F , typename DFx , typename DFy> vector<ret_t<F,int,int>> Mo:
 
     }
 
-    auto [x,y,i] = m_query[d][0];
-    R temp = answer[i] = f( x , y );
-    Solve_Body( answer , temp , x , y , dfx , dfy , d , 1 );
+    auto [x,y,q] = m_query[d][0];
+    R1 temp = f( x , y );
+    answer[q] = g( temp , q );
+    Solve_Body( answer , temp , x , y , dfx , dfy , d , 1 , g );
 
     while( ++d < m_Y_d ){
 
-      Solve_Body( answer , temp , x , y , dfx , dfy , d , 0 );
+      Solve_Body( answer , temp , x , y , dfx , dfy , d , 0 , g );
 
     }
 
@@ -139,7 +141,9 @@ template <typename F , typename DFx , typename DFy> vector<ret_t<F,int,int>> Mo:
 
 }
 
-template <typename R , typename DFx , typename DFy> void Mo::Solve_Body( vector<R>& answer , R& temp , int& x , int& y , DFx& dfx , DFy& dfy , const int& d , const int& i_start ) const
+template <typename F , typename DFx , typename DFy> inline vector<ret_t<F,int,int>> Mo::Solve( F& f , DFx& dfx , DFy& dfy ) const { using R = ret_t<F,int,int>; auto id = [&]( const R& r , const int& ) -> const R& { return r; }; return Solve( f , dfx , dfy , id ); }
+
+template <typename R , typename DFx , typename DFy , typename G> void Mo::Solve_Body( vector<R>& answer , R& temp , int& x , int& y , DFx& dfx , DFy& dfy , const int& d , const int& i_start , G& g ) const
 {
 
   auto& m_query_d = m_query[d];
@@ -148,7 +152,8 @@ template <typename R , typename DFx , typename DFy> void Mo::Solve_Body( vector<
   for( int i = i_start ; i < size ; i++ ){
 
     auto& [x_next,y_next,q] = m_query_d[i];
-    answer[q] = temp = dfy( dfx( temp , x , y , x_next ) , x_next , y , y_next );
+    temp = dfy( dfx( temp , x , y , x_next ) , x_next , y , y_next );
+    answer[q] = g( temp , q );
     x = x_next;
     y = y_next;
 

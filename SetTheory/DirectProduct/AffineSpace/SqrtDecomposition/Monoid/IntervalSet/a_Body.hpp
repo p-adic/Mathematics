@@ -5,8 +5,10 @@
 
 #include "../../Sqrt/a_Body.hpp"
 
-template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSetSqrtDecomposition( NON_COMM_N_MODULE M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_M( move( M ) ) , m_a( m_N_m , m_M.One() ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_N_d , m_M.One() ) , m_suspended( m_N_d ) { static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<NON_COMM_N_MODULE>> ); }
-template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSetSqrtDecomposition( NON_COMM_N_MODULE M , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_N_d , m_M.One() ) , m_suspended( m_N_d )
+template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_M( move( M ) ) , m_a( m_N_m , m_M.One() ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_N_d , m_M.One() ) , m_suspended( m_N_d ) { static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<NON_COMM_N_MODULE>> ); }
+
+template <typename U , typename NON_COMM_N_MODULE> template <typename...Args>
+IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_N_d , m_M.One() ) , m_suspended( m_N_d )
 {
 
   static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<NON_COMM_N_MODULE>> );
@@ -31,11 +33,11 @@ template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> in
 
 }
 
-template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline void IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Initialise( Args&&... args ) { IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE> temp{ m_M , forward<Args>( args )... }; SqrtDecompositionCoordinate::operator=( temp ); m_a = move( temp.m_a ); m_b = move( temp.m_b ); m_lazy_substitution = vector( m_N_d , m_M.One() ); m_suspended = vector( m_N_d , false ); }
+template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline void IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Initialise( Args&&... args ) { IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE> temp{ m_M , forward<Args>( args )... }; SqrtDecompositionCoordinate::operator=( temp ); m_a = move( temp.m_a ); m_b = move( temp.m_b ); m_lazy_substitution = move( temp.m_lazy_substitution ); m_suspended = move( temp.m_suspended ); }
 
-template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Set( const int& i , const U& u ) { IntervalSet( i , i , u ); }
+template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Set( const int& i , const U& u ) { IntervalSet( i , i , u ); }
 
-template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSet( const int& i_start , const int& i_final , const U& u )
+template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSet( const int& i_start , const int& i_final , const U& u )
 {
 
   const int i_min = max( i_start , 0 );
@@ -113,7 +115,7 @@ template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetSqrtDe
   
 }
 
-template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSet_Body( const int& i_min , const int& i_ulim , const U& u )
+template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSet_Body( const int& i_min , const int& i_ulim , const U& u )
 {
 
   for( int i = i_min ; i < i_ulim ; i++ ){
@@ -126,10 +128,10 @@ template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetSqrtDe
   
 }
 
-template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::operator[]( const int& i ) { assert( 0 <= i && i < m_N ); const int d = i / m_N_sqrt; return m_suspended[d] ? m_lazy_substitution[d] : m_a[i]; }
-template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Get( const int& i ) { return operator[]( i ); }
+template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::operator[]( const int& i ) { assert( 0 <= i && i < m_N ); const int d = i / m_N_sqrt; return m_suspended[d] ? m_lazy_substitution[d] : m_a[i]; }
+template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Get( const int& i ) { return operator[]( i ); }
 
-template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalProduct( const int& i_start , const int& i_final )
+template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalProduct( const int& i_start , const int& i_final )
 {
 
   const int i_min = max( i_start , 0 );
@@ -168,7 +170,7 @@ template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecom
   
 }
 
-template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalProduct_Body( const int& i_min , const int& i_ulim )
+template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalProduct_Body( const int& i_min , const int& i_ulim )
 {
 
   U answer = m_M.One();
@@ -183,10 +185,10 @@ template <typename U , typename NON_COMM_N_MODULE> inline U IntervalSetSqrtDecom
     
 }
 
-template <typename U , typename NON_COMM_N_MODULE> template <typename F , SFINAE_FOR_SD_S> inline int IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Search( const int& i_start , const F& f , const bool& reversed ) { return reversed ? SearchReverse_Body( i_start , f , m_M.One() ) : Search_Body( i_start , f , m_M.One() ); }
-template <typename U , typename NON_COMM_N_MODULE> inline int IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Search( const int& i_start , const U& u , const bool& reversed ) { return Search( i_start , [&]( const U& product , const int& ){ return !( product < u ); } , reversed ); }
+template <typename U , typename NON_COMM_N_MODULE> template <typename F , SFINAE_FOR_SD_S> inline int IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Search( const int& i_start , const F& f , const bool& reversed ) { return reversed ? SearchReverse_Body( i_start , f , m_M.One() ) : Search_Body( i_start , f , m_M.One() ); }
+template <typename U , typename NON_COMM_N_MODULE> inline int IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Search( const int& i_start , const U& u , const bool& reversed ) { return Search( i_start , [&]( const U& product , const int& ){ return !( product < u ); } , reversed ); }
 
-template <typename U , typename NON_COMM_N_MODULE> template <typename F> int IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::Search_Body( const int& i_start , const F& f , U product_temp )
+template <typename U , typename NON_COMM_N_MODULE> template <typename F> int IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::Search_Body( const int& i_start , const F& f , U product_temp )
 {
 
   const int i_min = max( i_start , 0 );
@@ -268,7 +270,7 @@ template <typename U , typename NON_COMM_N_MODULE> template <typename F> int Int
 
 }
 
-template <typename U , typename NON_COMM_N_MODULE> template <typename F> int IntervalSetSqrtDecomposition<U,NON_COMM_N_MODULE>::SearchReverse_Body( const int& i_final , const F& f , U product_temp )
+template <typename U , typename NON_COMM_N_MODULE> template <typename F> int IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::SearchReverse_Body( const int& i_final , const F& f , U product_temp )
 {
 
   const int i_max = min( i_final , m_N - 1 );

@@ -28,10 +28,10 @@ class GeometricProgressionMinAction :
   
 private:
   N_MODULE m_M;
-  const vector<U>* m_p_memor_r;
+  const vector<U>* m_p_memory_r;
 
 public:
-  inline GeometricProgressionMinAction( N_MODULE M , const vector<U>& memor_r );
+  inline GeometricProgressionMinAction( N_MODULE M , const vector<U>& memory_r );
   pair<U,int> Action( const vector<U>& y , pair<U,int> u );
 
 };
@@ -57,7 +57,7 @@ class GeometricProgressionMinDualSqrtDecomposition :
 
 private:
   // クエリで扱う公比を事前に格納する。
-  vector<U> m_memor_r;
+  vector<U> m_memory_r;
   
 public:
   template <typename...Args> inline GeometricProgressionMinDualSqrtDecomposition( N_MODULE M , const U& infty , vector<U> memory_r , vector<U> a = {} , Args&&... args );
@@ -65,6 +65,7 @@ public:
   template <typename...Args> inline void Initialise( Args&&... args );
   inline void Set( const int& i , U u );
   inline void IntervalAct( const int& i_start , const int& i_final , const vector<U>& f ) = delete;
+  // yは初項、つまりi_start項目ではなく0項目の値であることに注意。
   inline void IntervalSetMin( const int& i_start , const int& i_final , const int& r_num , const U& y );
 
   inline U operator[]( const int& i );
@@ -75,3 +76,6 @@ private:
   
 };
 template <typename N_MODULE , typename...Args> GeometricProgressionMinDualSqrtDecomposition( N_MODULE M , Args&&... args ) -> GeometricProgressionMinDualSqrtDecomposition<inner_t<N_MODULE>,N_MODULE>;
+
+// GeometricProgressionMinDualSqrtDecomposition sd{ Module<int,int>() , int( 1e9 ) , {1,-1} , a };
+// で公差1,-1の等差数列min更新。

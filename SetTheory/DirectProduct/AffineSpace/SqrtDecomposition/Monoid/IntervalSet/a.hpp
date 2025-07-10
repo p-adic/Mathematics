@@ -3,7 +3,7 @@
 #pragma once
 #include "../../a_Macro.hpp"
 
-#include "../../Sqrt/a_Body.hpp"
+#include "../../Sqrt/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/964805（配列初期化、一点代入、区間積）
@@ -24,7 +24,7 @@
 // 一点代入O(N^{1/2})（区間代入を使う）
 // 区間代入O(N^{1/2})（非可換N加群構造を使う）
 template <typename U , typename NON_COMM_N_MODULE>
-class IntervalSetSqrtDecomposition :
+class IntervalSetMonoidSqrtDecomposition :
   public SqrtDecompositionCoordinate
 {
 
@@ -37,8 +37,8 @@ protected:
   
 public:
   // MonoidSqrtDecompositionのコンストラクタとm_lazy_substitution,m_suspendedの零初期化
-  template <typename...Args> inline IntervalSetSqrtDecomposition( NON_COMM_N_MODULE M , const int& N = 0 , const Args&... args );
-  template <typename...Args> inline IntervalSetSqrtDecomposition( NON_COMM_N_MODULE M , vector<U> a , const Args&... args );
+  template <typename...Args> inline IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , const int& N = 0 , const Args&... args );
+  template <typename...Args> IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , vector<U> a , const Args&... args );
 
   template <typename...Args> inline void Initialise( Args&&... args );
   inline void Set( const int& i , const U& u );
@@ -64,4 +64,11 @@ private:
   template <typename F> int SearchReverse_Body( const int& i_final , const F& f , U sum_temp );
   
 };
-template <typename NON_COMM_N_MODULE , typename...Args> IntervalSetSqrtDecomposition( NON_COMM_N_MODULE M , Args&&... args ) -> IntervalSetSqrtDecomposition<inner_t<NON_COMM_N_MODULE>,NON_COMM_N_MODULE>;
+template <typename NON_COMM_N_MODULE , typename...Args> IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , Args&&... args ) -> IntervalSetMonoidSqrtDecomposition<inner_t<NON_COMM_N_MODULE>,NON_COMM_N_MODULE>;
+
+// - 整数の加法N加群を乗せる時は
+//   IntervalSetMonoidSqrtDecomposition sd( Module<int,ll>() , A );
+// - AbstractModuleを乗せる時は
+//   IntervalSetMonoidSqrtDecomposition sd( AbstractModule( 0 , action , AbstractMonoid( prod , uint ) ) , A );
+// とすればよい。
+

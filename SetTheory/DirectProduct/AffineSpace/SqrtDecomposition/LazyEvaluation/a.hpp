@@ -95,5 +95,6 @@ template <typename PT_MAGMA , typename RN_BIMODULE , typename...Args> LazySqrtDe
 
 // 例えば
 // LazySqrtDecomposition lsd{ MultiplicativeMonoid<int>{ 1 } , Module<int,ll>() , N };
+// でintによるllへの区間スカラー倍更新と区間和取得が可能で、
 // LazySqrtDecomposition lsd{ MultiplicativeMonoid<U>{ 1 } , BiModule<U,int,U>() , N };
-// で区間スカラー倍更新と区間和取得が可能。
+// でUとintによるUへの区間スカラー倍更新と区間和取得が可能。

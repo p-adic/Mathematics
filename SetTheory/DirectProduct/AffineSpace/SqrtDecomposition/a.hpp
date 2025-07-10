@@ -3,7 +3,7 @@
 #pragma once
 #include "a_macro.hpp"
 
-#include "Sqrt/a.hpp"
+#include "Coordinate/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/981574（零初期化、一点加算、区間和）

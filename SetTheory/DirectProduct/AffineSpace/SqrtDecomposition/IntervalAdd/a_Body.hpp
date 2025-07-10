@@ -6,7 +6,7 @@
 #include "../a_Body.hpp"
 
 template <typename U , typename Z_MODULE> template <typename...Args> inline IntervalAddAbstractSqrtDecomposition<U,Z_MODULE>::IntervalAddAbstractSqrtDecomposition( Z_MODULE M , Args&&... args ) : AbstractSqrtDecomposition<U,Z_MODULE>( move( M ) , forward<Args>( args )... ) , m_lazy_addition( this->m_N_d , this->m_M.Zero() ) {}
-template <typename U> template <typename...Args> inline IntervalAddSqrtDecomposition<U>::IntervalAddSqrtDecomposition( Args&&... args ) : IntervalAddAbstractSqrtDecomposition<U,Module<int,U>>( Module<int,U>() , args... ) {}
+template <typename U> template <typename...Args> inline IntervalAddSqrtDecomposition<U>::IntervalAddSqrtDecomposition( Args&&... args ) : IntervalAddAbstractSqrtDecomposition<U,Module<int,U>>( Module<int,U>() , forward<Args>( args )... ) {}
 
 template <typename U , typename Z_MODULE> template <typename...Args> inline void IntervalAddAbstractSqrtDecomposition<U,Z_MODULE>::Initialise( Args&&... args ) { AbstractSqrtDecomposition<U,Z_MODULE>::Initialise( forward<Args>( args )... ); m_lazy_addition = vector( this->m_N_d , this->m_M.Zero() ); }
 

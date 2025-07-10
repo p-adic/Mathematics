@@ -4,12 +4,12 @@
 #include "../Sqrt/a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/981583（区間作用、一点取得）
+// https://yukicoder.me/submissions/1015050（区間作用、一点取得）
 // https://yukicoder.me/submissions/961738（非結合的マグマ、区間作用、一点取得）
 
 // 入力の範囲内で要件
-// (1) LがRの基点付き左作用構造（例えば基点付きマグマの正則左加群構造）である。
-// (2) XがUの左L作用構造であって以下を満たす：
+// (1) LがR上の「基点付き集合による基点付き左作用構造」（例えば基点付きマグマの正則左加群構造）である。
+// (2) XがU上の左L作用構造であって以下を満たす：
 //     (2-1) Lの基点がXの恒等変換に対応する。
 //     (2-2) Lの左作用とXの左作用が結合的である。（例えばマグマ作用である）
 // を満たす場合にのみサポート。
@@ -52,3 +52,10 @@ protected:
 };
 template <typename PT_MAGMA , typename R_SET , typename...Args> DualSqrtDecomposition( PT_MAGMA M , R_SET X , Args&&... args ) -> DualSqrtDecomposition<inner_t<PT_MAGMA>,PT_MAGMA,inner_t<R_SET>,R_SET>;
 
+// 例えば
+// AdditiveMonoid<U> monoid{};
+// DualSqrtDecomposition dsd{ RegularRSet( monoid ) , RegularRSet( monoid ) , vector<U>( N ) };
+// で区間加算を、
+// MultiplicativeMonoid<U> monoid{};
+// DualSqrtDecomposition dsd{ RegularRSet( monoid ) , RegularRSet( monoid ) , vector<U>( N ) };
+// で区間乗算を処理できる。

@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "Sqrt/a_Body.hpp"
+#include "Coordinate/a_Body.hpp"
 
 template <typename U , typename ABELIAN_GROUP> template <typename...Args> inline AbstractSqrtDecomposition<U,ABELIAN_GROUP>::AbstractSqrtDecomposition( ABELIAN_GROUP M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_M( move( M ) ) , m_a( m_N_m , m_M.Zero() ) , m_b( m_N_d , m_M.Zero() ) { static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<ABELIAN_GROUP>> ); }
 template <typename U , typename ABELIAN_GROUP> template <typename...Args> inline AbstractSqrtDecomposition<U,ABELIAN_GROUP>::AbstractSqrtDecomposition( ABELIAN_GROUP M , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.Zero() ) { Construct(); }
