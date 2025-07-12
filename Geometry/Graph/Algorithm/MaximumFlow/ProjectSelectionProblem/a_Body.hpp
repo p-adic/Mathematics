@@ -8,7 +8,7 @@
 #include "../../../../../Utility/Vector/a_Body.hpp"
 
 template <typename U , typename ABEL_GROUP , typename V0 , typename V1 , typename V2 , typename V3>
-U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& score , const V1& dependency_penalty , const V2& pair_accept_score , const V3& pair_reject_score )
+U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& score , const V1& dependency_penalty , const V2& set_accept_score , const V3& set_reject_score )
 {
 
   const U& zero = R.Zero();
@@ -39,24 +39,6 @@ U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& sco
     d[i][j] = R.Sum( move( d[i][j] ) , u );
     
   }
-  
-  vector a( N , vector<U>( N , zero ) );
-
-  for( auto& [i,j,u] : pair_accept_score ){
-
-    assert( !( u < zero || i == j ) );
-    a[j][i] = a[i][j] = R.Sum( move( a[i][j] ) , u );
-    
-  }
-  
-  vector r( N , vector<U>( N , zero ) );
-
-  for( auto& [i,j,u] : pair_reject_score ){
-
-    assert( !( u < zero || i == j ) );
-    r[j][i] = r[i][j] = R.Sum( move( r[i][j] ) , u );
-    
-  }
 
   for( int i = 0 ; i < N ; i++ ){
 
@@ -70,15 +52,18 @@ U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& sco
           const int& ij_r = d[i][j] < d[j][i] ? j : i;
           U& dmin = d[ij_l][ij_r];
           const U& dmax = d[ij_r][ij_l];
-          a[i][j] = R.Sum( move( a[i][j] ) , dmin );
-          r[i][j] = R.Sum( move( r[i][j] ) , dmin );
-          const bool same = dmin == dmax;
-          dmin = R.Inverse( dmin );
+
+          const int k = e.size();
+          e.push_back( {{i,infty},{j,infty}} );
+          e.push_back( {{N+1,dmin}} );
+          e[N].push_back( {k,dmin} );
+          e[i].push_back( {k+1,infty} );
+          e[j].push_back( {k+1,infty} );
           answer = R.Sum( move( answer ) , dmin );
 
-          if( !same ){
+          if( dmin != dmax ){
             
-            e[ij_r].push_back( {ij_l,R.Sum(move(dmin),dmax)} );
+            e[ij_r].push_back( {ij_l,R.Sum(R.Inverse(dmin),dmax)} );
 
           }
 
@@ -94,24 +79,66 @@ U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& sco
 
       }
 
-      if( a[i][j] != zero ){
+    }
 
-        const int k = e.size();
-        e.push_back( {{i,infty},{j,infty}} );
-        e[N].push_back( {k,a[i][j]} );
-        answer = R.Sum( move( answer ) , a[i][j] );
+  }
+
+  vector<bool> found( N );
+
+  for( auto& [v,u] : set_accept_score ){
+
+    assert( !( u < zero || v.empty() ) );
+
+    if( u != zero ){
+
+      const int k = e.size();
+      e.push_back( {{}} );
+
+      for( auto& i : v ){
+
+        assert( !found[i] );
+        found[i] = true;
 
       }
 
-      if( r[i][j] != zero ){
+      for( auto& i : v ){
 
-        const int k = e.size();
-        e.push_back( {{N+1,r[i][j]}} );
+        found[i] = false;
+        e[k].push_back( {i,infty} );
+
+      }
+      
+      e[N].push_back( {k,u} );
+      answer = R.Sum( move( answer ) , u );
+
+    }
+
+  }
+  
+  for( auto& [v,u] : set_reject_score ){
+
+    assert( !( u < zero || v.empty() ) );
+
+    if( u != zero ){
+
+      const int k = e.size();
+      e.push_back( {{N+1,u}} );
+
+      for( auto& i : v ){
+
+        assert( !found[i] );
+        found[i] = true;
+
+      }
+
+      for( auto& i : v ){
+
+        found[i] = false;
         e[i].push_back( {k,infty} );
-        e[j].push_back( {k,infty} );
-        answer = R.Sum( move( answer ) , r[i][j] );
 
       }
+      
+      answer = R.Sum( move( answer ) , u );
 
     }
 
@@ -124,4 +151,4 @@ U AbstractProjectSelectionProblem( ABEL_GROUP R , const U& infty , const V0& sco
 
 }
 
-template <typename U , typename V0 , typename V1 , typename V2 , typename V3> inline U ProjectSelectionProblem( const U& infty , const V0& score , const V1& dependency_penalty , const V2& pair_accept_score , const V3& pair_reject_score ) { return AbstractProjectSelectionProblem( AdditiveGroup<U>{} , infty , score , dependency_penalty , pair_accept_score , pair_reject_score ); }
+template <typename U , typename V0 , typename V1 , typename V2 , typename V3> inline U ProjectSelectionProblem( const U& infty , const V0& score , const V1& dependency_penalty , const V2& set_accept_score , const V3& set_reject_score ) { return AbstractProjectSelectionProblem( AdditiveGroup<U>{} , infty , score , dependency_penalty , set_accept_score , set_reject_score ); }
