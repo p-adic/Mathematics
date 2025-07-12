@@ -86,7 +86,7 @@ pair<vector<int>,int> Kruscal( const int& V , const vector<pair<int,int>>& E , c
 
   }
 
-  return { move( answer ) , uff.size( false ) };  
+  return { move( answer ) , uff.RootSize() };  
 
 }
 

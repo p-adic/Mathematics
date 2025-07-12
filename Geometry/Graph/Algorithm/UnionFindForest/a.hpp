@@ -37,11 +37,13 @@ private:
   // m_w[num]はnum番目のnodeがrootならば0、rootでないならば親nodeからのパスの符号付き重みを返す。
   // Graftと整合的な解xが存在する場合にはx[num]-x[親node]を返すことと等価。
   vector<U> m_w;
+  bool m_solvable;
   
 public:
   AbstractUnionFindForest( GRAPH& G , ABEL_GROUP M );
 
   // tのrootを計算して返す。
+  // Enumerationを介すのでconst参照にしない。
   const decltype( ( declval<GRAPH>().Enumeration(0) ) ) RootOfNode( const T& );
   // rootを全て返す。
   template <template <typename...> typename V> vector<T> GetRoot() const;
@@ -58,8 +60,9 @@ public:
   // t1からt0へ符号付き重みwの有向辺を結ぶ操作と整合的に
   // なるようにrootを接合。符号付き重みの整合性が取れない場合はfalseを返す。
   // 返り値はx[t0]-x[t1]=wの解の有無と等価。
-  bool Graft( const T& t0 , const T& t1 , const U& w = U() );
-  template <typename PATH> inline bool Graft( const T& t0 , const PATH& t1 );
+  const bool& Graft( const T& t0 , const T& t1 , const U& w = U() );
+  template <typename PATH> inline const bool& Graft( const T& t0 , const PATH& t1 );
+  const bool& Solvable() const noexcept;
   
 };
 template <typename GRAPH , typename ABEL_GROUP> AbstractUnionFindForest( GRAPH& G , ABEL_GROUP M ) -> AbstractUnionFindForest<inner_t<GRAPH>,GRAPH,inner_t<ABEL_GROUP>,ABEL_GROUP>;
@@ -74,3 +77,10 @@ public:
   inline UnionFindForest( const int& size );
 
 };
+
+// 連結時に演算を行う機能はなし。（2乗和の管理など、副作用を持たせたりしたいので）
+// 外部に配列を用意し、連結成功か否かをRootOfNodeで判定しながら
+// 演算を行うとよい。
+// (1) 連結成分ごとの頂点数なら、vector<int> weight( N , 1 );と加算。
+// (2) 連結成分ごとの頂点数の2乗和を管理するなら、(1)に加えて積の倍を引く副作用。
+// (3) 連結成分ごとの頂点リストならvector<vector<int>> vertex = {{0},{1},...,{N-1}}とマージ。

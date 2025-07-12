@@ -1,20 +1,26 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/MaximumFlow/a.hpp
 
 #pragma once
-#ubckude "../../a.hpp"
+#include "../../a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/973269
 
 // GRAPHはグラフG=(V_G,E_G:T->(T \times U(容量))^{< \omega})に相当する型。
+// 流量を整数とする時の上限をFと置く。
 
 // 入力の範囲内で要件
 // (0) Rは全順序アーベル群構造である。
-// (1) Vの各要素u,vに対し、辺u->vが複数存在しない。
+// (1) Vの各要素uに対し、辺u->uが存在しない。
+// (2) Vの各要素u,vに対し、辺u->vが複数存在しない。
+// (3) 各辺u->vの容量がR.Zero()以上である。
 // が成り立つ場合にのみサポート。
 
 // Dinic法を用いる。
-// 単一始点単一終点最大流路探索O(|V_G|^2 |E_G|)
+// 単一始点単一終点最大流路探索O(min(|V_G|^2,F)|E_G|)
+// ただし入力次第でより小さい下界も得られる。
+// https://misawa.github.io/others/flow/dinic_time_complexity.html
+// 例えば二部マッチングの計算はO(min(√|V_G|,F)|E_G|)になる。
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP>
 class AbstractMaximumFlow
 {

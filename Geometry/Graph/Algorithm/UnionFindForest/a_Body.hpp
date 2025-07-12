@@ -7,7 +7,7 @@
 #include "../../../../Algebra/Monoid/Group/a_Body.hpp"
 
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP>
-AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::AbstractUnionFindForest( GRAPH& G , ABEL_GROUP M ) : m_G( G ) , m_M( move( M ) ) , m_root_size( m_G.size() ) , m_pred( m_root_size ) , m_height( m_root_size , 1 ) , m_w( m_root_size , m_M.Zero() )
+AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::AbstractUnionFindForest( GRAPH& G , ABEL_GROUP M ) : m_G( G ) , m_M( move( M ) ) , m_root_size( m_G.size() ) , m_pred( m_root_size ) , m_height( m_root_size , 1 ) , m_w( m_root_size , m_M.Zero() ) , m_solvable( true )
 {
 
   const int& size = m_G.size();
@@ -98,7 +98,7 @@ template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> inline
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> inline const int& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::RootSize() const noexcept { return m_root_size; }
 
 template <typename T , typename GRAPH , typename U , typename ABEL_GROUP>
-bool AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const T& t1 , const U& w )
+const bool& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const T& t1 , const U& w )
 {
 
   const T& root0 = RootOfNode( t0 );
@@ -106,7 +106,7 @@ bool AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const T
 
   if( root0 == root1 ){
 
-    return Potential( t0 , t1 ) == w;
+    return m_solvable &= Potential( t0 , t1 ) == w;
     
   }
 
@@ -150,8 +150,10 @@ bool AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const T
   
   m_pred[*p_removed_node] = m_pred[*p_removed_root] = *p_kept_root;
   m_root_size--;
-  return true;
+  return m_solvable;
 
 }
 
-template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> template <typename PATH> inline bool AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const PATH& t1 ) { return Graft( t0 , get<0>( t1 ) , get<1>( t1 ) ); }
+template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> template <typename PATH> inline const bool& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Graft( const T& t0 , const PATH& t1 ) { return Graft( t0 , get<0>( t1 ) , get<1>( t1 ) ); }
+
+template <typename T , typename GRAPH , typename U , typename ABEL_GROUP> const bool& AbstractUnionFindForest<T,GRAPH,U,ABEL_GROUP>::Solvable() const noexcept { return m_solvable; }
