@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Iteration/Truncated/a_Body.hpp"
+#else
+TE <TY INT1,TY INT2>ll TruncatedPower(ll n,INT1 e,CO INT2& bound){AS(n >= 0 && e >= 0 && bound >= 0);if(e == 0){RE 1;}if(n <= 1){RE MO(n);}if(e >= 63){RE bound + 1;}ll AN =(e & 1)== 0?1:n;e >>= 1;WH(e > 0){if(n <= bound / n){n *= n;}else{RE bound + 1;}if((e & 1)== 1){if(AN <= bound / n){AN *= n;}else{RE bound + 1;}}e >>= 1;}RE AN;}TE <TY INT1,TY INT2>INT2 RoundDownRoot(CO INT1& e,CO INT2& n){AS(e >= 1 && n >= 0);if(n == 0 || e == 1){RE n;}int l = 1,r = n;WH(l < r - 1){int m =(l + r)>> 1;(TruncatedPower(m,e,n)<= n?l:r)= m;}RE l;}
+#endif
+
