@@ -1,9 +1,9 @@
 #ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/FloorSum/FloorRiemanZeta/a_Body.hpp"
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/FloorSum/FloorRiemannZeta/a_Body.hpp"
 #else
-TE <TY INT>INT RoundDownSqrt(CO INT& n){AS(n >= 0);if(n <= 1){RE n;}INT l = 1,r = n;WH(l < r - 1){CO INT m =(l + r)>> 1;(m <= n / m?l:r)= m;}RE l;}TE <TY INT>INT RoundUpSqrt(CO INT& n){AS(n >= 0);if(n <= 2){RE n;}CO INT n_minus = n - 1;INT l = 1,r = n;WH(l + 1 < r){CO INT m =(l + r)>> 1;(m <= n_minus / m?l:r)= m;}RE r;}
+TE <TY INT1,TY INT2>ll TruncatedPower(ll n,INT1 e,CO INT2& bound){AS(n >= 0 && e >= 0 && bound >= 0);if(e == 0){RE 1;}if(n <= 1){RE MO(n);}if(e >= 63){RE bound + 1;}ll AN =(e & 1)== 0?1:n;e >>= 1;WH(e > 0){if(n <= bound / n){n *= n;}else{RE bound + 1;}if((e & 1)== 1){if(AN <= bound / n){AN *= n;}else{RE bound + 1;}}e >>= 1;}RE AN;}TE <TY INT1,TY INT2>INT2 RoundDownRoot(CO INT1& e,CO INT2& n){AS(e >= 1 && n >= 0);if(n == 0 || e == 1){RE n;}INT2 l = 1,r = n;WH(l < r - 1){INT2 m =(l + r)>> 1;(TruncatedPower(m,e,n)<= n?l:r)= m;}RE l;}
 
-TE <TY T> IN T Square(CO T& t){RE t * t;}TE <TY T,TY UINT>T PW(T t,UINT EX){T AN =(EX & 1)== 1?t:1;EX >>= 1;WH(EX > 0){t = Square(t);(EX & 1)== 1?AN *= t:AN;EX >>= 1;}RE AN;}TE <TY T,TY UINT>T PW(T t,UINT EX,T init){(EX & 1)== 1?init *= t:init;EX >>= 1;WH(EX > 0){t = Square(t);(EX & 1)== 1?init *= t:init;EX >>= 1;}RE MO(init);}
+TE <TY INT> CE INT Log(INT N){INT AN = 0,pw = 1;WH(N > pw){pw <<= 1;AN++;}RE AN;}
 
-TE <TY INT>INT FloorRiemannZeta(CO INT& n,CO INT& EX){INT i_max = RoundDownSqrt(n);INT AN = 0;for(INT i = 1;i <= i_max;i++){AN +=(n / i - n /(i + 1))* PW(i,EX);}i_max = n /(i_max + 1);for(INT i = 1;i <= i_max;i++){AN += PW(n / i,EX);}RE AN;}TE <TY INT> IN INT HarmonicFloorSum(CO INT& n){RE n < 0?- FloorRiemannZeta<INT>(- n - 1,1)- n:FloorRiemannZeta<INT>(n,1);}
+TE <TY INT1,TY INT2>ll FloorRiemannZeta(CO INT1& n,CO INT2& s){AS(n >= 0 && s > 0);if(n == 0){RE 0;}CO int logs = Log(s),logn = Log(n);CO int v_mid = RoundDownRoot(s + 1,n / TruncatedPower(s *(logs + 1)*(logs * logn + 1),s,n - 1));CO int i_max = RoundDownRoot(s,n / v_mid);ll AN = 0;for(int i = 1;i <= i_max;i++){AN += n / Power(i,s);}ll prev = RoundDownRoot(s,n),next;for(int v = 1;v < v_mid;v++){next = RoundDownRoot(s,n /(v + 1));AN +=(prev - next)* Power(v,s);prev = next;}RE AN;}TE <TY INT> IN INT HarmonicFloorSum(CO INT& n){RE n < 0?- FloorRiemannZeta(- n - 1,1)- n:FloorRiemannZeta<INT>(n,1);}
 #endif
