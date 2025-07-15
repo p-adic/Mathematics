@@ -36,7 +36,7 @@ ll FloorRiemannZeta( const INT1& n , const INT2& s )
   // O(i_max(log(s)+1)) = O((n/v_mid)^{1/s}(log(s)+1))
   for( int i = 1 ; i <= i_max ; i++ ){
 
-    answer += n / Power( i , s );
+    answer += n / Power( ll( i ) , s );
 
   }
 
@@ -51,7 +51,7 @@ ll FloorRiemannZeta( const INT1& n , const INT2& s )
     // <=> n/(v+1) < i^s <= n/v
     // <=> floor(floor(n/(v+1))^{1/s}) < i <= floor(floor(n/v)^{1/s})
     next = RoundDownRoot( s , n / ( v + 1 ) );
-    answer += ( prev - next ) * Power( v , s );
+    answer += ( prev - next ) * Power( ll( v ) , s );
     prev = next;
 
   }
