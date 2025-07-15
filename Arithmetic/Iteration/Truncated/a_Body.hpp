@@ -76,11 +76,11 @@ INT2 RoundDownRoot( const INT1& e , const INT2& n )
 
   }
 
-  int l = 1 , r = n;
+  INT2 l = 1 , r = n;
 
   while( l < r - 1 ){
 
-    int m = ( l + r ) >> 1;
+    INT2 m = ( l + r ) >> 1;
     ( TruncatedPower( m , e , n ) <= n ? l : r ) = m;
 
   }
