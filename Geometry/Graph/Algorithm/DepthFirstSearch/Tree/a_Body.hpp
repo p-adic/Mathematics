@@ -17,9 +17,12 @@ template <typename TREE> inline const vector<int>& DepthFirstSearchOnTree<TREE>:
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::Depth( const int& i ) { if( !m_set_depth ){ SetDepth(); } return m_depth[i]; }
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::Height( const int& i , const bool& maximum ) { if( !m_set_height ){ SetHeight(); } return ( maximum ? m_height_max : m_height_min )[i]; }
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::Heaviness( const int& i ) { if( !m_set_heaviness ){ SetHeaviness(); } return m_heaviness[i]; }
+template <typename TREE> inline int DepthFirstSearchOnTree<TREE>::Degree( const int& i ) { return Children( i ).size() + ( i == Root() ? 0 : 1 ); }
+template <typename TREE> inline bool DepthFirstSearchOnTree<TREE>::IsLeaf( const int& i , const int& root ) { assert( -1 <= root && root < this->size() ); return Degree( i ) == 1 && i != ( root == -1 ? Root() : root ); }
 
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::NodeNumber( const int& i , const bool& reversed ) const { const int& V = this->size(); assert( i < V ); return m_node_num[reversed ? V - 1 - i : i]; }
 template <typename TREE> inline const int& DepthFirstSearchOnTree<TREE>::ChildrenNumber( const int& i ) { if( ! m_set_children ){ SetChildren(); } return m_children_num[i]; }
+template <typename TREE> template <typename Ord> inline void DepthFirstSearchOnTree<TREE>::ReorderChildren( Ord& ord ) { const int& V = this->size(); for( int i = 0 ; i < V ; i++ ){ sort( m_children[i].begin() , m_children[i].end() , [&]( const int& j , const int& k ) { return ord( i , j , k ); } ); const int L = m_children[i].size(); for( int j = 0 ; j < L ; j++ ){ m_children_num[m_children[i][j]] = j; } } }
 
 template <typename TREE>
 int DepthFirstSearchOnTree<TREE>::Ancestor( int i , int n )
@@ -251,11 +254,12 @@ ret_t<F> DepthFirstSearchOnTree<TREE>::RootingDP( F& f )
 
 }
   
-template <typename TREE> template <typename U , typename COMM_MONOID , typename F , typename G>
-void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , vector<U>& d )
+template <typename TREE> template <typename MONOID , typename F , typename G>
+vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( MONOID M , F& f , G& g )
 {
 
-  static_assert( is_same_v<U,inner_t<COMM_MONOID>> && is_invocable_r_v<U,F,U,int> && is_invocable_r_v<U,G,U,bool,int,int> );
+  using U = inner_t<MONOID>;
+  static_assert( is_invocable_r_v<U,F,U,int> && is_invocable_r_v<U,G,U,bool,int,int> );
   
   if( ! m_set_children ){
 
@@ -265,7 +269,6 @@ void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , ve
   
   const int& V = this->size();
   const U& e = M.Unit();
-  d.resize( V );
 
   // children_value[i][m]‚Éi‚Ìm”Ô–Ú‚Ìqƒm[ƒhj‚Ü‚Å‚ÌŒvZ’l‚Ìf‚Å‚Ì‘œ‚ğŠi”[B
   vector<vector<U>> children_value( V );
@@ -273,7 +276,7 @@ void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , ve
   // g‚Å‚Ì‘œ‚ÌM‚ÉŠÖ‚·‚éÏ‚ğŠi”[B
   vector<vector<U>> l_sum( V );
   // r_sum[i][m]‚Échildren_value[i][m+1],...,children_value[i][size_i-1]‚Ì
-  // g‚Å‚Ì‘œ‚ÌMŠÖ‚·‚éÏ‚ğŠi”[B
+  // g‚Å‚Ì‘œ‚ÌM‚ÉŠÖ‚·‚éÏ‚ğŠi”[B
   vector<vector<U>> r_sum( V );
   
   for( int i = 0 ; i < V ; i++ ){
@@ -334,7 +337,8 @@ void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , ve
     
     for( int m = 0 ; m <= size_i ; m++ ){
 
-      // l_sum[i][m]‚Érest_i‚Æchildren_value[i][0],...,children_value[i][m-1]‚Ì
+      // l_sum[i][m]‚Érest_ii‚ ‚éˆÓ–¡m_children[i][-1]j‚Æ
+      // children_value[i][0],...,children_value[i][m-1]‚Ì
       // g‚Å‚Ì‘œ‚ÌM‚ÉŠÖ‚·‚éÏ‚ğŠi”[B
       l_sum[i][m] = M.Product( rest_i , l_sum[i][m] );
 
@@ -342,15 +346,18 @@ void DepthFirstSearchOnTree<TREE>::RerootingDP( COMM_MONOID M , F& f , G& g , ve
 
   }
 
+  vector<U> answer( V );
+
   for( int i = 0 ; i < V ; i++ ){
 
-    // l_sum[i].back()‚Íchildren_value_i[0],...,children_value_i[size_i-1]‚Ì
-    // g‚Å‚Ì‘œ‚Æe‚ÌŠñ—^‚ÌM‚ÉŠÖ‚·‚éÏB
-    d[i] = f( l_sum[i].back() , i );
+    // l_sum[i].back()‚Íe‚ÌŠñ—^i‚ ‚éˆÓ–¡children_value[i][-1]j‚Æ
+    // children_value[i][0],...,children_value[i][size_i-1]‚Ì
+    // g‚Å‚Ì‘œ‚ÌM‚ÉŠÖ‚·‚éÏB
+    answer[i] = f( l_sum[i].back() , i );
 
   }
 
-  return;
+  return answer;
 
 }
 

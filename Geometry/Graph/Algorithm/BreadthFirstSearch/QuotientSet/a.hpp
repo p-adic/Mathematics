@@ -7,13 +7,12 @@
 // https://yukicoder.me/submissions/981290（Shift,Next）
 
 // GRAPHは辺Edge:T->(T \times ...)^{< \omega}を持つMemorisationGraphでない
-// 完全グラフに相当する型。
+// 局所完全グラフ（同値関係のグラフ）に相当する型。
 
 // 構築 O(1)/O(|V_G|)（未初期化/初期化）
 // Next()の反復でinitから到達可能な頂点を全探索 O(initの連結成分における辺の本数)
-// Next()の反復とShift()で全探索 O(|V_G|+|E_G|)
-// initからの到達可能性判定と深さ計算 O(initの連結成分における辺の本数)
-// 連結成分の色分けと数え上げ O(|V_G|+|E_G|) 
+// Next()の反復とShift()で全探索 O(|V_G|)
+// 連結成分の色分けと数え上げ O(|V_G|) 
 template <typename T , typename GRAPH>
 class QuotientSetSearch
 {

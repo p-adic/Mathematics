@@ -8,6 +8,13 @@
 // https://yukicoder.me/submissions/953239（SetConnectedComponent）
 // https://yukicoder.me/submissions/953242（TopologicalSort）
 
+// GRAPHは辺Edge:T->(T \times ...)^{< \omega}を持つグラフに相当する型。
+
+// 入力の範囲内で要件
+// (1) Gは有向グラフである。
+// (2) not_foundはGの頂点でない。
+// を満たす場合にのみサポート。
+
 template <typename T , typename GRAPH>
 class DepthFirstSearch :
   public VirtualBreadthFirstSearch<T,GRAPH>
