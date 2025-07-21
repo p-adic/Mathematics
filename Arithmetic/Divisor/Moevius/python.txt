@@ -1,0 +1,21 @@
+#最小の素因数を格納
+L=9**5 #59049
+#L=8**7 #2097152
+P=[0]*L
+for d in R(2,L):
+	if P[d]<1:
+		for n in R(d,L,d):
+			if P[n]<1:P[n]=d
+#最小の素因数を用いてメビウス関数を計算
+M=[1]*2
+for d in R(2,L):e=d//P[d];M+=[e%P[d]and -M[e]]
+
+
+#最小の素因数を用いない定数倍改善版
+M=[-2]*L
+M[1]=1
+for i in R(2,L):
+	if M[i]!=-2:continue
+	M[i],s=-1,i*i
+	for j in R(i+i,L,i):M[j]*=-1
+	for j in R(s,L,s):M[j]=0
