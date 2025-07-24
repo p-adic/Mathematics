@@ -362,15 +362,22 @@ template <typename T>
 Polynomial<T> Polynomial<T>::NaiveQuotient( Polynomial<T> f0 , const Polynomial<T>& f1 )
 {
 
-  const int diff = f1.m_size - f0.m_size;
+  const int diff = f0.m_size - f1.m_size;
+
+  if( diff < 0 ){
+
+    return move( f0 );
+
+  }
+
   const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
   f0.m_f.pop_back();
   f0.m_size--;
   f0.Reduce();
 
-  for( int i = 0 ; i < f0.m_size ; i++ ){
+  for( int i = diff ; i < f0.m_size ; i++ ){
 
-    f0[i] -= r * f1[i + diff];
+    f0[i] -= r * f1[i - diff];
 
   }
 
@@ -385,26 +392,27 @@ template <typename T>
 Polynomial<T> Polynomial<T>::NaiveResidue( Polynomial<T> f0 , const Polynomial<T>& f1 )
 {
 
-  if( f0.m_size < f1.m_size ){
+  const int diff = f0.m_size - f1.m_size;
+
+  if( diff < 0 ){
 
     return move( f0 );
 
   }
 
-  const int diff = f1.m_size - f0.m_size;
   const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
   f0.m_f.pop_back();
   f0.m_size--;
   f0.Reduce();
 
-  for( int i = 0 ; i < f0.m_size ; i++ ){
+  for( int i = diff ; i < f0.m_size ; i++ ){
 
-    f0[i] -= r * f1[i + diff];
+    f0[i] -= r * f1[i - diff];
 
   }
 
   f0.Reduce();
-  return NaiveQuotient( move( f0 ) , f1 );
+  return NaiveResidue( move( f0 ) , f1 );
 
 }
 
