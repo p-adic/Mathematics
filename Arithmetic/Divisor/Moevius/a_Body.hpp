@@ -78,6 +78,46 @@ auto MoeviusFunction( const LD& ld , INT n ) -> enable_if_t<!IsPE<LD>,int>
 
 }
 
+template <typename INT> vector<INT>
+TotalMoeviusFunction( const INT& n_max )
+{
+
+  vector<INT> answer( n_max + 1 , -2 );
+  answer[1] = 1;
+
+  for( int i = 2 ; i <= n_max ; i++ ){
+
+    if( answer[i] != -2 ){
+
+      continue;
+
+    }
+
+    answer[i] = -1;
+
+    for( int j = i + i ; j <= n_max ; j++ ){
+
+      answer[j] *= -1;
+
+    }
+
+    if( i <= n_max / i ){
+
+      const int s = i * i;
+      
+      for( int j = s ; j <= n_max ; j += s ){
+
+        answer[j] = 0;
+
+      }
+
+    }
+
+  }
+
+  return answer;
+
+}
 
 template <typename LD , typename INT>
 vector<INT> TotalMoeviusFunction( const LD& ld , const INT& n_max )

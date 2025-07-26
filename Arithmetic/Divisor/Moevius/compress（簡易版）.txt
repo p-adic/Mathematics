@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Divisor/Moevius/compra_Body.hpp"
+#else
+TE <TY INT> int MoeviusFunction(CO INT& n)NE{VE<INT> P{},EX{};SetPrimeFactorisation(n,P,EX);CO int le = P.SZ();for(int i = 0;i < le;i++){if(EX[i]> 1){RE 0;}}RE le % 2 == 0?1:-1;}TE <TY INT> VE<INT>TotalMoeviusFunction(CO INT& n_max){VE<INT> AN(n_max + 1,-2);AN[1]= 1;for(int i = 2;i <= n_max;i++){if(AN[i]!= -2){continue;}AN[i]= -1;for(int j = i + i;j <= n_max;j++){AN[j]*= -1;}if(i <= n_max / i){CO int s = i * i;for(int j = s;j <= n_max;j += s){AN[j]= 0;}}}RE AN;}
+#endif
+
