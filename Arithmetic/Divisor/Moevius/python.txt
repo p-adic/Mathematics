@@ -12,10 +12,10 @@ for d in R(2,L):e=d//P[d];M+=[e%P[d]and -M[e]]
 
 
 #Å¬‚Ì‘fˆö”‚ğ—p‚¢‚È‚¢’è””{‰ü‘P”Å
-M=[-2]*L
-M[1]=1
+C=[0]*L
+M=[1]*L
 for i in R(2,L):
-	if M[i]!=-2:continue
-	M[i],s=-1,i*i
-	for j in R(i+i,L,i):M[j]*=-1
+	if C[i]:continue
+	for j in R(i,L,i):M[j]*=-1;C[j]=1
+	s=i*i
 	for j in R(s,L,s):M[j]=0

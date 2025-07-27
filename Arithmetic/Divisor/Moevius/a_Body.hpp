@@ -82,22 +82,22 @@ template <typename INT> vector<INT>
 TotalMoeviusFunction( const INT& n_max )
 {
 
-  vector<INT> answer( n_max + 1 , -2 );
-  answer[1] = 1;
+  vector<bool> composite( n_max + 1 );
+  vector<INT> answer( n_max + 1 , 1 );
+  answer[0] = 0;
 
   for( int i = 2 ; i <= n_max ; i++ ){
 
-    if( answer[i] != -2 ){
+    if( composite[i] ){
 
       continue;
 
     }
 
-    answer[i] = -1;
-
-    for( int j = i + i ; j <= n_max ; j++ ){
+    for( int j = i ; j <= n_max ; j++ ){
 
       answer[j] *= -1;
+      composite[j] = true;
 
     }
 
