@@ -6,42 +6,55 @@
 #include "../../a_Body.hpp"
 #include "../../../../Algebra/Monoid/Semirng/MeetSemirng/a_Body.hpp"
 
-template <typename U , typename IDEMPOTENT_SEMIRNG> inline AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::AbstractFloydWarshall( IDEMPOTENT_SEMIRNG R , const vector<vector<U>>& d ) : m_R( move( R ) ) , m_size() , m_p_d() { static_assert( is_same_v<U,inner_t<IDEMPOTENT_SEMIRNG>> ); Initialise( d ); }
-template <typename U> inline FloydWarshall<U>::FloydWarshall( U infty_U , const vector<vector<U>>& d ) : AbstractFloydWarshall<U,AdditiveTropicalSemirng<U>>( move( infty_U ) , d ) {}
-
-template <typename U , typename IDEMPOTENT_SEMIRNG> inline void AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::Initialise( const vector<vector<U>>& d ) { m_p_d = ( m_size = d.size() ) == 0 ? nullptr : &d; assert( m_size == 0 || m_size == int( d[0].size() ) ); }
+template <typename U , typename IDEMPOTENT_SEMIRNG> inline AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::AbstractFloydWarshall( IDEMPOTENT_SEMIRNG R , vector<vector<U>> d ) : m_R( move( R ) ) , m_size() , m_weight() , m_prev() { static_assert( is_same_v<U,inner_t<IDEMPOTENT_SEMIRNG>> ); Initialise( move( d ) ); }
+template <typename U> inline FloydWarshall<U>::FloydWarshall( U infty_U , vector<vector<U>> d ) : AbstractFloydWarshall<U,AdditiveTropicalSemirng<U>>( move( infty_U ) , move( d ) ) {}
 
 template <typename U , typename IDEMPOTENT_SEMIRNG>
-vector<vector<U>> AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::GetDistance()
+void AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::Initialise( vector<vector<U>> d )
 {
 
-  auto& d = *m_p_d;
-  auto answer = d;
-  const U& infty = m_R.Infty();
+  m_weight = move( d );
+  m_size = m_weight.size();
+  m_prev = vector( m_size , vector( m_size , -1 ) );
+  auto& weight_infty = infty();
 
+  for( int i = 0 ; i < m_size ; i++ ){
+
+    assert( int( m_weight[i].size() ) == m_size );
+
+    for( int j = 0 ; j < m_size ; j++ ){
+
+      if( m_weight[i][j] != weight_infty ){
+
+        assert( m_weight[i][j] == m_R.Meet( m_weight[i][j] , weight_infty ) );
+        m_prev[i][j] = i;
+
+      }
+
+    }
+
+  }
+    
+  // [0,k]を経由点に許す場合の最短経路をkについて再帰的に計算していく。
+  // 通常の行列累乗と違って経由点ごとに考えるお陰でO(V^4)->O(V^3)となる。
+  // 経由点の個数が指定されている場合は行列累乗を使う。
+  // m_Rは単位的とは限らないが、単位的でない場合はm_weigthtの対角成分を用いないので
+  // 対角成分の場合分けは不要。
   for( int k = 0 ; k < m_size ; k++ ){
-
-    auto& answer_k = answer[k];
 
     for( int i = 0 ; i < m_size ; i++ ){
 
-      auto& answer_i = answer[i];
-      const U& answer_ik = answer_i[k];
-    
-      if( i != k && answer_ik != infty ){
-	
-	for( int j = 0 ; j < m_size ; j++ ){
+      for( int j = 0 ; j < m_size ; j++ ){
 
-	  const U& answer_kj = answer_k[j];
+        // AbstractTropicalSemirngのProductの定義から、inftyは気にしなくて良い。
+        U weight_curr = m_R.Meet( m_R.Product( m_weight[i][k] , m_weight[k][j] ) , m_weight[i][j] );
 
-	  if( i != j && k != j && answer_kj != infty ){
+        if( m_weight[i][j] != weight_curr ){
 
-	    U& answer_ij = answer_i[j];
-	    answer_ij = m_R.Meet( move( answer_ij ) , m_R.Product( answer_ik , answer_kj ) );
+          m_weight[i][j] = move( weight_curr );
+          m_prev[i][j] = k;
 
-	  }
-
-	}
+        }
 
       }
 
@@ -49,50 +62,36 @@ vector<vector<U>> AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::GetDistance()
 
   }
 
-  return answer;
+  return;
 
 }
 
 template <typename U , typename IDEMPOTENT_SEMIRNG>
-pair<vector<vector<U>>,vector<vector<int>>> AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::GetPath()
+void AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::SetMeet( const int& start , const int& goal , U u )
 {
 
-  auto& d = *m_p_d;
-  auto weight = d;
-  auto path = vector( m_size , vector( m_size , -1 ) );
-  const U& infty = m_R.Infty();
+  assert( start != goal );
+  u = m_R.Meet( move( u ) , m_weight[start][goal] );
+  
+  if( u == m_weight[start][goal] ){
 
-  for( int k = 0 ; k < m_size ; k++ ){
+    return;
 
-    auto& weight_k = weight[k];
+  }
 
-    for( int i = 0 ; i < m_size ; i++ ){
+  m_weight[start][goal] = move( u );
+  m_prev[start][goal] = start;
+  
+  for( int i = 0 ; i < m_size ; i++ ){
 
-      auto& weight_i = weight[i];
-      auto& path_i = path[i];
-      const U& weight_ik = weight_i[k];
-    
-      if( i != k && weight_ik != infty ){
-	
-	for( int j = 0 ; j < m_size ; j++ ){
+    for( int j = 0 ; j < m_size ; j++ ){
 
-	  const U& weight_kj = weight_k[j];
+      U weight_curr = m_R.Meet( i == start ? j == goal ? u : m_R.Product( u , m_weight[goal][j] ) : m_R.Product( m_weight[i][start] , j == goal ? u : m_R.Product( u , m_weight[goal][j] ) ) , m_weight[i][j] );
 
-	  if( i != j && k != j && weight_kj != infty ){
+      if( m_weight[i][j] != weight_curr ){
 
-	    U& weight_ij = weight_i[j];
-	    U weight_curr = m_R.Product( weight_ik , weight_kj );
-
-	    if( weight_ij > weight_curr ){
-
-	      weight_ij = move( weight_curr );
-	      path_i[j] = k;
-
-	    }
-
-	  }
-
-	}
+        m_weight[i][j] = move( weight_curr );
+        m_prev[i][j] = m_prev[goal==j?start:goal][j];
 
       }
 
@@ -100,6 +99,12 @@ pair<vector<vector<U>>,vector<vector<int>>> AbstractFloydWarshall<U,IDEMPOTENT_S
 
   }
 
-  return { move( weight ) , move( path ) };
-
+  return;
+  
 }
+
+template <typename U , typename IDEMPOTENT_SEMIRNG> inline const U& AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::Get( const int& start , const int& goal ) const { return m_weight[start][goal]; }
+
+template <typename U , typename IDEMPOTENT_SEMIRNG> inline const int& AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::prev( const int& start , const int& goal ) const { assert( start != goal ); return m_prev[start][goal]; }
+
+template <typename U , typename IDEMPOTENT_SEMIRNG> inline const U& AbstractFloydWarshall<U,IDEMPOTENT_SEMIRNG>::infty() const noexcept { return m_R.Infty(); }
