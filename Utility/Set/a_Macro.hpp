@@ -25,7 +25,7 @@
   template <typename T> inline T pop_min( SET& S ) { assert( !S.empty() ); auto itr = S.begin(); T answer = *itr; S.erase( itr ); return answer; } \
   template <typename T> inline SET& operator<<=( SET& S , T t ) { S.insert( move( t ) ); return S; } \
   template <typename T , typename U> inline SET& operator<<=( SET& S , U&& u ) { S.insert( T{ forward<U>( u ) } ); return S; } \
-  template <typename T> inline SET& operator>>=( SET& S , const T& t ) { auto itr = S.lower_bound( t ); assert( itr != S.end() && *itr == t ); S.erase( itr ); return S; } \
+  template <typename T> inline SET& operator>>=( SET& S , const T& t ) { S.erase( t ); return S; } \
   template <typename T , typename U> inline SET& operator>>=( SET& S , const U& u ) { return S >>= T{ u }; } \
   template <typename T> inline const T& Get( const SET& S , int i ) { auto begin = S.begin() , end = S.end(); auto& itr = i < 0 ? ( ++i , --end ) : begin; while( i > 0 && itr != end ){ --i; ++itr; } while( i < 0 && itr != begin ){ ++i; --itr; } assert( i == 0 ); return *itr; } \
 
