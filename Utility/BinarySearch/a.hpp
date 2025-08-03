@@ -5,3 +5,5 @@
 
 // verify:
 // https://yukicoder.me/submissions/999828ÅiBS1Åj
+
+template <typename INT> inline constexpr Mid( const INT& l , const INT& r );

@@ -2,3 +2,6 @@
 
 #pragma once
 #include "a.hpp"
+
+template <typename INT> inline constexpr Mid( const INT& l , const INT& r ) { return l + ( ( r - l ) >> 1 ); }
+
