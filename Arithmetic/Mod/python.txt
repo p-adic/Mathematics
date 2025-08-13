@@ -16,10 +16,6 @@ class ModB:
 	def __init__(self,val,valid = False):
 		self.val = int(val)
 		if not valid and not(0 <= self.val < ModB.B):self.val %= ModB.B
-	def ref(n):
-		return n if n.__class__ == __class__ else ModB(n,True)
-	def get(n):
-		return n.val if n.__class__ == __class__ else n
 	def copy(self):
 		return ModB(self.val,True)
 
@@ -57,9 +53,12 @@ class ModB:
 		return ModB(x - self.val)
 
 	def __mul__(self,x):
-		return ModB.get(x) * self
+		return ModB(self.val * ModB.get(x))
+	def __imul__(self,x):
+		self = self * x
+		return self
 	def __rmul__(self,x):
-		return ModB(self.val * x)
+		return ModB(x * self.val)
 
 	def __pow__(self,n): #Supported only if n>=0.
 		assert 0<=n
@@ -81,8 +80,11 @@ class ModB:
 			while len(ModB.inverse) <= n:ModB.inverse+=[ModB.B - ModB.inverse[ModB.B % len(ModB.inverse)] * ( ModB.B // len(ModB.inverse) ) % ModB.B]
 			return ModB(ModB.inverse[n],True)
 		return ModB(n) ** ( ModB.B - 2 )
+	def __itruediv__(self,x):
+		self *= ModB.Inverse(x)
+		return self
 	def __truediv__(self,x):
-		return ModB.Inverse(x) * self
+		return self * ModB.Inverse(x)
 	def __rtruediv__(self,x):
 		return x * ModB.Inverse(self.val)
 
@@ -94,6 +96,12 @@ class ModB:
 		return ModB(ModB.factorial_inverse[n],True)
 	def Combination(n,m): #Supported only if B is a prime.
 		return ModB.Factorial(n) * (ModB.FactorialInverse(m).val * ModB.FactorialInverse(n-m).val)if 0<=m<=n else ModB(0,True)
+
+	#private:
+	def get(n):
+		return n.val if n.__class__ == __class__ else n
+	def ref(n):
+		return n if n.__class__ == __class__ else ModB(n)
 
 #B‚ª‘f”‚Å‚È‚¢Žž—p‚Ì“ñ€ŒW”ŒvŽZiO(N^2)j
 C=[]
