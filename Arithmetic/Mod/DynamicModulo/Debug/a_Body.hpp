@@ -17,8 +17,12 @@ template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator+=( const 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator-=( const DynamicMods<NUM>& n ) noexcept { if( Constants::g_M > 1 ){ ull m_n0 = ull( m_n ) * n.m_d , m_n1 = n.m_n * ull( m_d ) , m_n_copy = m_non_negative != n.m_non_negative ? move( m_n0 += m_n1 ) : m_n0 == m_n1 ? ( m_non_negative = true , 0 ) : m_n0 > m_n1 ? move( m_n0 -= m_n1 ) : ( m_non_negative = !m_non_negative , move( m_n1 -= m_n0 ) ); ull m_d_copy = ull( m_d ) * n.m_d; ull gcd = GCD( m_n_copy , m_d_copy ); assert( gcd != 0 ); m_n = uint( move( ( m_n_copy /= gcd ) %= Constants::g_M ) ); m_d = uint( move( ( m_d_copy /= gcd ) %= Constants::g_M ) ); } return *this; }
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator*=( const DynamicMods<NUM>& n ) noexcept { if( Constants::g_M > 1 ){ ull m_n_copy = ull( m_n ) * n.m_n , m_d_copy = ull( m_d ) * n.m_d; ull gcd = GCD( m_n_copy , m_d_copy ); assert( gcd != 0 ); m_n = uint( move( ( m_n_copy /= gcd ) %= Constants::g_M ) ); m_d = uint( move( ( m_d_copy /= gcd ) %= Constants::g_M ) ); m_non_negative = m_n == 0 || m_non_negative == n.m_non_negative; } return *this; }
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator/=( DynamicMods<NUM> n ) { return operator*=( n.Invert() ); }
-template <int NUM> template <typename INT> inline DynamicMods<NUM>& DynamicMods<NUM>::operator<<=( INT n ) { assert( n >= 0 ); return *this *= DynamicMods<NUM>( 2 ).NonNegativePower( move( n ) ); }
-template <int NUM> template <typename INT> inline DynamicMods<NUM>& DynamicMods<NUM>::operator>>=( INT n ) { assert( n >=0 ); while( n-- > 0 ){ ( m_n & 1 ) == 0 ? m_n >>= 1 : m_d << 1 < Constants::g_M ? m_d <<= 1 : ( m_n += Constants::g_M ) >>= 1; } return *this; }
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::PositivePower( ll exponent ) noexcept { DynamicMods<NUM> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::NonNegativePower( ll exponent ) noexcept { return exponent == 0 ? ( m_n = 1 , *this ) : PositivePower( move( exponent ) ); }
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator^=( ll exponent ) { bool neg = exponent < 0; assert( !( neg && m_n == 0 ) ); return NonNegativePower( move( neg ? ( exponent %= Constants::g_order ) == 0 ? exponent : exponent += Constants::g_order : exponent ) ); }
+
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator<<=( ll n ) { return *this *= ( n < 0 && -n < int( Constants::g_memory_length ) ) ? TwoPowerInverse( - int( n ) ) : ( n >= 0 && n < int( Constants::g_memory_length ) ) ? TwoPower( int( n ) ) : DynamicMods<NUM>( 2 ) ^= move( n ); }
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator>>=( ll n ) { return *this <<= move( n *= -1 ); }
 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator++() noexcept { return *this += 1; }
 template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator++( int ) noexcept { DynamicMods<NUM> n{ *this }; operator++(); return n; }
@@ -36,23 +40,20 @@ DEFINITION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( + , noexcept , n , + );
 DEFINITION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( - , noexcept , n.SignInvert() , + );
 DEFINITION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( * , noexcept , n , * );
 DEFINITION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( / , , n.Invert() , * );
-template <int NUM> template <typename INT> inline DynamicMods<NUM> DynamicMods<NUM>::operator^( INT exponent ) const { return move( DynamicMods<NUM>( *this ).Power( move( exponent ) ) ); }
-template <int NUM> template <typename INT> inline DynamicMods<NUM> DynamicMods<NUM>::operator<<( INT n ) const { return move( DynamicMods<NUM>( *this ) <<= move( n ) ); }
-template <int NUM> template <typename INT> inline DynamicMods<NUM> DynamicMods<NUM>::operator>>( INT n ) const { return move( DynamicMods<NUM>( *this ) >>= move( n ) ); }
+template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator^( ll exponent ) const { return move( DynamicMods<NUM>( *this ) ^= move( exponent ) ); }
+template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator<<( ll n ) const { return move( DynamicMods<NUM>( *this ) <<= move( n ) ); }
+template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator>>( ll n ) const { return move( DynamicMods<NUM>( *this ) >>= move( n ) ); }
 
 template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::operator-() const noexcept { return move( DynamicMods<NUM>( *this ).SignInvert() ); }
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::SignInvert() noexcept { m_non_negative = m_n == 0 || !m_non_negative; return *this; }
 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::Invert() { if( GCD( m_n , Constants::g_M ) == 1 ){ std::swap( m_n , m_d ); } else { m_n = 0; m_d = Constants::g_M > 1 ? 1 : 0; } return *this; }
 
-template <int NUM> template <typename INT> inline DynamicMods<NUM>& DynamicMods<NUM>::PositivePower( INT exponent ) noexcept { DynamicMods<NUM> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
-template <int NUM> template <typename INT> inline DynamicMods<NUM>& DynamicMods<NUM>::NonNegativePower( INT exponent ) noexcept { return exponent == 0 ? ( m_n = m_d = 1 , *this ) : PositivePower( move( exponent ) ); }
-template <int NUM> template <typename INT> inline DynamicMods<NUM>& DynamicMods<NUM>::Power( INT exponent ) { bool neg = exponent < 0; assert( !( neg && m_n == 0 ) ); return NonNegativePower( move( neg ? ( exponent %= Constants::g_order ) == 0 ? exponent : exponent += Constants::g_order : exponent ) ); }
-
 template <int NUM> inline void DynamicMods<NUM>::swap( DynamicMods<NUM>& n ) noexcept { std::swap( m_non_negative , n.m_non_negative ); std::swap( m_n , n.m_n ); std::swap( m_d , n.m_d ); }
 
 template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::Inverse( const int& n ) { if( Constants::g_M == 1 ){ return zero(); } assert( 0 < n && n < int( Constants::g_memory_length ) ); static vector<DynamicMods<NUM>> memory = { zero() , one() }; static int length_curr = 2; while( length_curr <= n ){ memory.push_back( one() ); memory.back().m_d = length_curr++; } return memory[n]; }
 template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::TwoPower( const int& n ) { if( Constants::g_M == 1 ){ return zero(); } assert( 0 <= n && n < int( Constants::g_memory_length ) ); static vector<DynamicMods<NUM>> memory = { one() }; static int length_curr = 1; while( length_curr <= n ){ memory.push_back( memory.back() + memory.back() ); length_curr++; } return memory[n]; }
+template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::TwoPowerInverse( const int& n ) { if( Constants::g_M == 1 ){ return zero(); } assert( 0 <= n && n < int( Constants::g_memory_length ) ); static vector<DynamicMods<NUM>> memory = { one() }; static int length_curr = 1; while( length_curr <= n ){ memory.push_back( Derepresent( 1 ) / TwoPower( n ) ); length_curr++; } return memory[n]; }
 template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::Factorial( const ll& n ) { assert( n >= 0 ); if( ll( Constants::g_M ) <= n ){ return zero(); } static vector<DynamicMods<NUM>> memory = { one() , one() }; static int length_curr = 2; while( length_curr <= n ){ memory.push_back( memory[length_curr - 1] ); auto& temp = memory.back().m_n; temp = ull( temp ) * length_curr++ % Constants::g_M; } return memory[n]; }
 template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::FactorialInverse( const ll& n ) { assert( 0 <= n && n < Constants::g_M ); static vector<DynamicMods<NUM>> memory = { one() , one() }; static int length_curr = 2; while( length_curr <= n ){ memory.push_back( memory[length_curr - 1] ); auto& temp = memory.back().m_d; temp = ull( temp ) * length_curr++ % Constants::g_M; } return memory[n]; }
 template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::Combination( const ll& n , const ll& i ) { return 0 <= i && i <= n ? Factorial( n ) * FactorialInverse( i ) * FactorialInverse( n - i ) : zero(); }
@@ -71,7 +72,7 @@ template <int NUM> inline void DynamicMods<NUM>::SetModulo( const uint& M , cons
 
 template <int NUM> inline DynamicMods<NUM> Inverse( const DynamicMods<NUM>& n ) { return move( DynamicMods<NUM>( n ).Invert() ); }
 
-template <int NUM , typename INT> inline DynamicMods<NUM> Power( DynamicMods<NUM> n , INT exponent ) { return move( n.Power( move( exponent ) ) ); }
+template <int NUM> inline DynamicMods<NUM> Power( DynamicMods<NUM> n , ll exponent ) { return move( n ^= move( exponent ) ); }
 
 template <int NUM> inline void swap( DynamicMods<NUM>& n0 , DynamicMods<NUM>& n1 ) noexcept { n0.swap( n1 ); }
 
