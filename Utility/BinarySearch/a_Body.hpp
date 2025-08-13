@@ -3,5 +3,5 @@
 #pragma once
 #include "a.hpp"
 
-template <typename INT> inline constexpr Mid( const INT& l , const INT& r ) { return l + ( ( r - l ) >> 1 ); }
+template <typename INT> inline constexpr INT Mid( const INT& l , const INT& r ) { return l + ( ( r - l ) >> 1 ); }
 
