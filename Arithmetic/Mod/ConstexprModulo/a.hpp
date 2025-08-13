@@ -31,10 +31,14 @@ public:
   inline constexpr Mod<M>& operator-=( const Mod<M>& n ) noexcept;
   inline constexpr Mod<M>& operator*=( const Mod<M>& n ) noexcept;
   inline Mod<M>& operator/=( Mod<M> n );
-  // n>=0である場合のみサポート。計算量O(log n)で2^n倍する。
-  template <typename INT> inline constexpr Mod<M>& operator<<=( INT n );
-  // n>=0かつMが奇数である場合のみサポート。計算量O(n)で2^{-n}倍する。
-  template <typename INT> inline constexpr Mod<M>& operator>>=( INT n );
+  // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
+  inline constexpr Mod<M>& operator^=( ll exponent );
+  // n>=0またはMが奇数である場合のみサポート。
+  // |n|<g_memory_lengthでは均し計算量O(1)で、一般にはO(log_2 n)で2^n倍する。
+  inline constexpr Mod<M>& operator<<=( ll n );
+  // n<0かつMが奇数である場合のみサポート。
+  // |n|<g_memory_lengthでは均し計算量O(1)で、一般にはO(log_2 n)で2^{-n}倍する。
+  inline constexpr Mod<M>& operator>>=( ll n );
 
   inline constexpr Mod<M>& operator++() noexcept;
   inline constexpr Mod<M> operator++( int ) noexcept;
@@ -53,20 +57,16 @@ public:
   DECLARATION_OF_ARITHMETIC_FOR_MOD( * , noexcept );
   DECLARATION_OF_ARITHMETIC_FOR_MOD( / , );
   // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
-  template <typename INT> inline constexpr Mod<M> operator^( INT exponent ) const;
+  inline constexpr Mod<M> operator^( ll exponent ) const;
   // n>=0である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
   // 一般にはO(log n)で2^n倍を返す。
-  template <typename INT> inline constexpr Mod<M> operator<<( INT n ) const;
-  // n>=0かつMが奇数である場合のみサポート。計算量O(n)で2^{-n}倍を返す。
-  template <typename INT> inline constexpr Mod<M> operator>>( INT n ) const;
+  inline constexpr Mod<M> operator<<( ll n ) const;
+  // n>=0かつMが奇数である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
+  // 一般にはO(log n)で2^{-n}倍を返す。
+  inline constexpr Mod<M> operator>>( ll n ) const;
 
   inline constexpr Mod<M> operator-() const noexcept;
-  // -1倍する。
-  inline constexpr Mod<M>& SignInvert() noexcept;
-  // Mが素数である場合のみサポート。-1乗する。
-  inline Mod<M>& Invert();
-  // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
-  template <typename INT> inline constexpr Mod<M>& Power( INT exponent );
+
   // グローバルスコープでswapを定義するためのもの。
   inline constexpr void swap( Mod<M>& n ) noexcept;
 
@@ -87,13 +87,18 @@ public:
   static inline constexpr INT_TYPE_FOR_MOD GetModulo() noexcept;
 
 private:
-  template <typename INT> inline constexpr Mod<M>& PositivePower( INT exponent ) noexcept;
-  template <typename INT> inline constexpr Mod<M>& NonNegativePower( INT exponent ) noexcept;
+  // -1倍する。
+  inline constexpr Mod<M>& SignInvert() noexcept;
+  // Mが素数である場合のみサポート。-1乗する。
+  inline Mod<M>& Invert();
+  inline constexpr Mod<M>& PositivePower( ll exponent ) noexcept;
+  inline constexpr Mod<M>& NonNegativePower( ll exponent ) noexcept;
 
   // Mが素数かつ0 < n < g_memory_lengthである場合のみサポート。
   static inline const Mod<M>& Inverse( const int& n );
   // 0 <= n < g_memory_lengthである場合のみサポート。
   static inline const Mod<M>& TwoPower( const int& n );
+  static inline const Mod<M>& TwoPowerInverse( const int& n );
 
   using Constants = ConstantsForMod<M>;
 
