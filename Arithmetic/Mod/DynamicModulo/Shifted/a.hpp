@@ -28,6 +28,10 @@ public:
   inline ShiftedMods<NUM>& operator=( ShiftedMods<NUM> n ) noexcept;
   inline ShiftedMods<NUM>& operator+=( const ShiftedMods<NUM>& n ) noexcept;
   inline ShiftedMods<NUM>& operator*=( const ShiftedMods<NUM>& n ) noexcept;
+
+  // exponent>=0である場合にのみサポート。exponent乗する。
+  template <typename INT> inline ShiftedMods<NUM>& operator^=( INT exponent );
+
   // n>=0である場合のみサポート。計算量O(log n)で2^n倍する。
   template <typename INT> inline ShiftedMods<NUM>& operator<<=( INT n );
 
@@ -48,8 +52,6 @@ public:
   // n>=0である場合のみサポート。計算量O(log n)で2^n倍を返す。
   template <typename INT> inline ShiftedMods<NUM> operator<<( INT n ) const;
 
-  // exponent>=0である場合にのみサポート。exponent乗する。
-  template <typename INT> inline ShiftedMods<NUM>& Power( INT exponent );
   // グローバルスコープでswapを定義するためのもの。
   inline void swap( ShiftedMods<NUM>& n ) noexcept;
 

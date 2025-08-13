@@ -15,7 +15,10 @@ template <int NUM> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator=( Shifted
 template <int NUM> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator+=( const ShiftedMods<NUM>& n ) noexcept { m_n = Residue( move( m_n += n.m_n ) ); return *this; }
 template <int NUM> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator*=( const ShiftedMods<NUM>& n ) noexcept { m_n = Residue( move( ull( m_n ) * n.m_n ) ); return *this; }
 
-template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator<<=( INT n ) { return *this *= ShiftedMods<NUM>( 2 ).Power( move( n ) ); }
+template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::PositivePower( INT exponent ) noexcept { ShiftedMods<NUM> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
+template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator^=( INT exponent ) { assert( exponent >= 0 ); return exponent == 0 ? ( m_n = 1 , *this ) : PositivePower( move( exponent ) ); }
+
+template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator<<=( INT n ) { return *this *= ( ShiftedMods<NUM>( 2 ) ^= move( n ) ); }
 
 template <int NUM> inline ShiftedMods<NUM>& ShiftedMods<NUM>::operator++() noexcept { ++m_n < T( Constants::g_KM ) ? m_n : m_n = Constants::g_K; return *this; }
 template <int NUM> inline ShiftedMods<NUM> ShiftedMods<NUM>::operator++( int ) noexcept { ShiftedMods<NUM> n{ *this }; operator++(); return n; }
@@ -29,11 +32,8 @@ DEFINITION_OF_COMPARISON_FOR_SHIFTED_MOD( <= );
 
 DEFINITION_OF_ARITHMETIC_FOR_SHIFTED_MOD( + , noexcept , n , + );
 DEFINITION_OF_ARITHMETIC_FOR_SHIFTED_MOD( * , noexcept , n , * );
-template <int NUM> template <typename INT> inline ShiftedMods<NUM> ShiftedMods<NUM>::operator^( INT exponent ) const { return move( ShiftedMods<NUM>( *this ).Power( move( exponent ) ) ); }
+template <int NUM> template <typename INT> inline ShiftedMods<NUM> ShiftedMods<NUM>::operator^( INT exponent ) const { return move( ShiftedMods<NUM>( *this ) ^= move( exponent ) ); }
 template <int NUM> template <typename INT> inline ShiftedMods<NUM> ShiftedMods<NUM>::operator<<( INT n ) const { return move( ShiftedMods<NUM>( *this ) <<= move( n ) ); }
-
-template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::PositivePower( INT exponent ) noexcept { ShiftedMods<NUM> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
-template <int NUM> template <typename INT> inline ShiftedMods<NUM>& ShiftedMods<NUM>::Power( INT exponent ) { assert( exponent >= 0 ); return exponent == 0 ? ( m_n = 1 , *this ) : PositivePower( move( exponent ) ); }
 
 template <int NUM> inline void ShiftedMods<NUM>::swap( ShiftedMods<NUM>& n ) noexcept { std::swap( m_n , n.m_n ); }
 
