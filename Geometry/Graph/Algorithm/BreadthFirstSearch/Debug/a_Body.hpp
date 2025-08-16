@@ -103,13 +103,19 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
 
 }
 
-template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Initialise( list<T> inits )
+template <typename T , typename GRAPH> template <template <typename...> typename VEC> inline void VirtualBreadthFirstSearch<T,GRAPH>::Initialise( VEC<T> inits )
 {
 
   DERR( "s”Ô†:" , __LINE__ );
   DERRNS( "-> " );
   Initialise();
-  m_next = move( inits );
+
+  for( auto& init : inits ){
+
+    m_next.push_back( move( init ) );
+
+  }
+  
   const int& V = size();
 
   for( auto& u : m_next ){
@@ -189,7 +195,7 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
 
 }
 
-template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Shift( list<T> inits )
+template <typename T , typename GRAPH> template <template <typename...> typename VEC> inline void VirtualBreadthFirstSearch<T,GRAPH>::Shift( VEC<T> inits )
 {
 
   if( m_initialised ){

@@ -5,7 +5,7 @@
 #include "../../../../Utility/Set/Map/a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/978898（一始点Shiftの反復による多点BFSでの全探索）
+// https://yukicoder.me/submissions/1113365（一始点Shiftの反復による多点BFSでの全探索）
 // https://yukicoder.me/submissions/978899（GetConnectedComponent）
 // https://yukicoder.me/submissions/978904（一始点のGetDistance、EnumerationGraph）
 // https://yukicoder.me/submissions/978910（一始点のGetDistance、MemorisationGraph）
@@ -49,10 +49,10 @@ public:
   inline void Initialise();
   // m_nextとm_foundとm_prevを初期化した上でinitを最初の探索点に設定する。
   inline void Initialise( const T& init );
-  inline void Initialise( list<T> inits );
+  template <template <typename...> typename VEC> inline void Initialise( VEC<T> inits );
   // m_nextを初期化した上でm_foundとm_prevを非初期化せずinitを次の探索点に設定する。
   inline void Shift( const T& init );
-  inline void Shift( list<T> inits );
+  template <template <typename...> typename VEC> inline void Shift( VEC<T> inits );
 
   // Gのサイズを取得。
   inline const int& size() const noexcept;
