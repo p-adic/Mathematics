@@ -12,10 +12,11 @@
 // 構築O(1)
 
 // 全要素数取得O(1)
+// 区間要素数取得O(LS)
 
 // 要素挿入O(L log S)
 // 要素削除O(L log S)
-// 特定の値に等しい要素数／特定の値を始切片に持つ要素数取得O(L log S)
+// 特定の値に等しい要素数／特定の値を始切片に持つ要素数などを取得O(L log S)
 
 // 要素のインクリメント、均しO(L)
 // 要素のディクリメント、均しO(L)
@@ -35,6 +36,9 @@ private:
   // m_edge[node][i]にnode番目に扱ったkeyの末尾にiを挿入したkeyを何番目に扱ったかを格納。
   vector<map<int,int>> m_edge;
 
+  int m_base;
+  int m_length;
+
 public:
   inline TrieTree( ABEL_GROUP M );
 
@@ -52,6 +56,10 @@ public:
   inline const U& size() const noexcept;
   // {vをkeyとする値,vを始切片に持つkeyでの値の総和}
   template <typename V> pair<U,U> count( const V& v );
+  // v_ulim未満における総和
+  template <typename V> U InitialSegmentCount( const V& v_ulim );
+  // 半開区間[v_min,v_ulim)における総和
+  template <typename V> U IntervalCount( const V& v_min , const V& v_ulim );
 
   // ここからMがoperator<(const U&,const U&)に関する全順序可換群構造である場合のみサポート。
 
@@ -85,9 +93,16 @@ public:
 
   // 各keyの始切片v0をv1に、v1をv0に置き換える。
   template <typename V> void swap( const V& v0 , const V& v1 );
-  
+
+  inline void SetBase( const int& base );
+  inline void SetLength( const int& length );
+
+  // vをm_base進法で長さm_lengthの列に変換する。
+  inline vector<int> ToArray( const int& v );
+  inline vector<int> ToArray( ll v );
   // vをM進法で列に変換する。
   static vector<int> ToArray( ll v , const int& M );
+  // vをM進法で長さLの列に変換する。
   static vector<int> ToArray( ll v , const int& M , const int& L );
 
 private:
