@@ -19,5 +19,10 @@ template <typename T> ll CountNonStrictlyIncreasingSubsequence( const vector<T>&
 
 // O(size log size)でaの連続とは限らない非空部分列であって任意の隣接２成分s,tに対し
 // f(s) <= tであるものの長さの最大値を返す。
-template <typename T , T f(const T&)> int LongestIncreasingSubsequence( const vector<T>& a , const T& infty );
+template <typename T , typename F> int LongestIncreasingSubsequence( const vector<T>& a , const T& infty , F f );
+
+// O(size log size)でanswer[i]にaの連続とは限らない非空単調増加部分列であって末尾が(i,a[i])
+// であるものの長さの最大値を返す。
+template <typename T> vector<int> LongestStrictlyIncreasingSubsequence( const vector<T>& a );
+template <typename T> vector<int> LongestNonStrictlyIncreasingSubsequence( const vector<T>& a );
 
