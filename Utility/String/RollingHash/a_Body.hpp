@@ -136,8 +136,8 @@ template <typename MODINT , typename INT , typename CODE> template <typename CHA
 
   auto& [h,p,s] = code;
   assert( s-- > 0 );
-  h -= Twist( c_prev ) * r_power( s );
-  r *= m_r_inv;
+  ( h -= Twist( c_prev ) * m_r_power[0] ) *= m_r_inv;
+  p *= m_r_inv;
   return move( code );
 
 }
@@ -147,8 +147,8 @@ template <typename MODINT , typename INT , typename CODE> template <typename CHA
 
   auto& [h,p,s] = code;
   assert( s-- > 0 );
-  ( h -= Twist( c_prev ) * m_r_power[0] ) *= m_r_inv;
-  r *= m_r_inv;
+  h -= Twist( c_prev ) * r_power( s );
+  p *= m_r_inv;
   return move( code );
 
 }

@@ -49,3 +49,5 @@ public:
 };
 
 #include "a_Alias.hpp"
+// DoubleRollingHash<M0,M1,INT> = RollingHashPair<RollingHash<Mod<M0>,INT>,RollingHash<Mod<M1>,INT>>;
+// TripleRollingHash<M0,M1,M2> = RollingHashPair<DoubleRollingHash<M0,M1,INT>,RollingHash<Mod<M2>,INT>>;
