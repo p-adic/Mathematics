@@ -131,6 +131,10 @@ public:
   //     for( auto& [x,j] : u ){ answer = M.Product( move( answer ) , x ); }
   //     return pair{ move( answer ) , i };
   //   };
+  // 他のメンバを使わないのであれば、定数倍の軽い再帰版
+  // RootingDP/a_Body.hpp
+  // の使用を検討する。
+  
   
   // Uは適当な型、Fは写像f:U \times N ->Uに相当する型、
   // Gは写像g:U \times \{0,1\} \times N^2 -> Uに相当する型。

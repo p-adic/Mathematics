@@ -329,10 +329,9 @@ vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( MONOID M , F&
     const int& j = Parent( i );
     const int& k = ChildrenNumber( i );
     const int size_i = r_sum[i].size();
-    // children_value[j][0],...,children_value[j][k-1]のgでの像と
-    // rest_j（既に計算済み）と
-    // children_value[j][k+1],...,children_value[j][size_i-1]のgでの像と
-    // のMに関する積のfでの像のgでの像。
+    // children_value[j][0],...,children_value[j][k-1]のgでの像のMに関する積と
+    // children_value[j][k+1],...,children_value[j][size_i-1]のgでの像のMに関する積の
+    // Mに関する積のfでの像（iを根とする時のjの寄与）のgでの像。
     const U rest_i = g( f( M.Product( l_sum[j][k] , r_sum[j][k] ) , j ) , false , i , j );
     
     for( int m = 0 ; m <= size_i ; m++ ){
