@@ -1,0 +1,18 @@
+#hash_endo:{0,1} \times M \times N -> M
+def EndomorphicGraphConvolution(V,E,hash_endo,repetition):
+	C=[0]*V
+	for r in range(repetition):
+		nextC=[0]*V
+		for u,v in E:
+			nextC[u]+=hash_endo(True,C[v],r)
+			nextC[v]-=hash_endo(False,C[u],r)
+		C=nextC
+	return C
+
+P=7
+P_power=[1]
+repetition=50
+for r in range(1,repetition):P_power+=[P_power[-1]*P]
+def xor_reduction(to,n,r):return(n^r)%P_power[r]
+
+C=EndomorphicGraphConvolution(V,E,xor_reduction,repetition):
