@@ -1,0 +1,10 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/WeightSum/Namori/a_Body.hpp"
+#else
+// êÊÇ…
+// Mathematics/Polynomial/FPS/compress.txt
+// Çì\ÇÈÅB
+
+TE <TY INT0,TY INT1,TY INT2>INT2 NamoriWeightSum(CO VE<Tuple<INT0,INT1,INT2>>& u){CO int SZ = u.SZ();INT2 AN{},sum0{},sum1{};PO<INT2> f{};PO<INT2> g{};for(int i = 0;i < SZ;i++){auto&[ui0,ui1,ui2]= u[i];sum0 += f[i]= g[SZ - 1 - i]= ui0;sum1 += ui1;AN += ui2 - ui0 * ui1;}AN +=(sum0 *= sum1);f *= g;for(int d = 1;d <= SZ - d;d++){AN += d *(d == SZ - d?(f[SZ-1-d]+ f[SZ*2-1-d])/ 2:f[SZ-1-d]+ f[SZ*2-1-d]);}RE AN;}
+#endif
+
