@@ -112,7 +112,7 @@ private:
 template <INT_TYPE_FOR_MOD M> inline Mod<M> Inverse( const Mod<M>& n );
 
 // Mが素数であるかexponent>=0である場合にのみサポート。
-template <INT_TYPE_FOR_MOD M , typename T> inline constexpr Mod<M> Power( Mod<M> n , T exponent );
+template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Power( Mod<M> n , ll exponent );
 
 template <INT_TYPE_FOR_MOD M> inline constexpr void swap( Mod<M>& n0 , Mod<M>& n1 ) noexcept;
 
