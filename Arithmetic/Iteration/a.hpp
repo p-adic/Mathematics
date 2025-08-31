@@ -15,14 +15,15 @@ template <typename T , template <typename...> typename V> inline T Sum( const V<
 template <typename T , typename U , template <typename...> typename V> inline T Sum( T t , const V<U>& f );
 template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f );
 template <typename T , typename U , template <typename...> typename V> inline T Prod( T t , const V<U>& f );
+
+template <typename T> inline T& SetMax( T& n );
+template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , const U& u1 , const Args&... args );
+template <typename T> inline T& SetMin( T& n );
+template <typename T , typename U , typename... Args> inline T& SetMin( T& t0 , const U& u1 , const Args&... args );
 template <typename T , template <typename...> typename V> inline const T& Max( const V<T>& f );
-template <typename T , typename...Args> inline T Max( const T& t0 , const T& t1 , const Args&... args );
+template <typename T , typename U , typename...Args> inline T Max( T t0 , const U& t1 , const Args&... args );
 template <typename T , template <typename...> typename V> inline const T& Min( const V<T>& f );
-template <typename T , typename...Args> inline T Min( const T& t0 , const T& t1 , const Args&... args );
-
-template <typename T , typename U> inline T SetMax( T& n , const U& m );
-template <typename T , typename U> inline T SetMin( T& n , const U& m );
-
+template <typename T , typename U , typename...Args> inline T Min( T t0 , const U& t1 , const Args&... args );
 
 // init * ( t ^ exponent )‚ð•Ô‚·
 template <typename T , typename UINT> T Power( const T& t , const UINT& exponent , T init = 1 );
