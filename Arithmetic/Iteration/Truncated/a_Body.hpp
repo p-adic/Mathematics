@@ -3,6 +3,9 @@
 #pragma once
 #include "a.hpp"
 
+#include "../../../Algebra/Monoid/a_Body.hpp"
+#include "../../../Utility/Set/Map/a_Body.hpp"
+
 template <typename INT1 , typename INT2>
 ll TruncatedPower( ll n , INT1 e , const INT2& bound )
 {
@@ -89,13 +92,13 @@ INT2 RoundDownRoot( const INT1& e , const INT2& n )
 
 }
 
-template <typename INT1 , typename INT2> inline bool IsThPower( const INT1& e , const INT2& n ) { return TruncatedPower( RoundDownRoot( e , n ) , e , n + 1 ) == n; }
+template <typename INT1 , typename INT2> inline bool IsThPower( const INT1& e , const INT2& n ) { return Power( RoundDownRoot( e , n ) , e ) == n; }
 
 template <typename INT1 , typename INT2>
-bool IsThPowerBelow( const INT1& e , const INT2& n , const int& i )
+bool IsThPowerMemorisation( const INT1& e , const INT2& n )
 {
 
-  assert( e > 0 && n >= 0 && i > 0 );
+  assert( e > 0 && n >= 0 );
   
   if( e == 1 || n <= 1 ){
 
@@ -110,12 +113,12 @@ bool IsThPowerBelow( const INT1& e , const INT2& n , const int& i )
 
   }
 
-  Map<int,pair<int,Set<ll>>> power{};
-  auto& [i_e,S_e] = power[e];
+  Map<int,tuple<int,ll,Set<ll>>> power{};
+  auto& [i_e,v_e,S_e] = power[e];
 
-  while( i_e < i ){
+  while( v_e < n ){
 
-    S_e.insert( TruncatedPower( ++i_e , e , infty ) );
+    S_e.insert( v_e = Power<ll>( ++i_e , e ) );
 
   }
 
@@ -161,7 +164,7 @@ int DiscreteLogarithm( MONOID M , const U& u , const U& v , const int& n )
 
   U curr = u_power[0];
 
-  for( int j = 0 ; j += sqrt_n ; j <= n ){
+  for( int j = 0 ; j <= n ; j += sqrt_n ){
 
     U next = curr * u_power[sqrt_n];
     
