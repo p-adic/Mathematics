@@ -10,6 +10,7 @@
 // https://yukicoder.me/submissions/965343（Derepresent,+=,-=,*,Combination,one）
 // https://yukicoder.me/submissions/965376（Derepresent,+=,-=,*=,SignInvert,+,*,^,++,--,Combination,zero,one）
 
+// 可逆な場合の逆元は法が素数でない場合にも有効。
 template <int NUM>
 class DynamicMods
 {
@@ -81,7 +82,7 @@ public:
   static inline const DynamicMods<NUM>& one() noexcept;
 
   static inline const uint& GetModulo() noexcept;
-  static inline void SetModulo( const uint& M , const int& order_minus_1 = -1 ) noexcept;
+  static inline void SetModulo( const uint& M , const bool& M_is_prime  = false ) noexcept;
   
 private:  // -1倍する。
   inline DynamicMods<NUM>& SignInvert() noexcept;
@@ -111,10 +112,10 @@ template <int NUM> inline DynamicMods<NUM> Power( DynamicMods<NUM> n , ll expone
 
 template <int NUM> inline void swap( DynamicMods<NUM>& n0 , DynamicMods<NUM>& n1 ) noexcept;
 
-template <int NUM> inline string to_string( const DynamicMods<NUM>& n ) noexcept;
-
 template <int NUM , class Traits> inline basic_istream<char,Traits>& operator>>( basic_istream<char,Traits>& is , DynamicMods<NUM>& n );
 template <int NUM , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const DynamicMods<NUM>& n );
+
+template <int NUM> inline string to_string( const DynamicMods<NUM>& n ) noexcept;
 
 #include "../Hash/a.hpp"
 template <int NUM> DECLARATION_OF_HASH( DynamicMods<NUM> );
