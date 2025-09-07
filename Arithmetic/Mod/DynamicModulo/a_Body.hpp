@@ -21,7 +21,7 @@ template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator/=( Dynami
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::PositivePower( ll exponent ) noexcept { DynamicMods<NUM> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::NonNegativePower( ll exponent ) noexcept { return exponent == 0 ? ( m_n = 1 , *this ) : PositivePower( move( exponent ) ); }
 
-template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator^=( ll exponent ) { if( exponent < 0 ){ Invert(); exponent *= -1; } return NonNegativePower( move( exponent ) ); }
+template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator^=( ll exponent ) { if( exponent < 0 ){ m_n = ModularInverse( Constants::g_M , move( m_n ) ); exponent *= -1; } return NonNegativePower( move( exponent ) ); }
 
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator<<=( ll n ) { return *this *= ( n < 0 && -n < int( Constants::g_memory_length ) ) ? TwoPowerInverse( - int( n ) ) : ( n >= 0 && n < int( Constants::g_memory_length ) ) ? TwoPower( int( n ) ) : DynamicMods<NUM>( 2 ) ^= move( n ); }
 template <int NUM> inline DynamicMods<NUM>& DynamicMods<NUM>::operator>>=( ll n ) { return *this <<= move( n *= -1 ); }

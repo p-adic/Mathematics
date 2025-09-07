@@ -10,7 +10,10 @@
 // https://yukicoder.me/submissions/965343（Derepresent,+=,-=,*,Combination,one）
 // https://yukicoder.me/submissions/965376（Derepresent,+=,-=,*=,SignInvert,+,*,^,++,--,Combination,zero,one）
 
-// 可逆な場合の逆元は法が素数でない場合にも有効。
+// 可逆な場合の逆元計算は法が素数でない場合にも有効で、
+// (1) /=,/は法が素数かつ右辺が小さい場合にメモ化再帰、そうでない場合にユークリッドの互除法で処理する。
+// (2) ^=,^はユークリッドの互除法で処理する。
+// で処理する。
 template <int NUM>
 class DynamicMods
 {
@@ -29,7 +32,7 @@ public:
   inline DynamicMods<NUM>& operator-=( const DynamicMods<NUM>& n ) noexcept;
   inline DynamicMods<NUM>& operator*=( const DynamicMods<NUM>& n ) noexcept;
   inline DynamicMods<NUM>& operator/=( DynamicMods<NUM> n );
-  // m_nが可逆であるか、またはexponent>=0である場合にのみサポート。exponent乗する。
+  // m_nが可逆であるかexponent>=0である場合にのみサポート。exponent乗する。
   inline DynamicMods<NUM>& operator^=( ll exponent );
   // n>=0またはMが奇数である場合のみサポート。
   // n < g_memory_lengthでは均し計算量O(1)で、一般にはO(log n)で2^n倍する。
@@ -54,7 +57,7 @@ public:
   DECLARATION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( - , noexcept );
   DECLARATION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( * , noexcept );
   DECLARATION_OF_ARITHMETIC_FOR_DYNAMIC_MOD( / , );
-  // exponent>=0である場合にのみサポート。exponent乗する。
+  // m_nが可逆であるかexponent>=0である場合にのみサポート。exponent乗する。
   inline DynamicMods<NUM> operator^( ll exponent ) const;
   // n>=0またはMが奇数である場合のみサポート。
   // n < g_memory_lengthでは均し計算量O(1)で、一般にはO(log n)で2^n倍を返す。
