@@ -7,12 +7,14 @@
 
 #include "Constant/a.hpp"
 
-// 非常によくバグるので、更新したら必ずverifyすること！
 // verify:
 // https://yukicoder.me/submissions/965330（+=,*,/,Power）
 // https://yukicoder.me/submissions/965328（Derepresent,+=,-=,*,Combination,one）
 // https://yukicoder.me/submissions/965332（Derepresent,+=,-=,*=,SignInvert,+,*,^,++,--,Combination,zero,one）
 
+// 逆元はMが素数の場合にのみ有効なメモ化再帰で実装。
+// Mが素数でない場合に逆元が必要であればModularInverse(M,-)を呼ぶか
+// DynamicModsを使う。
 template <INT_TYPE_FOR_MOD M>
 class Mod
 {
