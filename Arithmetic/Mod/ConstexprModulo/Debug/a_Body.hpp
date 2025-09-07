@@ -18,7 +18,7 @@ template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator*=( const
 template <INT_TYPE_FOR_MOD M> inline Mod<M>& Mod<M>::operator/=( Mod<M> n ) { return operator*=( n.Invert() ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::PositivePower( ll exponent ) noexcept { Mod<M> power{ *this }; exponent--; while( exponent != 0 ){ ( exponent & 1 ) == 1 ? *this *= power : *this; exponent >>= 1; power *= power; } return *this; }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::NonNegativePower( ll exponent ) noexcept { return exponent == 0 ? ( m_n = m_d = 1 , *this ) : PositivePower( move( exponent ) ); }
-template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator^=( ll exponent ) ( ll exponent ) { if( exponent < 0 ){ Invert(); exponent *= -1; } return NonNegativePower( move( exponent ) ); }
+template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator^=( ll exponent ) { if( exponent < 0 ){ Invert(); exponent *= -1; } return NonNegativePower( move( exponent ) ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator<<=( ll n ) { return *this *= ( n < 0 && -n < int( Constants::g_memory_length ) ) ? TwoPowerInverse( - int( n ) ) : ( n >= 0 && n < int( Constants::g_memory_length ) ) ? TwoPower( int( n ) ) : Mod<M>( 2 ) ^= move( n ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator>>=( ll n ) { return *this <<= move( n *= -1 ); }
 
