@@ -4,6 +4,7 @@
 #include "a.hpp"
 
 #include "../Constant/a_Body.hpp"
+#include "../../Function/Residue/a_Body.hpp"
 #include "../../../Divisor/GCD/a_Body.hpp"
 
 template <int NUM> inline DynamicMods<NUM>::DynamicMods() noexcept : m_non_negative( true ) , m_n() , m_d( 1 ) {}
@@ -61,7 +62,7 @@ template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::Combination( const 
 template <int NUM> inline const bool& DynamicMods<NUM>::GetSign() const noexcept { return m_non_negative; }
 template <int NUM> inline const uint& DynamicMods<NUM>::GetNumerator() const noexcept { return m_n; }
 template <int NUM> inline const uint& DynamicMods<NUM>::GetDenominator() const noexcept { return m_d; }
-template <int NUM> inline uint DynamicMods<NUM>::Represent() const noexcept { DynamicMods<NUM> d_inv = DynamicMods<NUM>::Derepresent( m_d ).NonNegativePower( Constants::g_order_minus ); return ull( m_non_negative ? m_n : Constants::g_M - m_n ) * d_inv.m_n % Constants::g_M; }
+template <int NUM> inline uint DynamicMods<NUM>::Represent() const noexcept { return ull( m_non_negative ? m_n : Constants::g_M - m_n ) * ModularInverse( Constants::g_M , m_d ) % Constants::g_M; }
 template <int NUM> inline DynamicMods<NUM> DynamicMods<NUM>::Derepresent( uint n ) noexcept { DynamicMods<NUM> n_copy{}; n_copy.m_n = move( n ); return n_copy; }
 
 template <int NUM> inline const DynamicMods<NUM>& DynamicMods<NUM>::zero() noexcept { static const DynamicMods<NUM> z{}; return z; }
