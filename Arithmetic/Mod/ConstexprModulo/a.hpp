@@ -12,9 +12,10 @@
 // https://yukicoder.me/submissions/965328（Derepresent,+=,-=,*,Combination,one）
 // https://yukicoder.me/submissions/965332（Derepresent,+=,-=,*=,SignInvert,+,*,^,++,--,Combination,zero,one）
 
-// 逆元はMが素数の場合にのみ有効なメモ化再帰で実装。
-// Mが素数でない場合に逆元が必要であればModularInverse(M,-)を呼ぶか
-// DynamicModsを使う。
+// 可逆な場合の逆元計算は
+// (1) /=,/は法Mが素数の場合にのみ有効で、右辺が小さい場合にメモ化再帰、
+//     そうでない場合にユークリッドの互除法で処理する。
+// (2) ^=,^は法Mが素数でなくても有効で、ユークリッドの互除法で処理する。
 template <INT_TYPE_FOR_MOD M>
 class Mod
 {
@@ -33,7 +34,7 @@ public:
   inline constexpr Mod<M>& operator-=( const Mod<M>& n ) noexcept;
   inline constexpr Mod<M>& operator*=( const Mod<M>& n ) noexcept;
   inline Mod<M>& operator/=( Mod<M> n );
-  // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
+  // m_nが可逆であるかexponent>=0である場合にのみサポート。exponent乗する。
   inline constexpr Mod<M>& operator^=( ll exponent );
   // n>=0またはMが奇数である場合のみサポート。
   // |n|<g_memory_lengthでは均し計算量O(1)で、一般にはO(log_2 n)で2^n倍する。
@@ -58,7 +59,7 @@ public:
   DECLARATION_OF_ARITHMETIC_FOR_MOD( - , noexcept );
   DECLARATION_OF_ARITHMETIC_FOR_MOD( * , noexcept );
   DECLARATION_OF_ARITHMETIC_FOR_MOD( / , );
-  // Mが素数であるかexponent>=0である場合にのみサポート。exponent乗する。
+  // m_nが可逆であるかexponent>=0である場合にのみサポート。exponent乗する。
   inline constexpr Mod<M> operator^( ll exponent ) const;
   // n>=0である場合のみサポート。n < g_memory_lengthでは均し計算量O(1)で、
   // 一般にはO(log n)で2^n倍を返す。
