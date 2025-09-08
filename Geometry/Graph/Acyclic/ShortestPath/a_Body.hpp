@@ -20,7 +20,7 @@ vector<pair<U,int>> TopologicalSortedShortestPath( TOPOLOGICAL_SORTED_ACYCLIC_GR
 
       auto&& j = G.Vertex( u );
       auto& [w,prev] = answer[j];
-      U temp = weight(i,j);
+      U temp = M.Product( get<0>( answer[i] ) , weight( i , j ) );
 
       if( prev == -1 || temp < w ){
 
