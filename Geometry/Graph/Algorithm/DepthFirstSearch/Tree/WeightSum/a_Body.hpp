@@ -4,7 +4,7 @@
 #include "a.hpp"
 
 #include "../../../../../../Algebra/Monoid/Group/TreeWeight/a_Body.hpp"
-#include "../RootingDP/a_Body.hpp"
+#include "../RootingDP/Recursion/a_Body.hpp"
 
 template <typename TREE , typename PREV_WEIGHT , typename INT>
 Tuple<int,INT,INT> TreeWeightSum( const TREE& T , PREV_WEIGHT pw )

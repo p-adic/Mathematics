@@ -1,66 +1,139 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/RootingDP/a_Body.hpp
 
 #pragma once
-#include "../a.hpp"
+#include "a.hpp"
 
-template <typename TREE , typename F>
-ret_t<F> RecursionRootingDP_Body( TREE& T , F& f , const int& i , vector<bool>& checked )
+#include "../a_Body.hpp"
+
+template <typename DFST , typename F>
+ret_t<F> DepthFirstSearchOnTree<TREE>::RootingDP( DFST& dfst , F& f )
 {
 
   using U = ret_t<F>;
   static_assert( is_invocable_r_v<U,F,vector<U>,int> );
-  checked[i] = true;
-  auto& ei = T.Edge( i );
-  const int ei_size = ei.size();
-  vector<U> temp{};
+  const int& V = dfst.size();
+  vector<vector<U>> children_value( V );
+  U temp;
+  
+  for( int n = 0 ; n < V ; n++ ){
+    
+    const int& i = dfst.NodeNumber( n , true );
+    const int& j = dfst.Parent( i );
+    temp = f( move( children_value[i] ) , i );
 
-  for( int m = 0 ; m < ei_size ; m++ ){
+    if( j != -1 ){
 
-    auto&& j = T.Vertex( ei[m] );
+      children_value[j].push_back( move( temp ) );
 
-    if( checked[j] ){
-
-      continue;
-      
     }
 
-    temp.push_back( RootingDP_Body( T , f , j , checked ) );
-
   }
-  
-  return f( temp , i );
+
+  return temp;
 
 }
-
-template <typename TREE , typename F> inline ret_t<F> RecursionRootingDP( TREE& T , F& f , const int& root ) { vector<bool> checked( T.size() ); return RecursionRootingDP_Body( T , f , root , checked ); }
-
-template <typename TREE , typename VAL , typename RIGHT_ACTION>
-ret_t<VAL,int> BinaryRootingDP_Body( TREE& T , VAL& val , RIGHT_ACTION& prod , const int& i , vector<bool>& checked )
+  
+template <typename DFST , typename MONOID , typename F , typename G>
+vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( DFST& dfst , MONOID M , F& f , G& g )
 {
 
-  using U = ret_t<VAL,int>;
-  static_assert( is_invocable_r_v<U,RIGHT_ACTION,U,U,int,int> );
-  checked[i] = true;
-  auto& ei = T.Edge( i );
-  const int ei_size = ei.size();
-  U answer = val( i );
+  using U = inner_t<MONOID>;
+  static_assert( is_invocable_r_v<U,F,U,int> && is_invocable_r_v<U,G,U,bool,int,int> );
+  
+  if( ! m_set_children ){
 
-  for( int m = 0 ; m < ei_size ; m++ ){
-
-    auto&& j = T.Vertex( ei[m] );
-
-    if( checked[j] ){
-
-      continue;
-      
-    }
-
-    answer = prod( move( answer ) , BinaryRootingDP_Body( T , val , prod , j , checked ) , i , j );
+    SetChildren();
 
   }
   
+  const int& V = dfst.size();
+  const U& e = M.Unit();
+
+  // children_value[i][m]Ç…iÇÃmî‘ñ⁄ÇÃéqÉmÅ[ÉhjÇ‹Ç≈ÇÃåvéZílÇÃfÇ≈ÇÃëúÇäiî[ÅB
+  vector<vector<U>> children_value( V );
+  // l_sum[i][m]Ç…children_value[i][0],...,children_value[i][m-1]ÇÃ
+  // gÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇäiî[ÅB
+  vector<vector<U>> l_sum( V );
+  // r_sum[i][m]Ç…children_value[i][m+1],...,children_value[i][size_i-1]ÇÃ
+  // gÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇäiî[ÅB
+  vector<vector<U>> r_sum( V );
+  
+  for( int i = 0 ; i < V ; i++ ){
+
+    children_value[i].resize( m_children[i].size() );
+
+  }
+  
+  for( int n = 0 ; n < V ; n++ ){
+    
+    const int& i = dfst.NodeNumber( n , true );
+    const int size_i = children_value[i].size();
+
+    U temp = e;
+    l_sum[i].reserve( size_i + 1 );
+    l_sum[i].push_back( temp );
+    
+    for( int m = 0 ; m < size_i ; m++ ){
+
+      l_sum[i].push_back( temp = M.Product( temp , g( children_value[i][m] , true , i , dfst.Children( i )[m] ) ) );
+
+    }
+    
+    const int& j = dsft.Parent( i );
+
+    if( j != -1 ){
+      
+      children_value[j][dfst.ChildrenNumer( i )] = f( temp , i );
+
+    }
+
+    temp = e;
+    r_sum[i].resize( size_i );
+
+    for( int m = 1 ; m <= size_i ; m++ ){
+
+      r_sum[i][size_i - m] = temp;
+      temp = M.Product( g( children_value[i][size_i - m] , true , i , dfst.Children( i )[size_i - m] ) , temp );
+
+    }
+
+  }
+
+  // l_sum[i][m]Ç…children_value[i][0],...,children_value[i][m-1]ÇÃ
+  // gÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇäiî[ÇµÇƒÇ¢ÇΩÇ™ÅAÇ≥ÇÁÇ…Ç±ÇÍÇ…êeÉmÅ[ÉhÇÃäÒó^Ç‡í«â¡Ç∑ÇÈÅB
+  for( int n = 1 ; n < V ; n++ ){
+    
+    const int& i = dfst.NodeNumber( n );
+    const int& j = dfst.Parent( i );
+    const int& k = dfst.ChildrenNumber( i );
+    const int size_i = r_sum[i].size();
+    // children_value[j][0],...,children_value[j][k-1]ÇÃgÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇ∆
+    // children_value[j][k+1],...,children_value[j][size_i-1]ÇÃgÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇÃ
+    // MÇ…ä÷Ç∑ÇÈêœÇÃfÇ≈ÇÃëúÅiiÇç™Ç∆Ç∑ÇÈéûÇÃjÇÃäÒó^ÅjÇÃgÇ≈ÇÃëúÅB
+    const U rest_i = g( f( M.Product( l_sum[j][k] , r_sum[j][k] ) , j ) , false , i , j );
+    
+    for( int m = 0 ; m <= size_i ; m++ ){
+
+      // l_sum[i][m]Ç…rest_iÅiÇ†ÇÈà”ñ°m_children[i][-1]ÅjÇ∆
+      // children_value[i][0],...,children_value[i][m-1]ÇÃ
+      // gÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÇäiî[ÅB
+      l_sum[i][m] = M.Product( rest_i , l_sum[i][m] );
+
+    }
+
+  }
+
+  vector<U> answer( V );
+
+  for( int i = 0 ; i < V ; i++ ){
+
+    // l_sum[i].back()ÇÕêeÇÃäÒó^ÅiÇ†ÇÈà”ñ°children_value[i][-1]ÅjÇ∆
+    // children_value[i][0],...,children_value[i][size_i-1]ÇÃ
+    // gÇ≈ÇÃëúÇÃMÇ…ä÷Ç∑ÇÈêœÅB
+    answer[i] = f( l_sum[i].back() , i );
+
+  }
+
   return answer;
 
 }
-
-template <typename TREE , typename VAL , typename RIGHT_ACTION> inline ret_t<VAL,int> BinaryRootingDP( TREE& T , VAL& val , RIGHT_ACTION& prod , const int& root ) { vector<bool> checked( T.size() ); return BinaryRootingDP_Body( T , val , prod , root , checked ); }

@@ -6,7 +6,6 @@
 // verify:
 // https://yukicoder.me/submissions/957446 (重み不使用のWDepth,WHeaviness,WAncestor,WLCA)
 // https://yukicoder.me/submissions/957499 (WLCA)
-// https://yukicoder.me/submissions/1078534 (WDiameter)
 
 // TREEはGraph<Edge>と表せる、木T=(V_T,E_T)に相当する型。特にV_Tの型はintに限られる。
 // E_Tは重み付き辺V_T -> (V_T \times U \times ...)^{< \omega}に相当する関数オブジェクト。
@@ -26,15 +25,6 @@
 // Mが全順序モノイド構造である場合に葉からの辺の重み総乗の最大／最小値（重み付き高さ）取得
 //   O(|V_T|)（二度目以降はO(1)）
 // Mが可換な場合に部分木の辺の重み総乗（重み付きサイズ）取得O(|V_T|)（二度目以降はO(1)）
-
-// 木動的計画法O(|V_T|)
-// 全方位木動的計画法O(|V_T|)
-
-// 以下、入力の範囲内で
-// (3) 各ノードの葉からの辺の本数 < 2^digit
-// を満たす場合にのみサポート。
-// 先祖取得O(|V_T| digit)（二度目以降はO(digit)）
-// 最近接共通先祖取得O(|V_T| digit)（二度目以降はO(digit)）
 template <typename TREE , typename U , typename MONOID>
 class DepthFirstSearchOnWeightedTree :
   public DepthFirstSearchOnTree<TREE>
@@ -70,18 +60,11 @@ private:
 public:
   inline DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const int& root = 0 , const int& digit = 0 );
 
+  inline MONOID& Monoid() noexcept;
+  inline const U& PrevWeight( const int& i ) const noexcept;
   inline const U& WDepth( const int& i , const bool& right = true );
   inline const U& WHeight( const int& i , const bool& maximum = true , const bool& right = true );
   inline const U& WHeaviness( const int& i );
-
-  // n階の親Parent^n( i )とiからそこまでの辺の重みの右／左総乗を返す。
-  pair<int,U> WAncestor( int i , int n , const bool& right = true );
-  // {iとjの最近接共通祖先k,iからkまでの辺の重みの右総乗,jからkまでの辺の重みの左総乗}を返す。
-  tuple<int,U,U> WLCA( int i , int j );
-  // 更にLCAからi,j側に進める場合に進んだ先の頂点のラベルをi_prev,j_prevに格納する。
-  tuple<int,U,U> WLCA( int i , int j , int& i_prev , int& j_prev );
-
-  tuple<int,int,U> WDiameter();
 
 private:
   void SetWDepth();

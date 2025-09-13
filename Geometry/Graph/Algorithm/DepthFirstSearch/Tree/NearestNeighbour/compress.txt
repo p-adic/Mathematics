@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/NearestNeighbour/a_Body.hpp"
+#else
+// êÊÇ…DepthFirstSearchOnTreeÇì\ÇÈÅB
+
+TE <TY DFST>VE<int> NearestNeighbourOnRootedTree(DFST& dfst,CO VE<bool>& subset){CRI V = dfst.SZ();VE<int> AN(V,-1);for(int n = 0;n < SZ;n++){auto&& i = dfst.NodeNumber(n);AN[i]= subset[i]?i:n == 0?-1:AN[dfst.Parent(i)];}RE AN;}TE <TY DFST> IN VE<int> NearestNeighbourOnRootedTree(DFST& dfst,CO VE<int>& subset){CRI V = dfst.SZ();VE<bool> image(V);for(auto& i:subset){image[i]= true;}RE NearestNeighbourOnRotedTree(dfst,image);}
+#endif
+
