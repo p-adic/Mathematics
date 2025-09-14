@@ -7,8 +7,8 @@
 
 #include "../a_Body.hpp"
 
-template <typename GRAPH>
-list<tuple<int,int,int>> SortedEdge( GRAPH& G , const vector<pair<int,int>>& E )
+template <typename GRAPH , typename PAIR>
+list<tuple<int,int,int>> SortedEdge( GRAPH& G , const vector<PAIR>& E )
 {
 
   using PATH = decldecay_t( declval<GRAPH>().edge()(0).back() );
@@ -46,8 +46,8 @@ list<tuple<int,int,int>> SortedEdge( GRAPH& G , const vector<pair<int,int>>& E )
 
 }
 
-template <typename On>
-pair<vector<int>,int> Kruscal( const int& V , const vector<pair<int,int>>& E , const list<tuple<int,int,int>>& E_sorted , const On& on , vector<int> answer )
+template <typename On , typename PAIR , typename TUPLE>
+pair<vector<int>,int> Kruscal( const int& V , const vector<PAIR>& E , const list<TUPLE>& E_sorted , const On& on , vector<int> answer )
 {
   
   static_assert( is_invocable_r_v<bool,On,int> );
@@ -90,5 +90,5 @@ pair<vector<int>,int> Kruscal( const int& V , const vector<pair<int,int>>& E , c
 
 }
 
-template <typename GRAPH> inline pair<vector<int>,int> Kruscal( GRAPH& G , const vector<pair<int,int>>& E , vector<int> answer ) { return Kruscal( G.size() , E , SortedEdge( G , E ) , [&]( const int& ) { return true; } , answer ); }
+template <typename GRAPH , typename PAIR> inline pair<vector<int>,int> Kruscal( GRAPH& G , const vector<PAIR>& E , vector<int> answer ) { return Kruscal( G.size() , E , SortedEdge( G , E ) , [&]( const int& ) { return true; } , answer ); }
 
