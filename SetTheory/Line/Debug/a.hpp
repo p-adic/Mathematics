@@ -23,6 +23,7 @@ public:
   using iterator = IteratorOfLineSubset<INT>;
   
   void insert( const INT& i ) noexcept;
+  void IntervalInsert( const INT& i_start , const INT& i_final ) noexcept;
   void erase( const INT& i ) noexcept;
   // itrをインクリメントして書き換え、それへの参照を返す。
   inline iterator& erase( iterator& itr );

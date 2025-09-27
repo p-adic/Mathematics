@@ -5,6 +5,7 @@
 
 // verify:
 // https://yukicoder.me/submissions/1002789（insert, erase, ConnectedComponentOf）
+// https://yukicoder.me/submissions/1123304 (IntervalInsert, ConnectedComponentOf, GetConnectedComponent)
 
 // 構築O(1)
 // 一点挿入O(log Q)
@@ -62,6 +63,7 @@ public:
   // iを含む連結成分を返す。存在しない場合は[1+1,i-1]を返す。
   pair<INT,INT> ConnectedComponentOf( const INT& i ) const noexcept;
 
+  // [r,l]の列をmapとして参照する。
   inline const map<INT,INT>& GetConnectedComponent() const noexcept;
   
 };

@@ -100,6 +100,24 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
 }
 
 template <typename INT>
+void LineSubset<INT>::IntervalInsert( const INT& i_start , const INT& i_final ) noexcept
+{
+
+  
+  DERRNS( "LineSubset‚É•Â‹æŠÔ[" , i_start , "," , i_final , "]‚ÌŠe—v‘f‚ğ‘}“ü‚µ‚Ü‚·B\n" );
+
+  for( int i = i_start ; i <= i_final ; i++ ){
+
+    insert( i );
+
+  }
+
+  DERRNS( "LineSubset‚É•Â‹æŠÔ[" , i_start , "," , i_final , "]‚ÌŠe—v‘f‚ğ‘}“ü‚µ‚Ü‚µ‚½B\n" );
+  return;
+
+}
+
+template <typename INT>
 void LineSubset<INT>::erase( const INT& i ) noexcept
 {
 

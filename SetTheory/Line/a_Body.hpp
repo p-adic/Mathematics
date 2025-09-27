@@ -79,20 +79,37 @@ template <typename INT> void LineSubset<INT>::IntervalInsert( const INT& i_start
 
   }
 
-  insert( i_final );
   auto itr_i = m_l.lower_bound( i_final ) , end_i = m_l.end();
-  INT& l = ( itr_i-- )->second = i_start;
 
-  while( itr_i != end_i && i_start - 1 <= itr_i->first ){
+  if( itr_i == end_i || i_final + 1 < itr_i->second ){
 
-    if( itr_i->second < i_start ){
+    m_l[i_final] = i_start;
+    itr_i = m_l.lower_bound( i_final );
 
-      l = itr_i->second;
+  } else {
+
+    itr_i->second = min( itr_i->second , i_start );
+
+  }
+
+  INT& l = itr_i->second;
+  auto begin_i = m_l.begin();
+
+  while( itr_i != begin_i && l - 1 <= ( --itr_i )->first ){
+
+    l = min( l , itr_i->second );
+    m_size--;
+
+    if( itr_i == begin_i ){
+
+      m_l.erase( itr_i );
+      break;
+
+    } else {
+
+      --( itr_i = m_l.erase( itr_i ) );
 
     }
-
-    ( itr_i = m_l.erase( itr_i ) )--;
-    m_size--;
 
   }
 
