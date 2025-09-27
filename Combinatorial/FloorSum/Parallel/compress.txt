@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/FloorSum/Parallel/Debug/a_Body.hpp"
+#else
+#define PARALLEL_FLOOR_SUM_PREP VE<INT2> cc{};Map<INT2,int> cc_inv{};for(auto& m:den){AS(m > 0);cc_inv[m];if(cc_inv.SZ()> cc.SZ()){cc.push_back(m);}}Sort(cc);CO int N = num.SZ(),M = den.SZ(),L = cc.SZ();for(int j = 0;j < L;j++){cc_inv[cc[j]]= j;}int logL = 1;WH(L > 1 << logL){logL++;}
+#define PARALLEL_FLOOR_SUM_BODY(ANS,ANS_INT)for(int i = 0;i < N;i++){auto& n = num[i];AS(n >= 0);CO int B = max(int(sqrt(n / logL)),1),B_div = n / B;MAX_LEQ(j0,0,L - 1,cc[j0],B_div);for(int j = 0;j <= j0;j++){ANS;}ll v_div = B_div;for(int v = B - 1;v >= 1;v--){v_div = n / v;MAX_LEQ(j,j0,L - 1,j >= 0?cc[j]:-1,v_div);ANS_INT;j0 = j;}}
+TE <TY INT1,TY INT2,TY RET = ll> VE<RET> NumeratorParallelFloorSum(CO VE<INT1>& num,CO VE<INT2>& den,VE<RET> coeff ={}){PARALLEL_FLOOR_SUM_PREP;VE<RET> a(N);if(coeff.empty()){coeff.resize(M,1);}for(int j = 1;j < M;j++){coeff[j]+= coeff[j-1];}PARALLEL_FLOOR_SUM_BODY(a[i]+= n / cc[j]*(j > 0?coeff[j]- coeff[j-1]:coeff[j]),a[i]+= v *(j0 >= 0?coeff[j]- coeff[j0]:coeff[j]));RE a;}TE <TY INT1,TY INT2>VE<ll> DenominatorParallelFloorSum(CO VE<INT1>& num,CO VE<INT2>& den){PARALLEL_FLOOR_SUM_PREP;VE<ll> a_cc(L),a_cc_dif(L + 2);PARALLEL_FLOOR_SUM_BODY(a_cc[j]+= n / cc[j],a_cc_dif[j0+1]+= v;a_cc_dif[j+1]-= v);for(int j = 0;j < L;j++){a_cc[j]+= a_cc_dif[j]+= j > 0?a_cc_dif[j-1]:0;}VE<ll> AN(M);for(int j = 0;j < M;j++){AN[j]= a_cc[cc_inv[den[j]]];}RE AN;}
+#endif
+
