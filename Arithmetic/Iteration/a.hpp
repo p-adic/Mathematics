@@ -11,10 +11,9 @@
 
 // tとfのoprに関する左結合的総乗を愚直に計算し、その結果を返す。
 template <typename T , typename U , template <typename...> typename V , typename OPR> T LeftConnectiveProd( T t , const V<U>& f , OPR opr );
-template <typename T , template <typename...> typename V> inline T Sum( const V<T>& f );
-template <typename T , typename U , template <typename...> typename V> inline T Sum( T t , const V<U>& f );
-template <typename T , template <typename...> typename V> inline T Prod( const V<T>& f );
-template <typename T , typename U , template <typename...> typename V> inline T Prod( T t , const V<U>& f );
+// Sum<ll>( vector<int>() )などの構文はできないので、代わりにSum( 0LL , vector<int>() )を考える。
+template <typename T , typename U , template <typename...> typename V> inline T Sum( const V<U>& f );
+template <typename T , typename U , template <typename...> typename V> inline T Prod( const V<U>& f );
 
 template <typename T> inline T& SetMax( T& n );
 template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , const U& u1 , const Args&... args );
