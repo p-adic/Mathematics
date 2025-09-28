@@ -2,8 +2,10 @@
 
 #pragma once
 // verify:
-// https://yukicoder.me/submissions/1063416 (CombinationFactorialValuative, MOD=443*2253371)
+// https://yukicoder.me/submissions/1123391 (CombinationFactorialValuative, MOD=443*2253371)
+// https://atcoder.jp/contests/abc425/submissions/69701209 (CombinationFactorialValuative, MOD一般)
 // https://yukicoder.me/submissions/1082026 (CombinationCumulativeProduct, RET=MP)
+
 
 // 主にINT1,INT2,INTはintやllを想定しているが、要件を満たせばModやDynamicModなどでも良い。
 // 例えばCombinationCumulativeProductはn,m次第でMod::Combinationより高速になる。
@@ -32,5 +34,14 @@ template <typename INT1 , typename INT2> inline INT1 CombinationFactorial( const
 // 要件
 // (1) factorは相異なる素数の列（長さをLと置く）である。
 // (2) MODはfactorの正羃の積を法とする整数の型である。
-// のもとでO(L)（前計算O(n log MOD)）で階乗を用いて計算する。
+// のもとで多項係数をO(L(1+m.size()))（前計算O(n log MOD)）で階乗を用いて計算する。
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , const vector<INT2> m , const VEC& factor , const int& euler );
 template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler );
+// valutaiveは以下と併用する。
+// auto [euler,factor,exponent] = EulerFunction( pe , n );
+// 最終的な答えは以下のように算出する。
+// auto [a,val] = CombinationFactorialValuative<MOD>( n , m , factor , euler );
+// FOR( i , 0 , L ){
+//   a *= PowerMemorisation( MOD{ factor[i] } , val[i] );
+//   // a *= Power( MOD{ factor[i] } , val[i] );
+// }

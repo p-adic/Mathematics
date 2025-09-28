@@ -135,14 +135,23 @@ INT CombinationFactorialRecursion( const INT& n , const INT& m )
 
 template <typename INT1 , typename INT2> inline INT1 CombinationFactorial( const INT1& n , INT2 m ){ assert( ( ( is_same_v<INT1,int> || is_same_v<INT1,uint> ) && n <= 12 ) || ( ( is_same_v<INT1,ll> || is_same_v<INT1,ull> ) && n <= 20 ) ); const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? INT1( 0 ) : CombinationFactorialRecursion( n , m_copy ); }
 
-template <typename MOD , typename INT , typename VEC>
-pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const int& euler )
+template <typename MOD , typename INT1 , typename INT2 , typename VEC>
+pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , const vector<INT2>& m , const VEC& factor , const int& euler )
 {
 
+  // １種類のfactorでしか呼び出さない想定。
   static const int L = factor.size();
   assert( L == int( factor.size() ) );
 
-  if( n < m ){
+  if( m.empty() ){
+
+    return { MOD{ 1 } , vector<int>( L ) };
+
+  }
+
+  const INT1 sum = Sum( INT1( 0 ) , m );
+
+  if( n < sum || Min( m ) < 0 ){
 
     return { MOD{ 0 } , vector<int>( L ) };
 
@@ -151,7 +160,7 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , con
   static vector<MOD> factorial{ 1 };
   static vector<MOD> factorial_inv{ 1 };
   static vector exponent( 1 , vector<int>( L ) );
-  INT size;
+  INT1 size;
 
   while( ( size = factorial.size() ) <= n ){
 
@@ -176,11 +185,15 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , con
 
   }
 
+  MOD f = factorial[n];
   vector<int> e = exponent[n];
+  const int M = m.size();
 
-  for( int num = 0 ; num < 2 ; num++ ){
+  for( int j = 0 ; j <= M ; j++ ){
 
-    auto& denom = exponent[num==0?m:n-m];
+    const int k = j < M ? INT1( m[j] ) : n - sum;
+    f *= factorial_inv[k];
+    auto& denom = exponent[k];
 
     for( int i = 0 ; i < L ; i++ ){
 
@@ -190,13 +203,11 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT& n , con
 
   }
 
-  return { factorial[n] * factorial_inv[m] * factorial_inv[n-m] , move( e ) };
+  return { move( f ) , move( e ) };
 
 }
 
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler ){ const INT1 m_copy = move( m ); return CombinationFactorialValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : m_copy , factor , euler ); }
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , const vector<INT2> m , const VEC& factor , const int& euler ){ return CombinationFactorialValuativeRecursion<MOD>( n , m , factor , euler ); }
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler ){ return CombinationFactorialValuativeRecursion<MOD>( n , vector<INT1>{ move( m ) } , factor , euler ); }
 
-// valutaiveは以下と併用する。
 #include "../../Arithmetic/Mod/Function/Euler/a_Body.hpp"
-// auto [euler,factor,exponent] = EulerFunction( pe , n )
-// PowerMemorisation( factor[i] , e ); // factor[i]のe乗を返す。
