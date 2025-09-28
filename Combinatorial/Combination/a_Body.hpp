@@ -41,7 +41,7 @@ RET CombinationCumulativeProductRecursion( const INT& n , const INT& m , const b
 
 template <typename RET , typename INT1 , typename INT2> inline RET CombinationCumulativeProduct( const INT1& n , INT2 m  , const bool& reset ){ const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? CombinationCumulativeProductRecursion<RET>( n , INT1{ 0 } , reset ) - 1 : CombinationCumulativeProductRecursion<RET>( n , min( m_copy , n - m_copy ) , reset ); }
 
-template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const int& euler , const bool& reset )
+template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const bool& reset )
 {
 
   static const int L = factor.size();
@@ -93,7 +93,7 @@ template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int
 
       }
 
-      num == 0 ? c *= r : euler == -1 ? c /= r : c *= Power( MOD{ r } , euler - 1 );
+      num == 0 ? c *= r : c /= r;
 
     }
 
@@ -114,7 +114,7 @@ template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int
 
 }
 
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler , const bool& reset ){ const INT1 m_copy = move( m ); return CombinationCumulativeProductValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : min( m_copy , n - m_copy ) , factor , euler , reset ); }
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuative( const INT1& n , INT2 m , const VEC& factor , const bool& reset ){ const INT1 m_copy = move( m ); return CombinationCumulativeProductValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : min( m_copy , n - m_copy ) , factor , reset ); }
 
 template <typename INT>
 INT CombinationFactorialRecursion( const INT& n , const INT& m )
@@ -136,7 +136,7 @@ INT CombinationFactorialRecursion( const INT& n , const INT& m )
 template <typename INT1 , typename INT2> inline INT1 CombinationFactorial( const INT1& n , INT2 m ){ assert( ( ( is_same_v<INT1,int> || is_same_v<INT1,uint> ) && n <= 12 ) || ( ( is_same_v<INT1,ll> || is_same_v<INT1,ull> ) && n <= 20 ) ); const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? INT1( 0 ) : CombinationFactorialRecursion( n , m_copy ); }
 
 template <typename MOD , typename INT1 , typename INT2 , typename VEC>
-pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , const vector<INT2>& m , const VEC& factor , const int& euler )
+pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , const vector<INT2>& m , const VEC& factor )
 {
 
   // ÇPéÌóﬁÇÃfactorÇ≈ÇµÇ©åƒÇ—èoÇ≥Ç»Ç¢ëzíËÅB
@@ -149,7 +149,7 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , co
 
   }
 
-  const INT1 sum = Sum( INT1( 0 ) , m );
+  const INT1 sum = Sum<INT1>( m );
 
   if( n < sum || Min( m ) < 0 ){
 
@@ -180,7 +180,7 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , co
     }
 
     factorial.push_back( factorial.back() * size );
-    factorial_inv.push_back( euler == -1 ? factorial_inv.back() / size : factorial_inv.back() * Power( MOD{ size } , euler - 1 ) );
+    factorial_inv.push_back( factorial_inv.back() / size );
     exponent.push_back( move( e ) );
 
   }
@@ -207,7 +207,7 @@ pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , co
 
 }
 
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , const vector<INT2> m , const VEC& factor , const int& euler ){ return CombinationFactorialValuativeRecursion<MOD>( n , m , factor , euler ); }
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor , const int& euler ){ return CombinationFactorialValuativeRecursion<MOD>( n , vector<INT1>{ move( m ) } , factor , euler ); }
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , const vector<INT2> m , const VEC& factor ){ return CombinationFactorialValuativeRecursion<MOD>( n , m , factor ); }
+template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor ){ return CombinationFactorialValuativeRecursion<MOD>( n , vector<INT1>{ move( m ) } , factor ); }
 
-#include "../../Arithmetic/Mod/Function/Euler/a_Body.hpp"
+#include "../../Arithmetic/Prime/Factorisation/a_Body.hpp"
