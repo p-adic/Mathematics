@@ -2,16 +2,16 @@
 
 #pragma once
 
-template <int NUM> class DynamicMods;
+template <int NUM> class DMods;
 
 template <int NUM>
-class ConstantsForDynamicMods
+class ConstantsForDMods
 {
 
-  friend class DynamicMods<NUM>;
+  friend class DMods<NUM>;
   
 private:
-  ConstantsForDynamicMods() = delete;
+  ConstantsForDMods() = delete;
   static uint g_M;
   static constexpr const uint g_memory_bound = 2e6;
   static uint g_memory_length;

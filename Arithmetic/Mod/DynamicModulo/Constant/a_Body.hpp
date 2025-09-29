@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-template <int NUM> uint ConstantsForDynamicMods<NUM>::g_M = 0;
-template <int NUM> uint ConstantsForDynamicMods<NUM>::g_memory_length = 0;
-template <int NUM> uint ConstantsForDynamicMods<NUM>::g_M_minus = -1;
-template <int NUM> bool ConstantsForDynamicMods<NUM>::g_M_is_prime = false;
+template <int NUM> uint ConstantsForDMods<NUM>::g_M = 0;
+template <int NUM> uint ConstantsForDMods<NUM>::g_memory_length = 0;
+template <int NUM> uint ConstantsForDMods<NUM>::g_M_minus = -1;
+template <int NUM> bool ConstantsForDMods<NUM>::g_M_is_prime = false;
