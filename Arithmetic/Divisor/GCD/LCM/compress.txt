@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Divisor/GCD/LCM/a_Body.hpp"
+#else
+IN int LCM(){RE 1;}TE <TY INT1,TY...INT2>INT1 LCM(INT1 b_0,INT2... args){b_0 < 0?b_0 = -b_0:b_0;CO INT1 b_1 = LCM(MO(args)...),gcd = GCD(b_0,b_1);RE gcd == 0?gcd:b_0 / gcd * b_1;}TE <TY INT,TE <TY...> TY V>INT LCM(V<INT> a){INT AN = 1;for(auto& b:a){AN = LCM(MO(AN),b);}RE AN;}
+#endif
+

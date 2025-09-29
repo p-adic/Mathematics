@@ -1,7 +1,11 @@
 #from math import gcd as G
+#from math import lcm as L
 #でもよい。デバッグしたい時には書き下した方が便利。
 
 def GCD(a,b):
-	c,d=abs(a),abs(b)
+	c,d=a,b
 	while d:c,d=d,c%d
-	return c
+	return abs(c)
+
+def LCM(a,b):
+	return abs(a//GCD(a,b)*b)if a|b else 0

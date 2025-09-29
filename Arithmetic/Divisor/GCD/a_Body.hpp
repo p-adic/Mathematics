@@ -30,7 +30,7 @@ INT GCD( V<INT> a )
   
   for( auto& b : a ){
 
-    answer = GCD( move( answer ) , b );
+    answer = GCD( move( answer ) , move( b ) );
 
   }
 
@@ -38,31 +38,3 @@ INT GCD( V<INT> a )
 
 }
 
-
-inline int LCM() { return 0; }
-
-template <typename INT1 , typename...INT2>
-INT1 LCM( INT1 b_0 , INT2... args )
-{
-
-  b_0 < 0 ? -b_0 : b_0;
-  INT1 b_1 = LCM( move( args )... );
-  return b_1 == 0 ? b_0 : b_0 / GCD( b_0 , b_1 ) * b_1;
-
-}
-
-template <typename INT , template <typename...> typename V>
-INT LCM( V<INT> a )
-{
-
-  INT answer = 1;
-  
-  for( auto& b : a ){
-
-    answer = LCM( move( answer ) , b );
-
-  }
-
-  return answer;
-
-}
