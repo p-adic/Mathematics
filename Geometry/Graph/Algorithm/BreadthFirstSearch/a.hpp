@@ -13,15 +13,15 @@
 // GRAPHは辺Edge:T->(T \times ...)^{< \omega}を持つグラフに相当する型。
 
 // 入力の範囲内で要件
-// (1) Gは有向グラフである。
+// (1) Gは有向グラフである。（無向グラフは両向きに辺を貼って有向化すればよい）
 // (2) not_foundはGの頂点でない。
 // を満たす場合にのみサポート。
 
 // 構築 O(1)/O(|V_G|)（未初期化/初期化）
-// Next()の反復でinitから到達可能な頂点を全探索 O(initの連結成分における辺の本数)
+// Next()の反復でinitから到達可能な頂点を全探索 O(initから到達できる頂点の出次数の合計)
 // Next()の反復とShift()で全探索 O(|V_G|+|E_G|)
-// initからの到達可能性判定と深さ計算 O(initの連結成分における辺の本数)
-// 連結成分の色分けと数え上げ O(|V_G|+|E_G|) 
+// initからの到達可能性判定と深さ計算 O(initから到達できる頂点の出次数の合計数)
+// 無向な場合の連結成分の色分けと数え上げ O(|V_G|+|E_G|) 
 template <typename T , typename GRAPH>
 class VirtualBreadthFirstSearch
 {
@@ -37,12 +37,14 @@ protected:
   // 以下GRAPHがGraphでない場合は添字にEnumerationが絡むことに注意。
   // m_nextに格納されたことがあるか否か。
   vector<bool> m_found;
-  // 到達済みかつ到達済みの点から辺を辿ってNext()で到達した場合、その点を格納。
+  // 到達済みかつ到達済みの点から辺を辿ってNext()で到達する場合、
+  // 初めて到達する時に通る辺の始点を格納。
   // GRAPHがGraphでない場合は添字にEnumerationが絡むことに注意。
   vector<T> m_prev;
 
 public:
   inline VirtualBreadthFirstSearch( GRAPH& G , const T& not_found );
+  // 始点をinitに設定する。
   template <typename Arg> inline VirtualBreadthFirstSearch( GRAPH& G , const T& not_found , Arg&& init );
 
   // m_nextとm_foundとm_prevを初期化する。

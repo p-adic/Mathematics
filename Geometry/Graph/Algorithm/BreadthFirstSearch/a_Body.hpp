@@ -66,6 +66,7 @@ auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<is_same_v<
   
   while( ( t = Next() ) != m_not_found ){
 
+    // 場合分けをしないとtが始点の時に問題となる。
     if( answer.count( t ) == 0 ){
       
       answer[t] = answer[m_prev[m_G.Enumeration_inv( t )]] + 1;
@@ -95,8 +96,8 @@ auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v
   while( ( t = Next() ) != m_not_found ){
 
     auto&& i = m_G.Enumeration_inv( t );
-    int& answer_i = answer[i];
-    answer_i == -1 ? answer_i = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer_i;
+    // 場合分けをしないとtが始点の時に問題となる。
+    answer[i] == -1 ? answer[i] = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer_i;
 
   }
 

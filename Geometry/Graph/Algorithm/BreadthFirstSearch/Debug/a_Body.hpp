@@ -6,12 +6,14 @@
 #include "../../../a_Body.hpp"
 #include "../../../../../Utility/Set/Map/a_Body.hpp"
 
-template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& not_found ) : m_G( G ) , m_not_found( not_found ) , m_initialised( false ) , m_next() , m_found() , m_prev()
+template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& not_found ) : m_G( G ) , m_not_found( not_found ) , m_initialised( false ) , m_next() , m_found() , m_prev() , m_ID()
 {
 
   static_assert( is_same_v<inner_t<GRAPH>,T> );
+  static int ID = 0;
+  m_ID = to_string( ID++ );
   const int& V = m_G.size();
-  DERR( "•^[‚³’Tõ—Dæ’Tõ‚ğƒfƒoƒbƒOƒ‚[ƒh‚ÅÀs‚µ‚Ü‚·B" );
+  DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚ğƒfƒoƒbƒOƒ‚[ƒh‚ÅÀs‚µ‚Ü‚·B" );
   DERR( "Še’TõƒXƒeƒbƒv‚ÌŒvZ—Ê‚ªO(V)’Ç‰Á‚³‚ê‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B" );
   DERR( "ƒOƒ‰ƒt‚Ì’¸“_”V‚Í" , V , "‚Å‚·B" );
 
@@ -58,7 +60,7 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
   m_initialised = true;
   const int& V = size();
   DERR( "s”Ô†:" , __LINE__ );
-  DERR( "•^[‚³’Tõ—Dæ’Tõ‚ğ‰Šú‰»‚µ‚Ü‚·B" );
+  DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚ğ‰Šú‰»‚µ‚Ü‚·B" );
 
   if( ! m_next.empty() ){
 
@@ -84,6 +86,7 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
   Initialise();
   m_next.push_back( init );
   m_found[i] = true;
+  DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚É" , init , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
   DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
@@ -126,6 +129,7 @@ template <typename T , typename GRAPH> template <template <typename...> typename
 
   }
 
+  DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚É" , inits , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
         DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
@@ -155,6 +159,7 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
     assert( 0 <= i && i < V );
     m_next.clear();
     DERR( "s”Ô†:" , __LINE__ );
+    DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
 
     if( m_found[i] ){
 
@@ -221,13 +226,15 @@ template <typename T , typename GRAPH> template <template <typename...> typename
     if( m_next.empty() ){
 
       DERR( "s”Ô†:" , __LINE__ );
+      DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
       DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ‚Ü‚µ‚½B" );
       DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
 
     } else {
       
       DERR( "s”Ô†:" , __LINE__ );
-            DERRNS( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ" );
+      DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
+      DERRNS( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ" );
 
       for( auto begin = m_next.begin() , itr = begin , end = m_next.end() ; itr != end ; itr++ ){
 
@@ -299,12 +306,14 @@ template <typename T , typename GRAPH> inline T VirtualBreadthFirstSearch<T,GRAP
   if( new_next.empty() ){
 
     DERR( "s”Ô†:" , __LINE__ );
+    DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
     DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚©‚ç" , t_curr , "‚ğæ‚èo‚µ‚Ü‚µ‚½B" );
     DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
 
   } else {
     
     DERR( "s”Ô†:" , __LINE__ );
+    DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
     DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚©‚ç" , t_curr , "‚ğæ‚èo‚µ" );
 
     for( auto begin = new_next.begin() , itr = begin , end = new_next.end() ; itr != end ; itr++ ){
@@ -353,6 +362,9 @@ auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<is_same_v<
   
   while( ( t = Next() ) != m_not_found ){
 
+    assert( answer.count( t ) == 0 );
+
+    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
     if( answer.count( t ) == 0 ){
       
       answer[t] = answer[m_prev[m_G.Enumeration_inv( t )]] + 1;
@@ -383,8 +395,9 @@ auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v
 
     auto&& i = m_G.Enumeration_inv( t );
     int& answer_i = answer[i];
+    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
     answer_i == -1 ? answer_i = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer_i;
-
+    
   }
 
   return answer;
