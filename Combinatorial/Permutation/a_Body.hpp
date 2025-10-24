@@ -6,39 +6,13 @@
 // NextPermutationとPreviousPermutationに使う。
 #include <algorithm>
 
-// InversionNumberに使う。
-#ifdef DEBUG
-  #include "../../SetTheory/DirectProduct/AffineSpace/BIT/Debug/a_Body.hpp"
-#else
-  #include "../../SetTheory/DirectProduct/AffineSpace/BIT/a_Body.hpp"
-#endif
-
 // PermtationOrderに使う。
-#include "../../Arithmetic/Divisor/GCD/a_Body.hpp"
+#include "../../Arithmetic/Divisor/GCD/LCM/a_Body.hpp"
 
 template <typename INT , int size_max> inline bool NextPermutation( INT ( &P )[size_max] , const int& size ) { return next_permutation( P , P + size ); }
 template <typename INT> inline bool NextPermutation( vector<INT>& P ) {  return next_permutation( P.begin() , P.end() ); }
 template <typename INT , int size_max> inline bool PreviousPermutation( INT ( &P )[size_max] , const int& size ) { return prev_permutation( P , P + size ); }
 template <typename INT> inline bool PreviousPermutation( vector<INT>& P ) {  return prev_permutation( P.begin() , P.end() ); }
-
-template <typename INT>
-ll InversionNumber( const vector<INT>& P )
-{
-
-  const int size = P.size();
-  BIT<int> count{ size };
-  ll answer = 0;
-  
-  for( int i = size - 1 ; i >= 0 ; i-- ){
-
-    answer += count.IntervalSum( 0 , P[i] - 1 );
-    count.Add( P[i] , 1 );
-
-  }
-
-  return answer;
-
-}
 
 template <typename INT>
 vector<vector<INT>> CyclicPermutationRepresentation( const vector<INT>& P , const bool& zero_indexed )
@@ -192,7 +166,4 @@ INT LeastSwapCount( const vector<INT>& P , const bool& zero_indexed )
   return answer;
 
 }
-
-template <typename INT> inline ll LeastAdjacentSwapCount( const vector<INT>& P ){ return InversionNumber( P ); }
-
 
