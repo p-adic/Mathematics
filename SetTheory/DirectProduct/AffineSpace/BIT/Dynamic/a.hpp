@@ -5,6 +5,8 @@
 #include "../../../../../Algebra/Monoid/Group/a.hpp"
 #include "../../../../../Utility/Set/Map/a.hpp"
 
+// vectorをMap<int,->に変更し、AccessとReplaceを追加したもの。
+
 // 入力の範囲内で要件
 // (1) MがUの可換群構造である。
 // を満たす場合にのみサポート。
