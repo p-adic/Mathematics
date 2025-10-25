@@ -11,7 +11,7 @@ template <typename U , typename ABELIAN_GROUP> inline AbstractTwoDimensionalDyna
 template <typename U> inline TwoDimensionalDynamicBIT<U>::TwoDimensionalDynamicBIT( const ll& X , const ll& Y ) : AbstractTwoDimensionalDynamicBIT<U,AdditiveGroup<U>>( AdditiveGroup<U>() , X , Y ) {}
 
 template <typename U , typename ABELIAN_GROUP> inline U AbstractTwoDimensionalDynamicBIT<U,ABELIAN_GROUP>::Access( const ll& i , const ll& j , U u ) noexcept { if( m_fenwick.count( i ) > 0 ){ auto& fenwick_i = m_fenwick.at( i ); if( fenwick_i.count( j ) > 0 ){ u = m_M.Sum( move( u ) , fenwick_i.at( j ) ); } } return move( u ); }
-template <typename U , typename ABELIAN_GROUP> inline void AbstractTwoDimensionalDynamicBIT<U,ABELIAN_GROUP>::Replace( const ll& i , const ll& j , U u ) noexcept { if( u == m_M.Zero() ){ if( m_fenwick.count( i ) > 0 ){ auto& fenwick_i = m_fenwick.at( i ); fenwick_i.erase( i ); if( fenwick_i.empty() ){ m_fenwick.erase( i ); } }; } else { m_fenwick[i][j] = move( u ); } }
+template <typename U , typename ABELIAN_GROUP> inline void AbstractTwoDimensionalDynamicBIT<U,ABELIAN_GROUP>::Replace( const ll& i , const ll& j , U u ) noexcept { if( u == m_M.Zero() ){ if( m_fenwick.count( i ) > 0 ){ auto& fenwick_i = m_fenwick.at( i ); fenwick_i.erase( j ); if( fenwick_i.empty() ){ m_fenwick.erase( i ); } }; } else { m_fenwick[i][j] = move( u ); } }
 
 template <typename U , typename ABELIAN_GROUP> inline void AbstractTwoDimensionalDynamicBIT<U,ABELIAN_GROUP>::Initialise( const ll& X , const ll& Y ) { m_fenwick.clear(); m_X = X; m_Y = Y; }
 template <typename U , typename ABELIAN_GROUP> inline void AbstractTwoDimensionalDynamicBIT<U,ABELIAN_GROUP>::Set( const ll& x , const ll& y , const U& u ) { Add( x , y , m_M.Sum( m_M.Inverse( Get( x , y ) ) , u ) ); }

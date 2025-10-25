@@ -25,7 +25,7 @@
 // M.Sum()による一点加算expected O(log_2 X log_2 Y)
 
 // AbstractDynamicBITを二重にすれば実装できるが、
-// 各操作がexpected O((log_2 X)Y)になることに注意。
+// 各操作がexpected O((log_2 X)(Mapのサイズの平均))になることに注意。
 template <typename U , typename ABELIAN_GROUP>
 class AbstractTwoDimensionalDynamicBIT
 {
