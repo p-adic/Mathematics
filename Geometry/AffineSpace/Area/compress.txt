@@ -2,14 +2,12 @@
   #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Area/a_Body.hpp"
 #else
 // 三角形の符号付き面積を頂点座標から計算
-#define DF_OF_AREA (x1 - x0)*(y2 - y0)-(y1 - y0)*(x2 - x0)
-#define CALL_DF_OF_AREA Area (get<0>(v0),get<1>(v0),get<0>(v1),get<1>(v1),get<0>(v2),get<1>(v2))
-IN ll Area_ll(CRL x0,CRL y0,CRL x1,CRL y1,CRL x2,CRL y2){RE DF_OF_AREA;}TE <TY INT> IN ll Area(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1,CO INT& x2,CO INT& y2){RE Area_ll(x0,y0,x1,y1,x2,y2);}IN double Area(CO double& x0,CO double& y0,CO double& x1,CO double& y1,CO double& x2,CO double& y2){RE DF_OF_AREA;}TE <TY INT,TE <TY...> TY PAIR> IN ll Area(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1,CO PAIR<INT,INT>& v2){RE CALL_DF_OF_AREA;}TE <TE <TY...> TY PAIR> IN double Area(CO PAIR<double,double>& v0,CO PAIR<double,double>& v1,CO PAIR<double,double>& v2){RE CALL_DF_OF_AREA;}
+TE <TY INT> IN INT Area(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1,CO INT& x2,CO INT& y2){RE(x1 - x0)*(y2 - y0)-(y1 - y0)*(x2 - x0);}TE <TY RET,TY INT,TE <TY...> TY PAIR> IN RET Area(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1,CO PAIR<INT,INT>& v2){RE Area<RET>(get<0>(v0),get<1>(v0),get<0>(v1),get<1>(v1),get<0>(v2),get<1>(v2));}
 
 // 三角形の符号なし面積を辺長から計算
 IN double Area(CO double& l0,CO double& l1,CO double& l2){CO double s =(l0 + l1 + l2)/ 2;RE sqrt(s *(s - l0))* sqrt((s - l1)*(s - l2));}
 
 // 凸多角形の符号付き面積を頂点座標から計算
-TE <TY INT,TE <TY...> TY PAIR,TY RET> IN RET Area(CO VE<PAIR<INT,INT>>& v,RET dummy){CRI SZ = v.SZ();AS(SZ > 2);for(int i = 2;i < SZ;i++){dummy += Area(v[0],v[i-1],v[i]);}RE MO(dummy);}
+TE <TY RET,TY INT,TE <TY...> TY PAIR> IN RET Area(CO VE<PAIR<INT,INT>>& v){RET AN{};CRI SZ = v.SZ();AS(SZ > 2);for(int i = 2;i < SZ;i++){AN += Area<RET>(v[0],v[i-1],v[i]);}RE AN;}
 #endif
 
