@@ -37,3 +37,7 @@ constexpr TupleAccessIndex<0> O{};
 constexpr TupleAccessIndex<1> I{};
 constexpr TupleAccessIndex<2> II{};
 constexpr TupleAccessIndex<3> III{};
+
+template <typename RET , template <typename...> typename PAIR , typename INT> T2<RET> cast( const PAIR<INT,INT>& t );
+template <typename RET , typename INT> T3<RET> cast( const tuple<INT,INT,INT>& t );
+template <typename RET , typename INT> T4<RET> cast( const tuple<INT,INT,INT,INT>& t );
