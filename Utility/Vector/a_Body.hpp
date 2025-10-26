@@ -25,3 +25,5 @@ template <typename V> inline int len( const V& a ) { return a.size(); }
 template <typename V> inline void Reverse( V& a ) { const int size = len( a ) , half = size / 2; for( int i = 0 ; i < half ; i++ ){ swap( a[i] , a[size-1-i] ); } }
 ;
 template <typename V> inline V Reversed( V a ) { Reverse( a ); return move( a ); }
+
+template <typename RET , template <typename...> typename V , typename T> inline V<RET> cast( const V<T>& a ) { V<RET> answer{}; for( auto& x : a ){ answer <<= a; } }

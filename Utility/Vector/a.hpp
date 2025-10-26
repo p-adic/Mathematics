@@ -21,13 +21,14 @@ DECLARATION_OF_SHIFT_FOR_VECTOR( basic_string );
 
 template <typename T = int> inline vector<T> id( const int& size );
 
-template <typename T> inline void Sort( vector<T>& a , const bool& reversed = false );
-template <typename T0 , typename T1> inline void Sort( vector<T0>& a , vector<T1>& b , const bool& reversed = false );
-template <typename T> inline vector<int> IndexSort( const vector<T>& a , const bool& reversed = false );
+template <typename V> inline void Sort( V& a , const bool& reversed = false );
+template <typename V0 , typename V1> inline void Sort( V0& a , V1& b , const bool& reversed = false );
+// {index[j]=AŠî€‚Åj”Ô–Ú‚Ì“Yš,ord[i]=i‚ª‰½”Ô–Ú‚Ì“Yš‚©=index^{-1}[i]}
+template <typename V> inline pair<vector<int>,vector<int>> IndexSort( const V& a , const bool& reversed = false );
 
 template <typename V> inline int len( const V& a );
 
-template <typename T> inline T pop( vector<T>& a );
-
 template <typename V> inline void Reverse( V& a );
 template <typename V> inline V Reversed( V a );
+
+template <typename RET , template <typename...> typename V , typename T> inline V<RET> cast( const V<T>& a );
