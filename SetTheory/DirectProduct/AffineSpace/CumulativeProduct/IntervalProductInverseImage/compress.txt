@@ -1,6 +1,0 @@
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/CumulativeProduct/IntervalProductInverseImage/a_Body.hpp"
-#else
-TE <TY GROUP,TY U>ll CountIntervalProductInverseImage(GROUP M,CO VE<U>& a,CO U& u,CO bool& right = true){ll AN = 0;CO U& one = M.One();U prod = one;CO int N = a.SZ();int L0 = 0,L1 = 0;for(int R = 0;R < N;R++){AS(!(a[R]< one));prod = right?M.Product(MO(prod),a[R]):M.Product(a[R],prod);WH(L0 <= R && u < prod){prod = right?M.Product(M.Inverse(a[L0]),prod):M.Product(MO(prod),M.Inverse(a[L0]));L0++;}L1 = max(L0,L1);WH(L1 <= R && a[L1]== one){L1++;}AN += prod == u?L1 - L0:0;}RE AN;}TE <TY GROUP,TY U>VE<pair<int,int>> EnumerateIntervalProductInverseImage(GROUP M,CO VE<U>& a,CO U& u,CO bool& right = true){VE<pair<int,int>> AN{};CO U& one = M.One();U prod = one;CO int N = a.SZ();int L = 0;for(int R = 0;R < N;R++){AS(one < a[R]);prod = right?M.Product(MO(prod),a[R]):M.Product(a[R],prod);WH(L <= R && u < prod){prod = right?M.Product(M.Inverse(a[L]),prod):M.Product(MO(prod),M.Inverse(a[L]));L++;}if(prod == u){AN.push_back({L,R});}}RE AN;}
-#endif
-
