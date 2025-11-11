@@ -5,7 +5,7 @@
 
 #include <typeinfo>
 
-#include "../../../Error/IllegalImput/a_Body.hpp"
+#include "../../../Error/IllegalInput/a_Body.hpp"
 
 template <typename T>
 T& SingletonType<T>::GetUniqueObject()
@@ -22,7 +22,7 @@ T& Object()
 
   if( ! is_base_of<SingletonType<T>,T>::value ){
 
-    ERR_IMPUT( typeid( T ) );
+    ERR_INPUT( typeid( T ) );
     
   }
 
