@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/Function/Residue/a_Body.hpp"
+#else
+TE <uint M,TY INT> CE INT Residue(INT n)NE{RE MO(n < 0?((((++n)*= -1)%= M)*= -1)+= M - 1:n < INT(M)?n:n %= M);}TE <TY INT1,TY INT2> CE INT1 Residue(INT1 n,CO INT2& M)NE{RE MO(n < 0?((((++n)*= -1)%= M)*= -1)+= M - 1:n < M?n:n %= M);}TE <TY INT> CE INT& ResidueP(INT& n)NE{CE CO uint trunc =(1 << 23)- 1;INT n_u = n >> 23;n &= trunc;INT n_uq =(n_u / 7)/ 17;n_u -= n_uq * 119;n += n_u << 23;RE n < n_uq?n += P - n_uq:n -= n_uq;}TE <TY INT> CE INT PositiveBaseModulo(INT a,CO INT& p){RE MO(a < 0?((((++a)*= -1)%= p)*= -1)+= p - 1:a < p?a:a %= p);}TE <TY INT> CE INT Modulo(INT a,CO INT& p){RE PositiveBaseModulo(MO(a),p < 0?-p:p);}TE <TY INT> CE INT PositiveBaseQuotient(INT a,CO INT& p){RE MO((a < 0?++a -= p:a)/= p);}TE <TY INT> CE INT Quotient(INT a,CO INT& p){RE p < 0?PositiveBaseQuotient(-a,-p):PositiveBaseQuotient(MO(a),p);}TE <TY INT> IN INT ModularInverse(CO INT& base,ll c){AS(base > 0);ll a[2]={0,1 % base};INT b[2]={base,INT((c %= base)< 0?c += base:c)};WH(b[1]!= 0){CO INT q = b[0]/ b[1];(a[0]-= q * a[1]% base)< 0?a[0]+= base:a[0];b[0]-= q * b[1];swap(a[0],a[1]);swap(b[0],b[1]);}AS(b[0]== 1 &&(a[0]* c - 1)% base == 0);RE a[0];}
+#endif
+
