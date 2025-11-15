@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../Area/a_Body.hpp"
+#include "../../Polytope/Area/a_Body.hpp"
 #include "../../Distance/L1/a_Body.hpp"
 
 template <typename INT> inline bool Online( const INT& x0 , const INT& y0 , const INT& x1 , const INT& y1 , const INT& z , const INT& w , const INT& epsilon ) { return sign( Area<ll>( x0 , y0 , x1 , y1 , z , w ) , epsilon ) == 0 && L1_LongestEdge( x0 , y0 , x1 , y1 , z , w , epsilon ); }
