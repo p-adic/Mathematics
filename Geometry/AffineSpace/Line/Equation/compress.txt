@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Line/Equation/a_Body.hpp"
+#else
+TE <TY T,TE <TY...> TY PAIR> IN T3<T> LineEquation(CO PAIR<T,T>& p,CO PAIR<T,T>& q){auto&[px,py]= p;auto&[qx,qy]= q;RE{py - qy,qx - px,px * qy - qx * py};}
+#endif
+

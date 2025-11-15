@@ -1,0 +1,13 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Circle/InscribedCircle/a_Body.hpp"
+#else
+IN double Area(CO double& l0,CO double& l1,CO double& l2){CO double s =(l0 + l1 + l2)/ 2;RE sqrt(s *(s - l0))* sqrt((s - l1)*(s - l2));}
+
+TE <TY INT> IN int sign(CO INT& n,CO INT& epsilon = 0){CE bool is_not_double = !is_same_v<INT,double>;AS(is_not_double || epsilon > 0);RE n < -epsilon?-1:epsilon < n?1:0;}
+
+TE <TY INT> IN INT L22(CO INT& x,CO INT& y){RE x * x + y * y;}TE <TY INT,TE <TY...> TY PAIR> IN INT L22(CO PAIR<INT,INT>& v){RE L22(get<0>(v),get<1>(v));}TE <TY INT> IN INT L22_Distance(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1){RE L22(x0 - x1,y0 - y1);}TE <TY INT,TE <TY...> TY PAIR> IN INT L22_Distance(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1){RE L22(v0 - v1);}TE <TY INT> IN double L2(CO INT& x,CO INT& y){RE sqrt(L22(x,y));}TE <TY INT,TE <TY...> TY PAIR> IN double L2(CO PAIR<INT,INT>& v){RE sqrt(L22(v));}TE <TY INT> IN double L2_Distance(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1){RE sqrt(L22_Distance(x0,y0,x1,y1));}TE <TY INT,TE <TY...> TY PAIR> IN double L2_Distance(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1){RE sqrt(L22_Distance(v0,v1));}TE <TY INT> IN bool L2_LongestEdge(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1,CO INT& z,CO INT& w,CO INT& epsilon){RE sign(L22_Distance(x0,y0,x1,y1)- max(L22_Distance(x0,y0,z,w),L22_Distance(z,w,x1,y1)),epsilon)>= 0;}TE <TY INT,TE <TY...> TY PAIR> IN bool L2_LongestEdge(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1,CO PAIR<INT,INT>& v2,CO INT& epsilon = 0 ){RE L2_LongestEdge(get<0>(v0),get<1>(v0),get<0>(v1),get<1>(v1),get<0>(v2),get<1>(v2),epsilon);}
+
+IN double InscribedCircleRadius(CO double& l0,CO double& l1,CO double& l2){RE Area(l0,l1,l2)* 2 /(l0 + l1 + l2);}TE <TY INT,TE <TY...> TY PAIR> IN double InscribedCircleRadius(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1,CO PAIR<INT,INT>& v2){RE InscribedCircleRadius(L2_Distance(v0,v1),L2_Distance(v1,v2),L2_Distance(v2,v0));}
+#endif
+
+
