@@ -1,5 +1,0 @@
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/RelativeDirection/a_Body.hpp"
-#else
-TE <TY INT> IN pair<INT,INT> RelativeDirection(CO pair<INT,INT>& v0,CO pair<INT,INT>& v1){AS(v0.first != 0 || v0.second != 0);RE{v1.first * v0.first + v1.second * v0.second,v1.second * v0.first - v1.first * v0.second};}TE <TY INT> IN int DirectionNumber(CO pair<INT,INT>& v){RE v.first > 0?v.second > 0?2:v.second < 0?8:1:v.first < 0?v.second > 0?4:v.second < 0?6:5:v.second > 0?3:v.second < 0?7:0;}TE <TY INT> IN int DirectionNumber(CO pair<INT,INT>& v0,CO pair<INT,INT>& v1){RE DirectionNumber(RelativeDirection(v0,v1));}TE <TY INT> IN bool RightAngle(CO pair<INT,INT>& v0,CO pair<INT,INT>& v1){if(v0.first == 0 && v0.second == 0){RE true;}CO int c = DirectionNumber(v0,v1);RE c == 0 ||(c & 3)== 3;}TE <TY INT> IN bool Parallel(CO pair<INT,INT>& v0,CO pair<INT,INT>& v1){if(v0.first == 0 && v0.second == 0){RE true;}CO int c = DirectionNumber(v0,v1);RE c == 0 ||(c & 3)== 1;}
-#endif
