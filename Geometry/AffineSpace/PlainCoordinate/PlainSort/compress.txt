@@ -1,0 +1,20 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/PlainCoordinate/PlainSort/a_Body.hpp"
+#else
+// 象限
+TE <TY INT,TE <TY...> TY PAIR> IN int Quadrant(CO PAIR<INT,INT>& xy){auto&[x,y]= xy;RE x < 0?y > 0?2:3:x > 0?y < 0?4:1:y > 0?2:y < 0?4:0;}
+
+// 偏角ソート
+TE <TY INT,TE <TY...> TY PAIR>VE<int> ArgumentSort(CO VE<PAIR<INT,INT>>& xy,CO PAIR<INT,INT>& centre){CO int N = xy.SZ();auto&[cx,cy]= centre;US T = tuple<int,ll,INT,ll,int>;VE<T> coord(N);for(int i = 0;i < N;i++){auto[x,y]= xy[i];x -= cx;y -=cy;coord[i]={Quadrant(pair{x,y}),abs(x),abs(y),ll(x)* x + ll(y)* y,i};}auto order =[&](CO T& t0,CO T& t1){auto&[q0,x0,y0,r0,i0]= t0;auto&[q1,x1,y1,r1,i1]= t1;if(q0 != q1){RE q0 < q1;}if(q0 == 0){RE false;}ll d0,d1;if((q0 & 1)== 1){d0 = y0 * x1;d1 = x0 * y1;}else{d0 = x0 * y1;d1 = y0 * x1;}RE tuple{d0,r0,i0}< tuple{d1,r1,i1};};sort(coord.BE(),coord.EN(),order);VE<int> AN(N);for(int i = 0;i < N;i++){AN[i]= get<4>(coord[i]);}RE AN;}
+
+// 平面の再帰的象限分割によるソート
+TE <TY INT,TE <TY...> TY PAIR>VO RecursiveDivisionSortBody(CO VE<PAIR<INT,INT>>& xy,CO PAIR<INT,INT>& xy_mid,CO INT& L,VE<int>& index){if(L <= 2 || index.SZ()<= 4){RE;}auto&[x_mid,y_mid]= xy_mid;VE<int> index_sub[2][2]{};for(auto& i:index){auto&[x,y]= xy[i];index_sub[x < x_mid?0:1][y < y_mid?0:1].push_back(i);}int num = 0;
+
+// 非乱択版
+// for(int px = 0;px < 2;px++){for(int py = 0;py < 2;py++){ RecursiveDivisionSortBody(xy,PAIR<INT,INT>{x_mid +((px == 0?-L:L)>> 1),y_mid +((py == 0?-L:L)>> 1)},L >> 1,index_sub[px][py]);for(auto& i:index_sub[px][py]){index[num++]= i;}index_sub[px][py].clear();}}
+
+// ヒューリスティック用の乱択版
+int rand = GetRand(0,23);LI<PAIR<int,int>> rest ={{0,0},{0,1},{1,0},{1,1}};for(int b = 4;b > 0;b--){int r = rand % b;rand /= b;auto IT = rest.BE();WH(r-- > 0){++IT;}auto&[px,py]= *IT; RecursiveDivisionSortBody(xy,PAIR<INT,INT>{x_mid +((px == 0?-L:L)>> 1),y_mid +((py == 0?-L:L)>> 1)},L >> 1,index_sub[px][py]);for(auto& i:index_sub[px][py]){index[num++]= i;}index_sub[px][py].clear();rest.erase(IT);}
+
+RE;}TE <TY INT,TE <TY...> TY PAIR> IN VE<int> RecursiveDivisionSort(CO VE<PAIR<INT,INT>>& xy,CO PAIR<INT,INT>& xy_mid,CO INT& L){CO int SZ = xy.SZ();VE<int> index(SZ);for(int i = 0;i < SZ;i++){index[i]= i;}RecursiveDivisionSortBody(xy,xy_mid,L,index);RE index;}
+#endif
