@@ -1,5 +1,0 @@
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/InnerProduct/a_Body.hpp"
-#else
-TE <TY INT,TE <TY...> TY PAIR> INT InnerProduct(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1){RE get<0>(v0)* get<0>(v1)+ get<1>(v0)* get<1>(v1);}TE <TY INT> INT InnerProduct(CO tuple<INT,INT,INT>& v0,CO tuple<INT,INT,INT>& v1){RE get<0>(v0)* get<0>(v1)+ get<1>(v0)* get<1>(v1)+ get<2>(v0)* get<2>(v1);}TE <TY INT> INT InnerProduct(CO tuple<INT,INT,INT,INT>& v0,CO tuple<INT,INT,INT,INT>& v1){RE get<0>(v0)* get<0>(v1)+ get<1>(v0)* get<1>(v1)+ get<2>(v0)* get<2>(v1)+ get<3>(v0)* get<3>(v1);}TE <TY INT> INT InnerProduct(CO VE<INT>& v0,CO VE<INT>& v1){CO int SZ = v0.SZ();AS(int(v1.SZ())== SZ);INT AN{};for(int i = 0;i < SZ;i++){AN += v0[i]* v1[i];}RE AN;}
-#endif
