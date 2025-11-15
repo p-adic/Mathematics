@@ -1,6 +1,0 @@
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Circle/a_Body.hpp"
-#else
-TE <TE <TY...> TY PAIR,TY INT>VE<int> NoncrossingPartition(CRI N,CO VE<PAIR<INT,INT>>& chord,CO bool& colour_edge){VE<VE<pair<INT,int>>> left(N);VE<VE<pair<INT,int>>> right(N);CO int M = chord.SZ();for(int j = 0;j < M;j++){auto[l,r]= chord[j];AS(0 <= l && l < N);AS(0 <= r && r != l && r < N);if(l < r){left[l].push_back({-r,j + 1});right[r].push_back({-l,j + 1});}else{left[r].push_back({-l,j + 1});right[l].push_back({-r,j + 1});}}VE<int> colour(N,-1);VE<int> stack ={0};for(int i = 0;i < N;i++){bool paint = colour_edge ||(right[i].empty()&& left[i].empty());sort(right[i].BE(),right[i].EN());WH(!right[i].empty()){AS(!stack.empty()&& get<1>(right[i].back())== stack.back());right[i].pop_back();stack.pop_back();}sort(left[i].BE(),left[i].EN());for(auto&[r,j]:left[i]){stack.push_back(j);}AS(!stack.empty());if(paint){colour[i]= stack.back();}}RE colour;}
-#endif
-
