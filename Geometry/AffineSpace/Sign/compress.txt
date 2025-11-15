@@ -1,5 +1,0 @@
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Sign/a_Body.hpp"
-#else
-TE <TY INT> IN int sign(CO INT& n,CO INT& epsilon = 0){CE bool is_not_double = !is_same_v<INT,double>;AS(is_not_double || epsilon > 0);RE n < -epsilon?-1:epsilon < n?1:0;}
-#endif
