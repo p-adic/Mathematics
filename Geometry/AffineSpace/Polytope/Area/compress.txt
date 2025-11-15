@@ -1,0 +1,13 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Polytope/Area/a_Body.hpp"
+#else
+// 三角形の符号付き面積を頂点座標から計算
+TE <TY INT> IN INT Area(CO INT& x0,CO INT& y0,CO INT& x1,CO INT& y1,CO INT& x2,CO INT& y2){RE(x1 - x0)*(y2 - y0)-(y1 - y0)*(x2 - x0);}TE <TY RET,TY INT,TE <TY...> TY PAIR> IN RET Area(CO PAIR<INT,INT>& v0,CO PAIR<INT,INT>& v1,CO PAIR<INT,INT>& v2){RE Area<RET>(get<0>(v0),get<1>(v0),get<0>(v1),get<1>(v1),get<0>(v2),get<1>(v2));}
+
+// 三角形の符号なし面積を辺長から計算
+IN double Area(CO double& l0,CO double& l1,CO double& l2){CO double s =(l0 + l1 + l2)/ 2;RE sqrt(s *(s - l0))* sqrt((s - l1)*(s - l2));}
+
+// 凸多角形の符号付き面積を頂点座標から計算
+TE <TY RET,TY INT,TE <TY...> TY PAIR> IN RET Area(CO VE<PAIR<INT,INT>>& v){RET AN{};CRI SZ = v.SZ();AS(SZ > 2);for(int i = 2;i < SZ;i++){AN += Area<RET>(v[0],v[i-1],v[i]);}RE AN;}
+#endif
+
