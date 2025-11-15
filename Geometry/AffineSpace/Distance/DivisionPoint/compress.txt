@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Distance/DivisionPoint/a_Body.hpp"
+#else
+TE <TY PAIR,TY T> IN PAIR DivisionPoint(CO PAIR& p,CO PAIR& q,CO T& l,CO T& r){auto&[px,py]= p;auto&[qx,qy]= q;RE{(px * r + qx * l)/(l + r),(py * r + qy * l)/(l + r)};}
+#endif
+
