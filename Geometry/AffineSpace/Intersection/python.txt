@@ -1,6 +1,0 @@
-def Area(u,v,w):return(v[0]-u[0])*(w[1]-u[1])-(v[1]-u[1])*(w[0]-u[0])
-def sign(n):return[-1,1][n>0]if n else 0
-def L1(v):return abs(v[0])+abs(v[1])
-def L1_Distance(u,v):return L1([u[0]-v[0],u[1]-v[1]])
-def L1_LongestEdge(u,v,w):return L1_Distance(u,v)>=max(L1_Distance(u,w),L1_Distance(w,v))
-def IntersectionType(u,v,z,w):s=[sign(Area(u,v,z)),sign(Area(u,v,w)),sign(Area(z,w,u)),sign(Area(z,w,v))];return 1 if s[0]*s[1]<0 and s[2]*s[3]<0 else 0 if(s[0]==0 and L1_LongestEdge(u,v,z))or(s[1]==0 and L1_LongestEdge(u,v,w))or(s[2]==0 and L1_LongestEdge(z,w,u))or(s[3]==0 and L1_LongestEdge(z,w,v))else -1
