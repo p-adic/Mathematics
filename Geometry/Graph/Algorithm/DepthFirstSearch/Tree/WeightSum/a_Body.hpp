@@ -11,7 +11,7 @@ Tuple<int,INT,INT> TreeWeightSum( const TREE& T , PREV_WEIGHT pw )
 {
 
   TreeWeightGroup twg{ 0 , INT{ 1 } , INT{ 1 } };
-  using U = twg::type;
+  using U = typename decltype( twg )::type;
 
   auto prod = [&]( U u0 , const U& u1 , const int& i , const int& j ){
     return twg.Product( move( u0 ) , twg.Extend( u1 , pw( j ) ) );

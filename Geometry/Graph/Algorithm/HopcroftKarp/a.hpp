@@ -1,8 +1,11 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/HopcroftKarp/a.hpp
 
 #pragma once
+// verify:
+// https://yukicoder.me/submissions/911317
+// https://yukicoder.me/submissions/1134028
 
-// verify: https://yukicoder.me/submissions/911317
+// Edgeは写像edge:[0,S) -> [0,T)^{< \omega}に相当する型。
 
 // (S,T,edge)が二部グラフである場合のみサポート。
 // edgeのサイズをeと置く。最大二部マッチング問題を
@@ -16,6 +19,7 @@ class HopcroftKarp
 {
 
 public:
+  // edgeと整合的な単射のうち定義域の大きさが最大なものを１つ返す。
   template <typename Edge> vector<pair<int,int>> GetMaximumMatching( const int& S , const int& T , Edge edge );
 
 };

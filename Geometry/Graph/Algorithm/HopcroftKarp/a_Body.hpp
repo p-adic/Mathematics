@@ -3,7 +3,11 @@
 #pragma once
 #include "a.hpp"
 
-#include "../BreadthFirst/a_Body.hpp"
+#ifdef DEBUG
+  #include "../BreadthFirstSearch/Debug/a_Body.hpp"
+#else
+  #include "../BreadthFirstSearch/a_Body.hpp"
+#endif
 
 template <typename Edge> vector<pair<int,int>> HopcroftKarp::GetMaximumMatching( const int& S , const int& T , Edge edge )
 {

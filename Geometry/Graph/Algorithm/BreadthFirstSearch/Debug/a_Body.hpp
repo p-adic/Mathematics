@@ -394,9 +394,8 @@ auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v
   while( ( t = Next() ) != m_not_found ){
 
     auto&& i = m_G.Enumeration_inv( t );
-    int& answer_i = answer[i];
     // ê‡•ª‚¯‚ð‚µ‚È‚¢‚Æt‚ªŽn“_‚ÌŽž‚É–â‘è‚Æ‚È‚éB
-    answer_i == -1 ? answer_i = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer_i;
+    answer[i] == -1 ? answer[i] = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer[i];
     
   }
 
