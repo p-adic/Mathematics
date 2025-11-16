@@ -16,7 +16,7 @@
 // を満たす場合のみサポート。
 // dp[j] = f(jの子ノードkを渡るdp[k]の列,j)
 // を満たす配列dpの根での値dp[root]をO(|V_T|)で求める。
-template <typename DFST , typename F> ret_t<F> RootingDP( DFST& dfst , F& f );
+template <typename DFST , typename F> ret_t<F> RootingDP( DFST& dfst , F f );
 // - ノードiにU型の値A[i]が定まっておりその部分木和をdp[i]に格納する場合：
 //   auto f = [&]( vector<U> u , const int& i ){
 //     U answer = A[i];
@@ -47,10 +47,9 @@ template <typename DFST , typename F> ret_t<F> RootingDP( DFST& dfst , F& f );
 // - 元の木構造でjの親となるものを最初に
 // - そうでないものはChildrenNumber()に関して昇順に
 // として定義する。
-template <typename DFST , typename MONOID , typename F , typename G> vector<inner_t<MONOID>> RerootingDP( DFST& dfst , MONOID M , F& f , G& g );
-// fはノードjごとのデータ（グラフ構造に依存しない）
-// gは有向辺is_child?(j,k):(k,j)ごとのデータ（グラフ構造、例えばkが葉か否かに依存できる）
-// に対応。
+template <typename DFST , typename MONOID , typename F , typename G> vector<inner_t<MONOID>> RerootingDP( DFST& dfst , MONOID M , F f , G g );
+// fはノードjごとのデータ（グラフ構造に依存しないもの）しか使えず、
+// gは有向辺is_child?(j,k):(k,j)ごとのデータ（グラフ構造、例えばkが葉か否かに依存できる）が使える。
 // -「パスの数」を求める場合：
 //   AdditiveMonoid<int> M{};
 //   auto f = [&]( const int& u , const int& i ){ return u + 1; };

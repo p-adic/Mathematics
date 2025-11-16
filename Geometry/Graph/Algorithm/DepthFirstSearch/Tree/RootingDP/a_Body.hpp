@@ -6,7 +6,7 @@
 #include "../a_Body.hpp"
 
 template <typename DFST , typename F>
-ret_t<F> DepthFirstSearchOnTree<TREE>::RootingDP( DFST& dfst , F& f )
+ret_t<F> RootingDP( DFST& dfst , F f )
 {
 
   using U = ret_t<F>;
@@ -34,18 +34,11 @@ ret_t<F> DepthFirstSearchOnTree<TREE>::RootingDP( DFST& dfst , F& f )
 }
   
 template <typename DFST , typename MONOID , typename F , typename G>
-vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( DFST& dfst , MONOID M , F& f , G& g )
+vector<inner_t<MONOID>> RerootingDP( DFST& dfst , MONOID M , F f , G g )
 {
 
   using U = inner_t<MONOID>;
   static_assert( is_invocable_r_v<U,F,U,int> && is_invocable_r_v<U,G,U,bool,int,int> );
-  
-  if( ! m_set_children ){
-
-    SetChildren();
-
-  }
-  
   const int& V = dfst.size();
   const U& e = M.Unit();
 
@@ -60,7 +53,7 @@ vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( DFST& dfst , 
   
   for( int i = 0 ; i < V ; i++ ){
 
-    children_value[i].resize( m_children[i].size() );
+    children_value[i].resize( dfst.Children( i ).size() );
 
   }
   
@@ -79,11 +72,11 @@ vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( DFST& dfst , 
 
     }
     
-    const int& j = dsft.Parent( i );
+    const int& j = dfst.Parent( i );
 
     if( j != -1 ){
       
-      children_value[j][dfst.ChildrenNumer( i )] = f( temp , i );
+      children_value[j][dfst.ChildrenNumber( i )] = f( temp , i );
 
     }
 
@@ -114,7 +107,7 @@ vector<inner_t<MONOID>> DepthFirstSearchOnTree<TREE>::RerootingDP( DFST& dfst , 
     
     for( int m = 0 ; m <= size_i ; m++ ){
 
-      // l_sum[i][m]にrest_i（ある意味m_children[i][-1]）と
+      // l_sum[i][m]にrest_i（ある意味dfst.Children( i )[-1]）と
       // children_value[i][0],...,children_value[i][m-1]の
       // gでの像のMに関する積を格納。
       l_sum[i][m] = M.Product( rest_i , l_sum[i][m] );
