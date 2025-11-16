@@ -9,4 +9,6 @@
 template <typename TREE> vector<int> Diameter( TREE& T );
 // 各頂点iを端点に持つ最長パスの長さは、中心をc0,c1（c0==c1も可）として
 // (c0からiの深さ)+(iがc0よりc1に近い?floor(直径/2):直径-floor(直径/2))
-// となる。
+// となる。この値は
+// ./LongestPath/
+// でK=1として求めることも可能。
