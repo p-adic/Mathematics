@@ -7,8 +7,8 @@
 
 // ファイル容量削減のため極力vectorの成分を参照するだけの変数を用いない。
 
-template <typename TREE , typename U , typename MONOID> inline DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const int& root , const int& digit ) :
-  DepthFirstSearchOnTree<TREE>( T , root , digit ) , m_M( move( M ) ) , m_wprev( this->size() , m_M.One() ) , m_wdepth_r() , m_wdepth_l() , m_set_wdepth() , m_wheight_max_r() , m_wheight_max_l() , m_wheight_min_r() , m_wheight_min_l() , m_set_wheight() , m_wheaviness() , m_set_wheaviness() , m_wdoubling( this->m_digit ) , m_set_wdoubling()
+template <typename TREE , typename U , typename MONOID> inline DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const int& root ) :
+  DepthFirstSearchOnTree<TREE>( T , root ) , m_M( move( M ) ) , m_wprev( this->size() , m_M.One() ) , m_wdepth_r() , m_wdepth_l() , m_set_wdepth() , m_wheight_max_r() , m_wheight_max_l() , m_wheight_min_r() , m_wheight_min_l() , m_set_wheight() , m_wheaviness() , m_set_wheaviness()
 {
 
   static_assert( is_same_v<U,inner_t<MONOID>> );
@@ -35,7 +35,7 @@ template <typename TREE , typename U , typename MONOID> inline DepthFirstSearchO
 }
 
 template <typename TREE , typename U , typename MONOID> inline MONOID& DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::Monoid() noexcept { return m_M; }
-template <typename TREE , typename U , typename MONOID> inline const U& DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::PrevWeight( const int& i ) const noexcept { return m_prev[i]; }
+template <typename TREE , typename U , typename MONOID> inline const U& DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::PrevWeight( const int& i ) const noexcept { return m_wprev[i]; }
 
 template <typename TREE , typename U , typename MONOID> inline const U& DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::WDepth( const int& i , const bool& right ) { assert( i < this->size() ); if( !m_set_wdepth ){ SetWDepth(); } return ( right ? m_wdepth_r : m_wdepth_l )[i]; }
 template <typename TREE , typename U , typename MONOID> inline const U& DepthFirstSearchOnWeightedTree<TREE,U,MONOID>::WHeight( const int& i , const bool& maximum , const bool& right ) { assert( i < this->size() ); if( !m_set_wheight ){ SetWHeight(); } return ( maximum ? ( right ? m_wheight_max_r : m_wheight_max_l ) : ( right ? m_wheight_min_r : m_wheight_min_l ) )[i]; }

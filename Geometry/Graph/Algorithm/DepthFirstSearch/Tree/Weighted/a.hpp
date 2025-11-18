@@ -53,12 +53,8 @@ private:
   vector<U> m_wheaviness;
   bool m_set_wheaviness;
 
-  // ダブリングで{先祖ノード,辺の重さの右総乗,辺の重さの左総乗}を格納。
-  vector<vector<tuple<int,U,U>>> m_wdoubling;
-  bool m_set_wdoubling;
-
 public:
-  inline DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const int& root = 0 , const int& digit = 0 );
+  inline DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const int& root = 0 );
 
   inline MONOID& Monoid() noexcept;
   inline const U& PrevWeight( const int& i ) const noexcept;
@@ -70,7 +66,6 @@ private:
   void SetWDepth();
   void SetWHeight();
   void SetWHeaviness();
-  void SetWDoubling();
 
 };
 template <typename TREE , typename MONOID , typename...Args> DepthFirstSearchOnWeightedTree( TREE& T , MONOID M , const Args&... args ) -> DepthFirstSearchOnWeightedTree<TREE,inner_t<MONOID>,MONOID>;
