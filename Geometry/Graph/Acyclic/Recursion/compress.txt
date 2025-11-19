@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Acyclic/Recursion/Debug/a_Body.hpp"
+#else
+TE <TY EDGE,TY T,TY F0,TY F1,TY G0,TY G1>VO RecursionOnDAG(EDGE& edge,CO T& t_start,F0 f0,F1 f1,G0 g0,G1 g1){ST_AS(is_invocable_r_v<VE<T>,EDGE,CO T&> && is_invocable_v<F0,CO T&> && is_invocable_v<F1,CO T&,CO T&> && is_invocable_v<G0,CO T&,CO T&> && is_invocable_v<G1,CO T&>);f0(t_start);for(auto&& u:edge(t_start)){f1(t_start,u);RecursionOnDAG(edge,u,MO(f0),f1,g0,g1);g0(t_start,u);}g1(t_start);RE;}
+#endif
+
