@@ -2,8 +2,8 @@
 
 #pragma once
 // verify:
-// https://yukicoder.me/submissions/957397（RootingDP）
-
+// https://yukicoder.me/submissions/957397
+// https://yukicoder.me/submissions/1135067
 #include "../a.hpp"
 
 // Uは適当な型、Fは写像f:(U^{< \omega}の右辺値) \times N -> Uに相当する型。
