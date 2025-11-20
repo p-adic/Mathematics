@@ -4,3 +4,4 @@
 
 template <typename T>
 using FPS = FormalPowerSeries<T>;
+
