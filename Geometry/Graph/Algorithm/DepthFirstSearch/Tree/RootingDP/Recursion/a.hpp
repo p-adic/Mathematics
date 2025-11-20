@@ -1,6 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/RootingDP/Recursion/a.hpp
 
 #pragma once
+#include "a_Macro.hpp"
+
 // verify:
 // https://yukicoder.me/submissions/1113759 (RecursionRootingDP)
 // https://yukicoder.me/submissions/1113760 (BinaryRootingDP)

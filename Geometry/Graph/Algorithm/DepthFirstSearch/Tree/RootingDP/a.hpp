@@ -1,6 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/RootingDP/a.hpp
 
 #pragma once
+#include "a_Macro.hpp"
+
 // verify:
 // https://yukicoder.me/submissions/957397
 // https://yukicoder.me/submissions/1135067
