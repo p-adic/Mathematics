@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/FloorSum/FloorFiber/a_Body.hpp"
+#else
+TE <TY INT>VE<T3<INT>> FloorFiber(CO INT& n){AS(n >= 1);CO INT B = RoundDownSqrt(n),i_max = n / B;VE<T3<INT>> AN{};for(int i = 1;i <= i_max;i++){AN.push_back({n/i,i,i});}for(int v = 1;v < B;v++){AN.push_back({v,n/(v+1)+1,n/v});}RE AN;}TE <TY INTERVAL_SUM,TY INT,TY RET = ret_t<INTERVAL_SUM,INT,INT,INT>>RET FloorComposition(INTERVAL_SUM f,CO INT& n,CRL l,CRL r){RET AN{};for(auto&[v,l_v,r_v]:FloorFiber(n)){SetMax(l_v,l);SetMin(r_v,r);if(l_v <= r_v){AN += f(v,l_v,r_v);}}RE AN;}
+#endif
+
