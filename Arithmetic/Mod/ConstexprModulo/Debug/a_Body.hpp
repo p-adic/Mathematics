@@ -110,3 +110,6 @@ inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , 
 
 #include "../../Hash/a_Body.hpp"
 template <INT_TYPE_FOR_MOD M> DEFINITION_OF_HASH_FOR_MOD( Mod<M> );
+
+// ”ñDebug‚Æinclude‚ğ“ˆê‚·‚éB
+#include "../../Function/Residue/Inverse/a_Body.hpp"
