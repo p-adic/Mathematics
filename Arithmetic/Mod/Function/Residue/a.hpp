@@ -15,6 +15,3 @@ template <typename INT> inline constexpr INT Modulo( INT a , const INT& p );
 // 非負の余りと整合的な商を返す。
 template <typename INT> inline constexpr INT PositiveBaseQuotient( INT a , const INT& p );
 template <typename INT> inline constexpr INT Quotient( INT a , const INT& p );
-
-// ユークリッドの互除法でcの法base逆元を返す。
-template <typename INT> inline INT ModularInverse( const INT& base , ll c );
