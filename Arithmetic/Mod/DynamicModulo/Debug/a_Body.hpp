@@ -4,7 +4,7 @@
 #include "a.hpp"
 
 #include "../Constant/a_Body.hpp"
-#include "../../Function/Residue/a_Body.hpp"
+#include "../../Function/Residue/Inverse/a_Body.hpp"
 #include "../../../Divisor/GCD/a_Body.hpp"
 
 template <int NUM> inline DMods<NUM>::DMods() noexcept : m_non_negative( true ) , m_n() , m_d( 1 ) {}
@@ -98,6 +98,3 @@ template <int NUM> inline string to_string( const DMods<NUM>& n ) noexcept { con
 
 #include "../../Hash/a_Body.hpp"
 template <int NUM> DEFINITION_OF_HASH_FOR_MOD( DMods<NUM> );
-
-// îÒDebugéûÇ∆includeÇìùàÍÇ∑ÇÈÅB
-#include "../../Function/Residue/Inverse/a_Body.hpp"
