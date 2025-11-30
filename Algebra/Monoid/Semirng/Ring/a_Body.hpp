@@ -5,11 +5,11 @@
 
 #include "../a_Body.hpp"
 
-template <typename U , typename GROUP , typename MONOID> inline AbstractRing<U,GROUP,MONOID>::AbstractRing( GROUP R0 , MONOID R1 ) : AbstractSemirng<U,GROUP,MONOID>( move( R0 ) , move( R1 ) ) {}
-template <typename U> inline Ring<U>::Ring( U one_U ) :AbstractRing<U,AdditiveGroup<U>,MultiplicativeMonoid<U>>( AdditiveGroup<U>() , MultiplicativeMonoid<U>( move( one_U ) ) ) {}
+template <typename GROUP , typename MONOID , typename U> inline AbstractRing<GROUP,MONOID,U>::AbstractRing( GROUP R0 , MONOID R1 ) : AbstractSemirng<GROUP,MONOID>( move( R0 ) , move( R1 ) ) {}
+template <typename U> inline Ring<U>::Ring( U one_U ) : AbstractRing<AdditiveGroup<U>,MultiplicativeMonoid<U>>( AdditiveGroup<U>() , MultiplicativeMonoid<U>( move( one_U ) ) ) {}
 
-template <typename U , typename GROUP , typename MONOID> inline U AbstractRing<U,GROUP,MONOID>::Inverse( const U& u ) { return this->m_R0.Inverse( u ); }
-template <typename U , typename GROUP , typename MONOID> inline const U& AbstractRing<U,GROUP,MONOID>::One() const noexcept { return this->m_R1.One(); }
+template <typename GROUP , typename MONOID , typename U> inline U AbstractRing<GROUP,MONOID,U>::Inverse( const U& u ) { return this->m_R0.Inverse( u ); }
+template <typename GROUP , typename MONOID , typename U> inline const U& AbstractRing<GROUP,MONOID,U>::One() const noexcept { return this->m_R1.One(); }
 
-template <typename U , typename GROUP , typename MONOID> inline GROUP& VirtualRing<U,GROUP,MONOID>::AdditiveGroup() noexcept { return this->AdditiveMonoid(); }
-template <typename U , typename GROUP , typename MONOID> inline MONOID& VirtualRing<U,GROUP,MONOID>::MultiplicativeMonoid() noexcept { return this->MultiplicativeSemigroup(); }
+template <typename GROUP , typename MONOID , typename U> inline GROUP& VirtualRing<GROUP,MONOID,U>::AdditiveGroup() noexcept { return this->AdditiveMonoid(); }
+template <typename GROUP , typename MONOID , typename U> inline MONOID& VirtualRing<GROUP,MONOID,U>::MultiplicativeMonoid() noexcept { return this->MultiplicativeSemigroup(); }

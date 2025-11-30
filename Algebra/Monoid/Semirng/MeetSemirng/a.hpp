@@ -7,21 +7,21 @@
 // verify:
 // https://yukicoder.me/submissions/946106ÅiAdditiveTropicalSemirngÅj
 
-template <typename U , typename MEET_SEMILATTICE , typename SEMIGROUP>
+template <typename MEET_SEMILATTICE , typename SEMIGROUP , typename U = inner_t<SEMIGROUP>>
 class VirtualMeetSemirng :
-  virtual public VirtualSemirng<U,MEET_SEMILATTICE,SEMIGROUP>
+  virtual public VirtualSemirng<MEET_SEMILATTICE,SEMIGROUP>
 {
 
 public:
-  inline const U& Infty();
+  inline const U& Infty() const noexcept;
   inline U Meet( U u0 , const U& u1 );
 
 };
 
-template <typename U , typename SEMIGROUP>
+template <typename SEMIGROUP , typename U = inner_t<SEMIGROUP>>
 class AbstractTropicalSemirng :
-  virtual public VirtualMeetSemirng<U,MinSemilattice<U>,SEMIGROUP> ,
-  public AbstractSemirng<U,MinSemilattice<U>,SEMIGROUP>
+  virtual public VirtualMeetSemirng<MinSemilattice<U>,SEMIGROUP> ,
+  public AbstractSemirng<MinSemilattice<U>,SEMIGROUP>
 {
 
 public:
@@ -32,7 +32,7 @@ public:
 
 template <typename U>
 class AdditiveTropicalSemirng :
-  public AbstractTropicalSemirng<U,AdditiveMagma<U>>
+  public AbstractTropicalSemirng<AdditiveMagma<U>>
 {
 
 public:
@@ -42,7 +42,7 @@ public:
 
 template <typename U>
 class MultiplicativeTropicalSemirng :
-  public AbstractTropicalSemirng<U,MultiplicativeMagma<U>>
+  public AbstractTropicalSemirng<MultiplicativeMagma<U>>
 {
 
 public:

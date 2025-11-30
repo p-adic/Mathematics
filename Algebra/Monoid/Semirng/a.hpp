@@ -3,7 +3,7 @@
 #pragma once
 #include "../a.hpp"
 
-template <typename U , typename MONOID , typename SEMIGROUP>
+template <typename MONOID , typename SEMIGROUP , typename U = inner_t<MONOID>>
 class VirtualSemirng
 {
 
@@ -17,9 +17,9 @@ public:
 
 };
 
-template <typename U , typename MONOID , typename SEMIGROUP>
+template <typename MONOID , typename SEMIGROUP , typename U = inner_t<MONOID>>
 class AbstractSemirng :
-  virtual public VirtualSemirng<U,MONOID,SEMIGROUP>
+  virtual public VirtualSemirng<MONOID,SEMIGROUP>
 
 {
 
@@ -39,7 +39,7 @@ public:
 
 template <typename U>
 class Semirng :
-  public AbstractSemirng<U,AdditiveMonoid<U>,MultiplicativeMagma<U>>
+  public AbstractSemirng<AdditiveMonoid<U>,MultiplicativeMagma<U>>
 {
 
 public:

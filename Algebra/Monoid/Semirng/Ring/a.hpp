@@ -7,9 +7,9 @@
 // https://yukicoder.me/submissions/946132（Ring）
 // https://yukicoder.me/submissions/946198（AbstractRing）
 
-template <typename U , typename GROUP , typename MONOID>
+template <typename GROUP , typename MONOID , typename U = inner_t<GROUP>>
 class VirtualRing :
-  virtual public VirtualSemirng<U,GROUP,MONOID>
+  virtual public VirtualSemirng<GROUP,MONOID>
 {
 
 public:
@@ -20,10 +20,10 @@ inline MONOID& MultiplicativeMonoid() noexcept;
 
 };
 
-template <typename U , typename GROUP , typename MONOID>
+template <typename GROUP , typename MONOID , typename U = inner_t<GROUP>>
 class AbstractRing :
-virtual public VirtualRing<U,GROUP,MONOID> ,
-public AbstractSemirng<U,GROUP,MONOID>
+  virtual public VirtualRing<GROUP,MONOID> ,
+  public AbstractSemirng<GROUP,MONOID>
 {
 
 public:
@@ -35,7 +35,8 @@ inline const U& One() const noexcept;
 
 template <typename U = ll>
 class Ring :
-virtual public AbstractRing<U,AdditiveGroup<U>,MultiplicativeMonoid<U>>
+  // コンストラクタが非自明なので仮想継承にしない。
+  public AbstractRing<AdditiveGroup<U>,MultiplicativeMonoid<U>>
 {
 
 public:
