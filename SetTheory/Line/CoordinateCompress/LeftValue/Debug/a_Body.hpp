@@ -3,10 +3,11 @@
 #pragma once
 #include "a.hpp"
 
-template <typename INT> inline CoordinateCompressL<INT>::CoordinateCompressL() : m_l()
+template <typename INT> inline CoordinateCompressL<INT>::CoordinateCompressL() : m_l() , m_num()
 {
 
   static bool init = true;
+  static int num = 0;
 
   if( init ){
 
@@ -16,12 +17,14 @@ template <typename INT> inline CoordinateCompressL<INT>::CoordinateCompressL() :
 
   }
 
+  m_num = num++;
+
 }
 
 template <typename INT> inline void CoordinateCompressL<INT>::Set( INT& t )
 {
 
-  DERR( "CoordinateCompressL::Set()‚Å¶•Ó’l" , t , "‚ğ“o˜^‚µ‚Ü‚µ‚½B" );
+  DERRNS( "CoordinateCompressL " , m_num , ": Set()‚Å¶•Ó’l " , t , " ‚ğ“o˜^‚µ‚Ü‚µ‚½B\n" );
   m_l.push_back( &t );
   const int size = m_l.size();
   DERR( "“o˜^‚³‚ê‚½“o˜^‚³‚ê‚½¶•Ó’l‚Í“o˜^‡‚É" );
@@ -47,7 +50,7 @@ pair<vector<INT>,int> CoordinateCompressL<INT>::Get()
 
   pair<vector<INT>,int> answer{ {} , -1 };
   auto& [value,value_max] = answer;
-  DERR( "CoordinateCompressL::Get()‚ÅA“o˜^‚³‚ê‚½¶•Ó’l‚ğÀ•Wˆ³k‚µ‚Ü‚·B" );
+  DERRNS( "CoordinateCompressL " , m_num , ": Get()‚ÅA“o˜^‚³‚ê‚½¶•Ó’l‚ğÀ•Wˆ³k‚µ‚Ü‚·B\n" );
 
   if( m_l.empty() ){
 
@@ -85,7 +88,7 @@ template <typename INT> inline void CoordinateCompressL<INT>::clear()
 {
   
   m_l.clear();
-  DERR( "CoordinateCompressL::clear()‚ÅA“o˜^‚³‚ê‚½¶•Ó’l‚ğ–•Á‚µ‚Ü‚·B" );
+  DERRNS( "CoordinateCompressL " , m_num , ": clear()‚ÅA“o˜^‚³‚ê‚½¶•Ó’l‚ğ–•Á‚µ‚Ü‚·B\n" );
   DERR( "" );
 
 }
