@@ -5,7 +5,7 @@
 // https://yukicoder.me/submissions/994770（ll、L）
 
 // intから型変換可能な全順序の定義された型にのみ使用可能。
-// Set回数をQ、Setされた項の種類数をNと置く。
+// Set回数をQと置く。
 
 // 左辺値登録O(1)
 // 左辺値圧縮O(Q log Q)

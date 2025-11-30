@@ -1,7 +1,7 @@
 #ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/CoordinateCompress/RightValue/Debug/a_Body.hpp"
+  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/CoordinateCompress/RightValue/a_Body.hpp"
 #else
-TE <TY INT = ll>CL CoordinateCompressR{PU:unordered_set<INT> m_r;IN CoordinateCompressR();IN VO Set(INT t);TE <TY U,TE <TY...> TY V > IN VO Set(V<U> a);tuple<VE<INT>,unordered_map<INT,int>,int> Get();IN VO clear();};
-TE <TY INT> IN CoordinateCompressR<INT>::CoordinateCompressR():m_r(){}TE <TY INT> IN VO CoordinateCompressR<INT>::Set(INT t){m_r.insert(MO(t));}TE <TY INT> TE <TY U,TE <TY...> TY V > IN VO CoordinateCompressR<INT>::Set(V<U> a){for(auto& t:a){Set(MO(t));}}TE <TY INT>tuple<VE<INT>,unordered_map<INT,int>,int> CoordinateCompressR<INT>::Get(){tuple<VE<INT>,unordered_map<INT,int>,int> AN{};auto&[value,value_inv,value_max]= AN;value.resize(m_r.SZ());for(auto t:m_r){value[value_inv[t]= value_max++]= t;}RE AN;}TE <TY INT> IN VO CoordinateCompressR<INT>::clear(){m_r.clear();}
+TE <TY INT = ll,bool ordered = true>CL CoordinateCompressR{PU:conditional_t<ordered,set<INT>,unordered_set<INT>> m_r;IN CoordinateCompressR();IN VO Set(INT t);TE <TY U,TE <TY...> TY V > IN VO Set(V<U> a);tuple<VE<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int> Get();IN VO clear();};
+TE <TY INT,bool ordered> IN CoordinateCompressR<INT>::CoordinateCompressR():m_r(){}TE <TY INT,bool ordered> IN VO CoordinateCompressR<INT>::Set(INT t){m_r.insert(MO(t));}TE <TY INT,bool ordered> TE <TY U,TE <TY...> TY V > IN VO CoordinateCompressR<INT>::Set(V<U> a){for(auto& t:a){Set(MO(t));}}TE <TY INT,bool ordered>tuple<VE<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int> CoordinateCompressR<INT>::Get(){tuple<VE<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int> AN{};auto&[value,value_inv,value_max]= AN;value.resize(m_r.SZ());for(auto t:m_r){value[value_inv[t]= value_max++]= t;}RE AN;}TE <TY INT,bool ordered> IN VO CoordinateCompressR<INT>::clear(){m_r.clear();}
 #endif
 

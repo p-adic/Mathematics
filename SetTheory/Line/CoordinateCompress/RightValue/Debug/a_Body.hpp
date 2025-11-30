@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() : m_r() , m_num()
+template <typename INT , bool ordered> inline CoordinateCompressR<INT,ordered>::CoordinateCompressR() : m_r() , m_num()
 {
 
   static bool init = true;
@@ -13,6 +13,7 @@ template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() :
 
     DERR( "CoordinateCompressRをデバッグモードで実行します。" );
     DERR( "エラー出力以外は変わりません。" );
+    DERR( "" );
     init = false;
 
   }
@@ -21,7 +22,7 @@ template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() :
 
 }
 
-template <typename INT> inline void CoordinateCompressR<INT>::Set( INT t )
+template <typename INT , bool ordered> inline void CoordinateCompressR<INT,ordered>::Set( INT t )
 {
 
   DERRNS( "CoordinateCompressR " , m_num , ": Set()で右辺値" , t , "を登録しました。\n" );
@@ -32,18 +33,18 @@ template <typename INT> inline void CoordinateCompressR<INT>::Set( INT t )
 
 }
 
-template <typename INT> template <typename U , template <typename...> typename V > inline void CoordinateCompressR<INT>::Set( V<U> a ) { for( auto& t : a ){ Set( move( t ) ); } }
+template <typename INT , bool ordered> template <typename U , template <typename...> typename V > inline void CoordinateCompressR<INT,ordered>::Set( V<U> a ) { for( auto& t : a ){ Set( move( t ) ); } }
 
-template <typename INT>
-tuple<vector<INT>,unordered_map<INT,int>,int> CoordinateCompressR<INT>::Get()
+template <typename INT , bool ordered>
+tuple<vector<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int> CoordinateCompressR<INT,ordered>::Get()
 {
 
-  tuple<vector<INT>,unordered_map<INT,int>,int> answer{};
+  tuple<vector<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int> answer{};
   auto& [value,value_inv,value_max] = answer;
   value.resize( m_r.size() );
 
   DERRNS( "CoordinateCompressR " , m_num , ": Get()で、登録された右辺値を座標圧縮します。\n" );
-  DERR( "右辺値をそれぞれ以下のように変換します：" );
+  DERRNS( "右辺値を" , ordered ? "小さい順に" : "順序を無視して" , "それぞれ以下のように変換します：" );
 
   for( auto t : m_r ){
 
@@ -58,7 +59,7 @@ tuple<vector<INT>,unordered_map<INT,int>,int> CoordinateCompressR<INT>::Get()
 
 }
 
-template <typename INT> inline void CoordinateCompressR<INT>::clear()
+template <typename INT , bool ordered> inline void CoordinateCompressR<INT,ordered>::clear()
 {
 
   m_r.clear();
