@@ -13,6 +13,7 @@ template <typename INT> inline CoordinateCompressL<INT>::CoordinateCompressL() :
 
     DERR( "CoordinateCompressLをデバッグモードで実行します。" );
     DERR( "エラー出力以外は変わりません。" );
+    DERR( "" );
     init = false;
 
   }
