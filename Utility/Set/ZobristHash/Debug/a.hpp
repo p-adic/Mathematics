@@ -1,17 +1,12 @@
-// c:/Users/user/Documents/Programming/Mathematics/Utility/Set/ZobristHash/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/Utility/Set/ZobristHash/Debug/a.hpp
 
 #pragma once
-// verify:
-// https://yukicoder.me/submissions/942404 (AddErase)
-// https://yukicoder.me/submissions/1137281 (AddErase)
+#include "../a_Macro.hpp"
 
-#include "a_Macro.hpp"
+#include "../../Map/a.hpp"
+#include "../a_Alias.hpp"
 
-#include "../Map/a.hpp"
-#include "a_Alias.hpp"
-
-// デバッグ時はハッシュ値の型をullから変えるので、ハッシュ値の管理時にullを
-// 直接使わずautoやdecltypeを使う。
+// デバッグ用にハッシュ値の型をSet<T>に変えたバージョン。
 
 template <typename T>
 class ZobristHashBody
@@ -25,22 +20,21 @@ public:
   inline ZobristHashBody();
   inline ZobristHashBody( const ull& r , const ull& s );
 
-  ull Encode( const Set<T>& S );
-  template <template <typename...> typename V> inline ull Encode( const V<T>& S , const bool& non_overlapping = false );
+  Set<T> Encode( const Set<T>& S );
+  template <template <typename...> typename V> inline Set<T> Encode( const V<T>& S , const bool& non_overlapping = false );
 
   // 集合の対称差
-  inline ull SymmetricDifference( ull code0 , const ull& code1 );
+  inline Set<T> SymmetricDifference( Set<T> code0 , const Set<T>& code1 );
   // 要素追加（Sはcodeに対応する集合）
-  inline ull Add( Set<T>& S , ull code , const T& t );
+  inline Set<T> Add( Set<T>& S , Set<T> code , const T& t );
   // 要素削除（Sはcodeに対応する集合）
-  inline ull Erase( Set<T>& S , ull code , const T& t );
+  inline Set<T> Erase( Set<T>& S , Set<T> code , const T& t );
   // 要素がある時は削除、ない時は追加
-  inline ull AddErase( ull code , const T& t );
+  inline Set<T> AddErase( Set<T> code , const T& t );
   
 private:
-  template <template <typename...> typename V> ull OverlappingEncode( const V<T>& S );
-  template <template <typename...> typename V> ull NonOverlappingEncode( const V<T>& S );
-  virtual ull Hash( const T& t ) = 0;
+  template <template <typename...> typename V> Set<T> OverlappingEncode( const V<T>& S );
+  template <template <typename...> typename V> Set<T> NonOverlappingEncode( const V<T>& S );
 
 };
 
@@ -61,9 +55,6 @@ class ZobristHash :
 public:
   template <typename...Args> inline ZobristHash( Args&&... args );
   
-private:
-  inline ull Hash( const ull& t );
-
 };
 
 // Tの集合のメモ化によるコーディング。
@@ -80,16 +71,10 @@ template <typename T>
 class MemorisationZobristHash :
   public ZobristHashBody<T>
 {
-
-private:
-  Map<T,ull> m_f;
-  
+ 
 public:
   template <typename...Args> inline MemorisationZobristHash( Args&&... args );
   
-private:
-  inline ull Hash( const T& t );
-
 };
 
 // Tの集合の数え上げによるコーディング。
@@ -109,9 +94,6 @@ class EnumerationZobristHash :
 
 public:
   template <typename...Args> inline EnumerationZobristHash( Args&&... args );
-  
-private:
-  inline ull Hash( const T& t );
 
 };
 
