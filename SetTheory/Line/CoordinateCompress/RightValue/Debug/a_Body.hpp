@@ -3,10 +3,11 @@
 #pragma once
 #include "a.hpp"
 
-template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() : m_r()
+template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() : m_r() , m_num()
 {
 
   static bool init = true;
+  static int num = 0;
 
   if( init ){
 
@@ -16,12 +17,14 @@ template <typename INT> inline CoordinateCompressR<INT>::CoordinateCompressR() :
 
   }
 
+  m_num = num++;
+
 }
 
 template <typename INT> inline void CoordinateCompressR<INT>::Set( INT t )
 {
 
-  DERR( "CoordinateCompressR::Set()で右辺値" , t , "を登録しました。" );
+  DERRNS( "CoordinateCompressR " , m_num , ": Set()で右辺値" , t , "を登録しました。\n" );
   m_r.insert( move( t ) );
   DERR( "登録された右辺値全体の集合は" , m_r , "です。" );
   DERR( "" );
@@ -39,7 +42,7 @@ tuple<vector<INT>,unordered_map<INT,int>,int> CoordinateCompressR<INT>::Get()
   auto& [value,value_inv,value_max] = answer;
   value.resize( m_r.size() );
 
-  DERR( "CoordinateCompressR::Get()で、登録された右辺値を座標圧縮します。" );
+  DERRNS( "CoordinateCompressR " , m_num , ": Get()で、登録された右辺値を座標圧縮します。\n" );
   DERR( "右辺値をそれぞれ以下のように変換します：" );
 
   for( auto t : m_r ){
@@ -59,7 +62,7 @@ template <typename INT> inline void CoordinateCompressR<INT>::clear()
 {
 
   m_r.clear();
-  DERR( "CoordinateCompressR::clear()で、登録された右辺値を抹消します。" );
+  DERRNS( "CoordinateCompressR " , m_num , ": clear()で、登録された右辺値を抹消します。\n" );
   DERR( "" );
 
 }
