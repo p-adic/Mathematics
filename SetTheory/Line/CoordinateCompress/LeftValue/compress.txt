@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/CoordinateCompress/LeftValue/Debug/a_Body.hpp"
+#else
+TE <TY INT = ll>CL CoordinateCompressL{PU:VE<INT*> m_l;IN CoordinateCompressL();IN VO Set(INT& t);TE <TY U,TE <TY...> TY V > IN VO Set(V<U>& a);pair<VE<INT>,int> Get();IN VO clear();};
+TE <TY INT> IN CoordinateCompressL<INT>::CoordinateCompressL():m_l(){}TE <TY INT> IN VO CoordinateCompressL<INT>::Set(INT& t){m_l.push_back(&t);}TE <TY INT> TE <TY U,TE <TY...> TY V > IN VO CoordinateCompressL<INT>::Set(V<U>& a){for(auto& t:a){Set(t);}}TE <TY INT>pair<VE<INT>,int> CoordinateCompressL<INT>::Get(){pair<VE<INT>,int> AN{{},-1};auto&[value,value_max]= AN;if(!m_l.empty()){auto comp =[](INT* CO& p0,INT* CO& p1){RE *p0 < *p1;};sort(m_l.BE(),m_l.EN(),comp);INT temp = *(m_l[0])- 1;for(auto p:m_l){*p = temp == *p?value_max:(value.push_back(temp = *p),++value_max);}}value_max++;RE AN;}TE <TY INT> IN VO CoordinateCompressL<INT>::clear(){m_l.clear();}
+#endif
+
