@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Algebra/Monoid/Semirng/Ring/Algebra/SquareSum/a_Body.hpp"
+#else
+TE <TY RING,TY U = inner_t<RING>>CL SquareAlgebra{PU:RING m_R;IN SquareAlgebra(RING R);IN CO T3<U>& Zero();IN CO T3<U>& One();IN T3<U> Sum(T3<U> v0,CO T3<U>& v1);IN T3<U> Product(T3<U> v0,CO T3<U>& v1);IN T3<U> Action(CO U& u,T3<U> v);};
+TE <TY RING,TY U> IN SquareAlgebra<RING,U>::SquareAlgebra(RING R):m_R(MO(R)){}TE <TY RING,TY U> IN CO T3<U>& SquareAlgebra<RING,U>::Zero(){ST CO T3<U> zero{m_R.Zero(),m_R.Zero(),m_R.Zero()};RE zero;}TE <TY RING,TY U> IN CO T3<U>& SquareAlgebra<RING,U>::One(){ST CO T3<U> one{m_R.One(),m_R.Zero(),m_R.Zero()};RE one;}TE <TY RING,TY U> IN T3<U> SquareAlgebra<RING,U>::Sum(T3<U> v0,CO T3<U>& v1){v0[II]= m_R.Sum(MO(v0[II]),v1[II]);v0[I]= m_R.Sum(MO(v0[I]),v1[I]);v0[O]= m_R.Sum(MO(v0[O]),v1[O]);RE MO(v0);}TE <TY RING,TY U> IN T3<U> SquareAlgebra<RING,U>::Product(T3<U> v0,CO T3<U>& v1){v0[II]= m_R.Sum(m_R.Sum(m_R.Product(MO(v0[II]),v1[O]),m_R.Product(v0[I],v1[I])),m_R.Sum(m_R.Product(v1[I],v0[I]),m_R.Product(v0[O],v1[II])));v0[I]= m_R.Sum(m_R.Product(MO(v0[I]),v1[O]),m_R.Product(v0[O],v1[I]));v0[O]= m_R.Product(MO(v0[O]),v1[O]);RE MO(v0);}TE <TY RING,TY U> IN T3<U> SquareAlgebra<RING,U>::Action(CO U& u,T3<U> v){v[II]= m_R.Product(u,v[II]);v[I]= m_R.Product(u,v[I]);v[O]= m_R.Product(u,v[O]);RE MO(v);}#define DC_OF_AR_FOR_DISTRIBUTION(OPR)IN Distribution<MODINT> OP OPR(CO Distribution<MODINT>& d)CO;
+#endif
+
