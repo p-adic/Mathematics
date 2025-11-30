@@ -44,7 +44,7 @@ tuple<vector<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int
   value.resize( m_r.size() );
 
   DERRNS( "CoordinateCompressR " , m_num , ": Get()で、登録された右辺値を座標圧縮します。\n" );
-  DERRNS( "右辺値を" , ordered ? "小さい順に" : "順序を無視して" , "それぞれ以下のように変換します：" );
+  DERRNS( "右辺値を" , ordered ? "小さい順に" : "順序を無視して" , "それぞれ以下のように変換します：\n" );
 
   for( auto t : m_r ){
 
