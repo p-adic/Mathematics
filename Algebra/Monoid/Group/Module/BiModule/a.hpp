@@ -16,7 +16,7 @@ public:
 
 };
 
-template <typename L , typename R , typename U , typename O_U_L , typename O_U_R , typename GROUP>
+template <typename L , typename R , typename O_U_L , typename O_U_R , typename GROUP, typename U = inner_t<GROUP>>
 class AbstractBiModule :
   public VirtualBiModule<L,R,U> ,
   public GROUP
@@ -34,7 +34,6 @@ public:
   inline U RAction( U u , const R& r );
 
 };
-template <typename L , typename R , typename O_U_L , typename O_U_R , typename GROUP> AbstractBiModule( const L& dummy_l , const R& dummy_r , O_U_L o_U_L , O_U_R o_U_R , GROUP M ) -> AbstractBiModule<L,R,inner_t<GROUP>,O_U_L,O_U_R,GROUP>;
 
 template <typename L , typename R , typename U>
 class BiModule :

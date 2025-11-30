@@ -20,7 +20,7 @@ public:
 
 };
 
-template <typename U , typename MAGMA>
+template <typename MAGMA , typename U = inner_t<MAGMA>>
 class RegularRSet :
   virtual public VirtualRSet<U,U> ,
   public MAGMA
@@ -31,8 +31,6 @@ public:
   inline U Action( const U& r , U u );
 
 };
-template <typename MAGMA> RegularRSet( MAGMA magma ) -> RegularRSet<inner_t<MAGMA>,MAGMA>;
-
 
 template <typename R , typename U , typename O_U>
 class AbstractRSet :
@@ -50,7 +48,7 @@ public:
 
 };
 
-template <typename R , typename U , typename O_U , typename GROUP>
+template <typename R , typename O_U , typename GROUP , typename U = inner_t<GROUP>>
 class AbstractModule :
   public AbstractRSet<R,U,O_U> ,
   public GROUP
@@ -61,7 +59,6 @@ public:
   inline AbstractModule( const R& dummy , O_U o_U , GROUP M );
 
 };
-template <typename R , typename O_U , typename GROUP> AbstractModule( const R& dummy , O_U o_U , GROUP M ) -> AbstractModule<R,inner_t<GROUP>,O_U,GROUP>;
 
 template <typename R , typename U>
 class Module :
