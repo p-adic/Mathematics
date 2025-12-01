@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/MaximalElement/SuffixMax/a_Body.hpp"
+#else
+TE <TY INT,TY Y,TY RET = Y>CL DynamicSuffixMax{PU:INT m_i_llim;INT m_i_max;Y m_y_ulim;VE<Pair<INT,Y>> m_me;VE<RET> m_ps;IN DynamicSuffixMax(INT i_llim,Y y_ulim);VO insert(CO INT& i,CO Y& y);IN VO clear();IN Y FinalSegmentMax(CO INT& i);IN RET FinalSegmentMaxSum(CO INT& i);IN T2<INT> GetInterval(CO INT& i);};
+TE <TY INT,TY Y,TY RET> IN DynamicSuffixMax<INT,Y,RET>::DynamicSuffixMax(INT i_llim,Y y_ulim):m_i_llim(MO(i_llim)),m_i_max(m_i_llim),m_y_ulim(MO(y_ulim)),m_me(1,{m_i_llim,m_y_ulim}),m_ps(1){}TE <TY INT,TY Y,TY RET> VO DynamicSuffixMax<INT,Y,RET>::insert(CO INT& i,CO Y& y){AS(m_i_max < i && y < m_y_ulim);m_i_max = i;WH(!(y < m_me.back()[I])){pop(m_me);pop(m_ps);}m_ps <<= m_ps.back()+ RET{i - m_me.back()[O]}* y;m_me <<={i,y};}TE <TY INT,TY Y,TY RET> IN VO DynamicSuffixMax<INT,Y,RET>::clear(){m_ps.clear();m_me.clear();}TE <TY INT,TY Y,TY RET> IN T2<INT> DynamicSuffixMax<INT,Y,RET>::GetInterval(CO INT& i){AS(m_i_llim < i && i <= m_i_max);int l = 0,SZ = m_me.SZ(),r = SZ;WH(l < r - 1){CO int m =(l + r)>> 1;(i < m_me[m][O]?r:l)= m;}if(m_me[l][O]== i){r = l;}AS(r < SZ);RE{l,r};}TE <TY INT,TY Y,TY RET> IN Y DynamicSuffixMax<INT,Y,RET>::FinalSegmentMax(CO INT& i){auto[l,r]= GetInterval(i);RE m_me[r][I];}TE <TY INT,TY Y,TY RET> IN RET DynamicSuffixMax<INT,Y,RET>::FinalSegmentMaxSum(CO INT& i){if(m_i_max < i){RE Y{};}auto[l,r]= GetInterval(i);RE m_ps.back()- m_ps[l]+ RET{l == r?1:-(i - 1 - m_me[l][O])}* m_me[r][I];}
+#endif
+
