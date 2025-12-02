@@ -1,4 +1,4 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/Tree/CumulativeProduct/TwoDimensional/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/CumulativeProduct/TwoDimensional/a.hpp
 
 #pragma once
 
@@ -17,7 +17,7 @@
 
 // Žn‹éŒ`˜aO(1)
 // ‹éŒ`˜aO(1)
-template <typename U , typename ABELIAN_GROUP>
+template <typename ABELIAN_GROUP , typename U = inner_t<ABELIAN_GROUP>>
 class AbstractTwoDimensionalCumulativeSum
 {
 
@@ -28,8 +28,7 @@ private:
   vector<vector<U>> m_a;
 
 public:
-  AbstractTwoDimensionalCumulativeSum( ABELIAN_GROUP M , const int& size_X , const int& size_Y );
-  AbstractTwoDimensionalCumulativeSum( ABELIAN_GROUP M , const vector<vector<U>>& a = {} );
+  template <typename T = U> AbstractTwoDimensionalCumulativeSum( ABELIAN_GROUP M , const vector<vector<T>>& a = {} );
 
   template <typename...Args> inline void Initialise( const Args&... args );
   
@@ -52,16 +51,13 @@ public:
   inline U RectangleSum( const int& i_start_x , const int& i_start_y , const int& i_final_x , const int& i_final_y );
 
 };
-template <typename ABELIAN_GROUP , typename...Args> AbstractTwoDimensionalCumulativeSum( ABELIAN_GROUP , const Args&... ) -> AbstractTwoDimensionalCumulativeSum<inner_t<ABELIAN_GROUP>,ABELIAN_GROUP>;
-
 
 template <typename U = ll>
 class TwoDimensionalCumulativeSum :
-  public AbstractTwoDimensionalCumulativeSum<U,AdditiveGroup<U>>
+  public AbstractTwoDimensionalCumulativeSum<AdditiveGroup<U>>
 {
 
 public:
-  inline TwoDimensionalCumulativeSum( const int& size_X , const int& size_Y );
-  inline TwoDimensionalCumulativeSum( const vector<vector<U>>& a = {} );
+  template <typename T = U> inline TwoDimensionalCumulativeSum( const vector<vector<T>>& a = {} );
   
 };
