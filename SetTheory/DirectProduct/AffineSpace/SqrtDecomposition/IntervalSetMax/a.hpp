@@ -1,7 +1,10 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SqrtDecomposition/IntervalSet/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SqrtDecomposition/IntervalSetMax/a.hpp
 
 #pragma once
-#include "../Sqrt/a.hpp"
+// verify:
+// https://yukicoder.me/submissions/1138062 (IntervalSetMax,Get)
+
+#include "../Coordinate/a.hpp"
 
 // 入力の範囲内で要件
 // (1) Mがoperator<(const U&const U&)に関するUの全順序Z加群構造である。
@@ -53,7 +56,7 @@ private:
 };
 template <typename Z_MODULE , typename...Args> IntervalSetMaxAbstractSqrtDecomposition( Z_MODULE M , Args&&... args ) -> IntervalSetMaxAbstractSqrtDecomposition<inner_t<Z_MODULE>,Z_MODULE>;
 
-template <typename U = ll>
+template <typename U>
 class IntervalSetMaxSqrtDecomposition :
   public IntervalSetMaxAbstractSqrtDecomposition<U,Module<int,U>>
 {

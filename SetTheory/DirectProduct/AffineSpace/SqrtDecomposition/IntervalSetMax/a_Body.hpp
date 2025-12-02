@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../Sqrt/a_Body.hpp"
+#include "../Coordinate/a_Body.hpp"
 #include "../../../../../Arithmetic/Iteration/Constexpr/Log/a_Body.hpp"
 
 template <typename U , typename Z_MODULE> inline IntervalSetMaxAbstractSqrtDecomposition<U,Z_MODULE>::IntervalSetMaxAbstractSqrtDecomposition( const Z_MODULE& M , const U& val_min , const int& N ) : IntervalSetMaxAbstractSqrtDecomposition( M , val_min , vector<U>( N , M.Zero() ) ) {}
@@ -12,7 +12,7 @@ template <typename U , typename Z_MODULE>
 IntervalSetMaxAbstractSqrtDecomposition<U,Z_MODULE>::IntervalSetMaxAbstractSqrtDecomposition( Z_MODULE M , const U& val_min , vector<U> a ) : IntervalSetMaxAbstractSqrtDecomposition( M , val_min , a.size() , a ) {}
 
 template <typename U , typename Z_MODULE>
-IntervalSetMaxAbstractSqrtDecomposition<U,Z_MODULE>::IntervalSetMaxAbstractSqrtDecomposition( Z_MODULE& M , const U& val_min , const int& N , vector<U>& a ) : SqrtDecompositionCoordinate( N , Sqrt( N / max( 1 , Log( N ) ) ) ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.Zero() ) , m_val_min( val_min ) , m_lazy_set_max( m_N_d , m_val_min ) , m_a_updated( m_N ) , m_b_updated( m_N_d ) , m_set( m_N_d )
+IntervalSetMaxAbstractSqrtDecomposition<U,Z_MODULE>::IntervalSetMaxAbstractSqrtDecomposition( Z_MODULE& M , const U& val_min , const int& N , vector<U>& a ) : SqrtDecompositionCoordinate( N , RoundUpSqrt( N / max( 1 , Log( N ) ) ) ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.Zero() ) , m_val_min( val_min ) , m_lazy_set_max( m_N_d , m_val_min ) , m_a_updated( m_N ) , m_b_updated( m_N_d ) , m_set( m_N_d )
 {
 
   static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<Z_MODULE>> );
