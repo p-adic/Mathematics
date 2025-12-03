@@ -1,6 +1,8 @@
 #ifdef DEBUG
   #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/Function/Residue/Quotient/a_Body.hpp"
 #else
-TE <TY INT>pair<INT,ll> CoprimeFactorInverse(CRL base,INT c){AS(base > 0);ll a[2]={0,1 % base};INT b[2]={base,INT((c %= base)< 0?c += base:c)};WH(b[1]!= 0){CO INT q = b[0]/ b[1];(a[0]-= q * a[1]% base)< 0?a[0]+= base:a[0];b[0]-= q * b[1];swap(a[0],a[1]);swap(b[0],b[1]);}RE{MO(a[0]),MO(b[0])};}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d,CRL coef,CRL gcd){AS(0 <= coef && coef < base &&(d % base * coef - gcd)% base == 0);RE n % gcd == 0?Residue(n / gcd % base * coef,base / gcd):-1;}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d){auto[coef,gcd]= CoprimeFactorInverse(base,d);RE ModularQuotient(base,n,d,coef,gcd);}
+TE <TY RET,TY INT>tuple<RET,RET,INT> PartitionOfUnity(CO INT& base_0,CO INT& base_1){if(base_1 == 0){RE{base_0<0?-1:1,0,abs(base_0)};}auto[c_1,c_0,gcd]= PartitionOfUnity<RET,INT>(base_1,base_0 % base_1);c_1 -= base_0 / base_1 * c_0;RE{MO(c_0),MO(c_1),MO(gcd)};}
+
+TE <TY INT> IN pair<INT,ll> CoprimeFactorInverse(CRL base,CO INT& c){AS(base > 0);auto[u_0,u_1,g]= PartitionOfUnity<ll,ll>(base,c);RE{Residue(u_1,base),MO(g)};}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d,CRL coef,CRL gcd){AS(0 <= coef && coef < base &&(d % base * coef - gcd)% base == 0);RE n % gcd == 0?Residue(n / gcd % base * coef,base / gcd):-1;}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d){auto[coef,gcd]= CoprimeFactorInverse(base,d);RE ModularQuotient(base,n,d,coef,gcd);}
 #endif
 
