@@ -1,0 +1,38 @@
+# gcd(p,q),単位の分割u,v（p*u+q*v=gcd(p,q)）を返す。
+def PartitionOfUnity(p,q):
+	if q==0:return abs(p),1-2*(p<0),q
+	g,c,d=PartitionOfUnity(q,p%q)
+	return g,d,c-p//q*d
+
+# gcd(p,q),非負最小解a（a≡s (mod p), a≡t (mod q)）を返す。
+# ただし解がない場合はa=-1とする。
+def ChineseRemainderTheorem(p,s,q,t):
+	g,u,v=PartitionOfUnity(p,q)
+	a=-1if s%g!=t%g else(s%g+t//g*p*u+s//g*q*v)%(p*q//g)
+	return g,a
+
+# 多倍長整数を用いて連立合同式の非負最小解を計算する。
+class DynamicChineseRemiderTheorem:
+	def __init__(self):
+		self.mod=1
+		self.ans=0
+		self.div=[]
+		self.len=0
+
+	def append(self,base,res):
+		assert base
+		if self.len:self.len+=1;return
+		g,a=ChineseRemainderTheorem(self.mod,self.ans,base,res)
+		if a<0:self.len=1;return
+		self.div+=[base//g]
+		self.mod,self.ans=self.mod*self.div[-1],a
+
+	def pop(self,n):
+		for i in R(n):
+			if self.len:self.len-=1
+			else:self.mod//=self.div.pop()
+		if self.len<1:self.ans%=self.mod
+
+	def Get(self,mod=0):
+		return -1if self.len else self.ans%mod if mod>0 else self.ans
+

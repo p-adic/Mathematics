@@ -6,13 +6,13 @@
 
 // GCDやLCMは../../../Prime/Divisor/GCDで定義。
 
-// u_0,u_1にu_0*b_0+u_1*b_1==GCD(b_0,b_1)を満たす値を格納し、
-// GCD(b_0,b_1)を返す。（O(log min(b_0,b_1))）
-template <typename INT> INT PartitionOfUnity( const INT& b_0 , const INT& b_1 , INT& u_0 ,  INT& u_1 );
-
-// GCD(b,c)==1である場合にのみサポート。
-// cの法b逆元を返す。（O(log b)）
-template <typename INT> inline INT ModularInverse( const INT& b , const INT& c );
+// u_0*b_0+u_1*b_1==GCD(b_0,b_1)を満たすu_0,u_1に対する
+// {u_0,u_1,GCD(b_0,b_1)}を返す。（O(log min(b_0,b_1))）
+// 計算過程のオーバーフローに注意。
+template <typename RET , typename INT> tuple<RET,RET,INT> PartitionOfUnity( const INT& base_0 , const INT& base_1 );
+// 逆元計算は
+// ../Residue/
+// のModularInverseの方が定数倍早い。
 
 // LCM(b_0,b_1)^2がINTでオーバーフローしない場合にのみサポート。
 // (x-c_0)%b_0==0かつ(x-c_1)%b_1==0を満たす非負整数xが存在すればそのようなxを返し、

@@ -1,15 +1,8 @@
 # gcd(p,q),単位の分割u,v（p*u+q*v=gcd(p,q)）を返す。
 def PartitionOfUnity(p,q):
-	b,c=[p,q],[[1,0],[0,1]]
-	i=p<q
-	j=1-i
-	while b[j]:
-		d=b[i]//b[j]
-		c[i][i]-=d*c[j][i]
-		c[i][j]-=d*c[j][j]
-		b[i]-=d*b[j]
-		i,j=j,i
-	return b[i],c[i][0],c[i][1]
+	if q==0:return abs(p),1-2*(p<0),q
+	g,c,d=PartitionOfUnity(q,p%q)
+	return g,d,c-p//q*d
 
 # gcd(p,q),非負最小解a（a≡s (mod p), a≡t (mod q)）を返す。
 # ただし解がない場合はa=-1とする。

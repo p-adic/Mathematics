@@ -1,0 +1,11 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/Function/CRT/Dynamic/a_Body.hpp"
+#else
+TE <TY RET,TY INT>tuple<RET,RET,INT> PartitionOfUnity(CO INT& base_0,CO INT& base_1){if(base_1 == 0){RE{base_0<0?-1:1,0,abs(base_0)};}auto[c_1,c_0,gcd]= PartitionOfUnity<RET,INT>(base_1,base_0 % base_1);c_1 -= base_0 / base_1 * c_0;RE{MO(c_0),MO(c_1),MO(gcd)};}
+
+TE <TY INT> IN pair<INT,ll> CoprimeFactorInverse(CRL base,CO INT& c){AS(base > 0);auto[u_0,u_1,g]= PartitionOfUnity<ll,ll>(base,c);RE{Residue(u_1,base),MO(g)};}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d,CRL coef,CRL gcd){AS(0 <= coef && coef < base &&(d % base * coef - gcd)% base == 0);RE n % gcd == 0?Residue(n / gcd % base * coef,base / gcd):-1;}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d){auto[coef,gcd]= CoprimeFactorInverse(base,d);RE ModularQuotient(base,n,d,coef,gcd);}
+
+CL DynamicGarner{PU:VE<int> m_base;VE<int> m_coef;int m_len;IN VO push_back(int base,int res);IN VO pop_back();IN int Get(CRI mod)CO;IN pair<int,int> Solve(CRI mod)CO;};
+IN VO DynamicGarner::push_back(int base,int res){AS(0 <= res && res < base);if(m_len > 0){m_len++;RE;}auto[a,b_prod]= Solve(base);CO int gcd = GCD(base,b_prod);if((res -= a)% gcd == 0){res = ModularQuotient(base,res,b_prod);if(res != -1){m_base.push_back(base /= gcd);m_coef.push_back(res %= base);RE;}}m_len = 1;RE;}IN VO DynamicGarner::pop_back(){if(m_len > 0){m_len--;}else{m_base.pop_back();m_coef.pop_back();}}IN int DynamicGarner::Get(CRI mod)CO{RE m_len > 0?-1:int(Solve(mod).first);}IN pair<int,int> DynamicGarner::Solve(CRI mod)CO{CO int SZ = m_base.SZ();ll a = 0,b_prod = 1;for(int i = 0;i < SZ;i++){(a += m_coef[i]* b_prod)%= mod;(b_prod *= m_base[i])%= mod;}RE{MO(a),MO(b_prod)};}
+#endif
+
