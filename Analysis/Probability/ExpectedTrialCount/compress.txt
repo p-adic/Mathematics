@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Analysis/Probability/ExpectedTrialCount/a_Body.hpp"
+#else
+TE <TY MODINT>MODINT ExpectedCompleteCollectionTrialCount(CO MODINT& n,CRI m,CRI l){AS(0 <= l && l <= m);MODINT AN{};for(int i = 0;i < l;i++){AN += n /(m - i);}RE AN;}TE <TY MODINT>MODINT ExpectedDoubleCollectionTrialCount(CO MODINT& n,CRI m,CRI l){AS(0 <= l && l <= m);VE<MODINT> dp(m - 1 + 1);for(int i = l - 1;i >= 0;i--){VE<MODINT> ndp(m - i + 1);CO MODINT den = 1 / MODINT{m - i};for(int j = m - i - 1;j >= 0;j--){ndp[j]=(n +(m - i - j)* ndp[j+1]+(j?j * dp[j-1]:MODINT{}))* den;}dp = MO(ndp);}RE dp[0];}TE <TY MODINT>MODINT ExpectedCompletePairCollectionTrialCount(CO MODINT& n,CRI m,CRI l){AS(0 <= l && l <= m);VE<MODINT> dp(2 * m - 2 * 1 + 1);for(int i = l - 1;i >= 0;i--){VE<MODINT> ndp(2 * m - 2 * i + 1);for(int j = 2 * m - 2 * i - 1;j >= 0;j--){ndp[j]=(n + 2 *(m - i - j)* ndp[j+1]+(j?j * dp[j-1]:MODINT{}))/(2 * m - 2 * i - j);}dp = MO(ndp);}RE dp[0];}TE <TY MODINT,TY INT> IN MODINT ExpectedCompletionTrialCount(CO MODINT& n,CRI m,INT c){AS(0 <= m);RE(1 - Power(1 - 1 / n,MO(c)))* m;}
+#endif
+
