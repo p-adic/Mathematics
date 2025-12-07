@@ -29,7 +29,7 @@ T Power( const T& t , const UINT& exponent , T init )
 
 template <typename T> inline T PowerMemorisation( const T& t , const int& exponent ) { assert( exponent >= 0 ); static Map<T,vector<T>> memory{}; auto& answer = memory[t]; if( answer.empty() ){ answer.push_back( 1 ); } while( int( answer.size() ) <= exponent ){ answer.push_back( answer.back() * t ); } return answer[exponent]; }
 
-template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d ) { return ( l + r ) * ( r - l + 1 ) / 2; }
+template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d ) { return ( l + r ) * ( ( r - l ) / d  + 1 ) / 2; }
 template <typename INT> inline INT SpecialisedArithmeticProgressionSum( const INT& l , const INT& r , const INT& d ) { assert( l - 1 <= r ); const INT c = ( r - l ) / d; return l - 1 == r ? 0 : ( c & 1 ) == 0 ? ( c + 1 ) * ( l + d * ( c >> 1 ) ) : ( ( c + 1 ) >> 1 ) * ( ( l << 1 ) + d * c ); }
 SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( int );
 SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( uint );
