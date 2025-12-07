@@ -24,7 +24,7 @@
 
 #define DECLARATION_OF_SHIFT_FOR_VECTOR( V )    \
   template <typename T> inline V<T>& operator<<=( V<T>& a , T t );      \
-  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U u ); \
+  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ); \
   template <typename T> inline T pop( V<T>& a )                  \
 
 #define DEFINITION_OF_SHIFT_FOR_VECTOR( V )			\
