@@ -19,9 +19,11 @@ template <typename T> inline T& SetMax( T& n );
 template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , const U& u1 , const Args&... args );
 template <typename T> inline T& SetMin( T& n );
 template <typename T , typename U , typename... Args> inline T& SetMin( T& t0 , const U& u1 , const Args&... args );
-template <typename T , template <typename...> typename V> inline const T& Max( const V<T>& f );
+template <typename T> inline const T& Max( const vector<T>& f );
+template <typename T , template <typename...> typename SET> inline const T& Max( const SET<T>& f );
 template <typename T , typename U , typename...Args> inline T Max( T t0 , const U& t1 , const Args&... args );
-template <typename T , template <typename...> typename V> inline const T& Min( const V<T>& f );
+template <typename T> inline const T& Min( const vector<T>& f );
+template <typename T , template <typename...> typename SET> inline const T& Min( const SET<T>& f );
 template <typename T , typename U , typename...Args> inline T Min( T t0 , const U& t1 , const Args&... args );
 
 // init * ( t ^ exponent )を返す
@@ -35,6 +37,8 @@ template <typename T> inline T PowerMemorisation( const T& t , const int& expone
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d = 1 );
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& r );
 
+// 0^2からr^2までの平方数の総和を取る。
+template <typename INT> inline INT SquareSum( const INT& r );
 
 // 入力の範囲内で要件
 // (1) Tがoperator+,operator-,operator*に関して単位的環をなす。

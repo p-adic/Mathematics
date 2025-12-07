@@ -12,11 +12,12 @@ template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , 
 template <typename T> inline T& SetMin( T& t ) { return t; }
 template <typename T , typename U , typename... Args> inline T& SetMin( T& t0 , const U& u1 , const Args&... args ) { return SetMin( u1 < t0 ? t0 = u1 : t0 , args... ); }
 
-template <typename T , template <typename...> typename V> inline const T& Max( const V<T>& f ) { return *max_element( f.begin() , f.end() ); }
+template <typename T> inline const T& Max( const vector<T>& f ) { return *max_element( f.begin() , f.end() ); }
+template <typename T , template <typename...> typename SET> inline const T& Max( const SET<T>& f ) { return *--f.end(); }
 template <typename T , typename U , typename...Args> inline T Max( T t0 , const U& t1 , const Args&... args ) { return move( SetMax( t0 , t1 , args... ) ); }
-template <typename T , template <typename...> typename V> inline const T& Min( const V<T>& f ) { return *min_element( f.begin() , f.end() ); }
+template <typename T> inline const T& Min( const vector<T>& f ) { return *min_element( f.begin() , f.end() ); }
+template <typename T , template <typename...> typename SET> inline const T& Min( const SET<T>& f ) { return *f.begin(); }
 template <typename T , typename U , typename...Args> inline T Min( T t0 , const U& t1 , const Args&... args ) { return move( SetMin( t0 , t1 , args... ) ); }
-
 
 template <typename T , typename UINT>
 T Power( const T& t , const UINT& exponent , T init )
@@ -35,6 +36,8 @@ SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( uint );
 SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( ll );
 SPECIALSATION_OF_ARITHMETIC_PROGRESSION_SUM( ull );
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& r ) { return ArithmeticProgressionSum( INT{} , r ); }
+
+template <typename INT> inline INT SquareSum( const INT& r ) { return r * ( r + 1 ) * ( 2 * r + 1 ) / 6; }
 
 template <typename T , typename UINT> inline T GeometricProgressionSum( T rate , UINT exponent_max , const T& init ) { T rate_minus = rate - 1; return rate_minus == 0 ? init * ++exponent_max : ( Power( move( rate ) , move( ++exponent_max ) ) - 1 ) / move( rate_minus ) * init; }
 
