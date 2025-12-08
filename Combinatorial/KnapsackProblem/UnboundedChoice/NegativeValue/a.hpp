@@ -3,7 +3,7 @@
 #pragma once
 
 // verify:
-// UnboundedChoiceNegativeValueKnapsack（N,cost_sum_bound）
+// NegativeValueUnboundedChoiceKnapsack（N,cost_sum_bound）
 // https://onlinejudge.u-aizu.ac.jp/status/users/padic/submissions/1/DPL_1_C/judge/9054779/C++17（100,1e4）
 
 // コストが正ならば選択回数はcost_sum_boundで抑えられ、
