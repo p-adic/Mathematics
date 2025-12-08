@@ -1,7 +1,6 @@
 // c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/BoundedChoice/a.hpp
 
 #pragma once
-
 // verify:
 // BoundedChoiceKnapsack（N,v_max,value_sum_bound,cost_sum_bound,choice_num_bound_max）
 // https://onlinejudge.u-aizu.ac.jp/status/users/padic/submissions/1/DPL_1_G/judge/9071868/C++17（100,1e3,1e9,1e4,1e4）
@@ -26,7 +25,7 @@ void SetIteratedItem( N_MODULE1 M1 , N_MODULE2 M2 , const int& N , const vector<
 // (2) 0 <= value_sum_boundである。
 // (3) 0 <= cost_sum_boundである。
 // を満たす場合にのみサポート。
-// 計算量O(min(N min(value_sum_bound,cost_sum_bound,cn_max 2^{N/2}) log_2 cn_max,
+// 計算量O(min(N min(value_sum_bound,cost_sum_bound,cn_max^{N/2}) log_2 cn_max,
 //   N^2 v_max^2 log_2 v_max))で
 // 各iに対し項目iをchoice_num_bound[i]回まで重複選択できるとして、コストの総和cost_sum_bound
 // 以下における価値の総和のvalue_sum_bound以下での最大値を求める。
