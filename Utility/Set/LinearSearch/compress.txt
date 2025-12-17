@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Utility/Set/LinearSearch/a_Body.hpp"
+#else
+TE <int digit>CL LinearSearchMultiset{PU:int m_amb;ull m_r;ull m_s;VE<VE<ull>> m_S;IN LinearSearchMultiset()NE;IN LinearSearchMultiset(ull r,ull s)NE;IN VO clear()NE;IN VO insert(ull n)NE;IN LinearSearchMultiset<digit>& OP<<=(ull n)NE;IN bool find(ull n)CO NE;IN int count(ull n)CO NE;};
+TE <int digit> IN LinearSearchMultiset<digit>::LinearSearchMultiset()NE:LinearSearchMultiset(GetRand(1,1LL << 60)* 2 - 1,GetRand(1,1LL << 60)){}TE <int digit> IN LinearSearchMultiset<digit>::LinearSearchMultiset(ull r,ull s)NE:m_amb((1 << digit)- 1),m_r(MO(r)),m_s(MO(s)),m_S(1 << digit){ST_AS(0 <= digit && digit < 30);}TE <int digit> IN VO LinearSearchMultiset<digit>::clear()NE{for(auto& v:m_S){v.clear();}}TE <int digit> IN VO LinearSearchMultiset<digit>::insert(ull n)NE{(n *= m_r)+= m_s;m_S[(n>>16)&m_amb]<<= n;}TE <int digit> IN LinearSearchMultiset<digit>& LinearSearchMultiset<digit>::OP<<=(ull n)NE{TH->insert(MO(n));RE *TH;}TE <int digit> IN bool LinearSearchMultiset<digit>::find(ull n)CO NE{(n *= m_r)+= m_s;for(auto& x:m_S[(n>>16)&m_amb]){if(x == n){RE true;}}RE false;}TE <int digit> IN int LinearSearchMultiset<digit>::count(ull n)CO NE{(n *= m_r)+= m_s;int AN = 0;for(auto& x:m_S[(n>>16)&m_amb]){AN += x == n;}RE AN;}
+#endif
+
