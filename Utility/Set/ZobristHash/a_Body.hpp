@@ -6,7 +6,7 @@
 #include "../Map/a_Body.hpp"
 #include "../../Random/a_Body.hpp"
 
-template <typename T> inline ZobristHashBody<T>::ZobristHashBody() : ZobristHashBody( GetRand( 1 , 1LL << 60 ) , GetRand( 1 , 1LL << 60 ) ) {}
+template <typename T> inline ZobristHashBody<T>::ZobristHashBody() : ZobristHashBody( GetRand( 1 , 1LL << 60 ) * 2 - 1 , GetRand( 1 , 1LL << 60 ) ) {}
 template <typename T> inline ZobristHashBody<T>::ZobristHashBody( const ull& r , const ull& s ) : m_r( r ) , m_s( s ) {}
 template <typename...Args> inline ZobristHash::ZobristHash( Args&&... args ) : ZobristHashBody<ull>( args... ) {}
 template <typename T> template <typename...Args> inline MemorisationZobristHash<T>::MemorisationZobristHash( Args&&... args ) : ZobristHashBody<T>( args... ) {}
