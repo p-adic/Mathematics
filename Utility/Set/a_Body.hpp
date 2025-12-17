@@ -11,7 +11,7 @@ template <typename SET , typename T> inline typename SET::const_iterator Minimum
 template <typename SET , typename ITERATOR> inline void EraseBack( SET& S , ITERATOR& itr ) { itr = S.erase( itr ); }
 template <typename SET , typename ITERATOR> inline void EraseFront( SET& S , ITERATOR& itr ) { itr = S.erase( itr ); itr == S.begin() ? itr = S.end() : --itr; }
 
-template <template <typename...> typename SET , typename T , typename...Args> inline bool In( const SET<T,Args...>& S , const T& t ) { return S.count( t ) == 1; }
+template <template <typename...> typename SET , typename T , typename...Args> inline bool In( const T& t , const SET<T,Args...>& S ) { return S.count( t ) > 0; }
 
 DEFINITION_OF_POP_FOR_SET( set<T> );
 DEFINITION_OF_POP_FOR_SET( unordered_set<T> );
