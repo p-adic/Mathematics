@@ -1,11 +1,11 @@
-// 常設ライブラリーのDynamicModsを消すか、DynamicModsの
+/* ConstexprModulo (8KB) */
+// (1) 常設ライブラリーのDynamicModsを消すか、DynamicModsの
 // - CEXPR(uint,P,998244353);
-// - US MP = DMOD;
-// をコメントアウトする。
-#ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/ConstexprModulo/Debug/a_Body.hpp"
-#else
+// - US MP = DMod;
+// をコメントアウトする。いずれの場合も常設ライブラリーに下を追加する。
 CEXPR(uint,P,998244353);
+#define RP Represent
+#define DeRP Derepresent
 TE <uint M,TY INT> CE INT Residue(INT n)NE{RE MO(n < 0?((((++n)*= -1)%= M)*= -1)+= M - 1:n < INT(M)?n:n %= M);}TE <TY INT> CE INT& ResidueP(INT& n)NE{CE CO uint trunc =(1 << 23)- 1;INT n_u = n >> 23;n &= trunc;INT n_uq =(n_u / 7)/ 17;n_u -= n_uq * 119;n += n_u << 23;RE n < n_uq?n += P - n_uq:n -= n_uq;}
 TE <TY INT> IN INT ModularInverse(CO INT& base,ll c){AS(base > 0);ll a[2]={0,1 % base};INT b[2]={base,INT((c %= base)< 0?c += base:c)};WH(b[1]!= 0){CO INT q = b[0]/ b[1];(a[0]-= q * a[1]% base)< 0?a[0]+= base:a[0];b[0]-= q * b[1];swap(a[0],a[1]);swap(b[0],b[1]);}AS(b[0]== 1 &&(a[0]* c - 1)% base == 0);RE a[0];}
 TE <uint M> CL Mod;TE <uint M>CL COantsForMod{PU:COantsForMod()= delete;ST CE CO uint g_memory_bound = 2e6;ST CE CO uint g_memory_le = M < g_memory_bound?M:g_memory_bound;ST CE uint g_M_minus = M - 1;ST CE int g_order = M - 1;ST CE int g_order_minus = g_order - 1;};
@@ -22,4 +22,3 @@ TE <uint M> CE Mod<M>::Mod()NE:m_n(){}TE <uint M> CE Mod<M>::Mod(CO Mod<M>& n)NE
 #define DF_OF_HASH_FOR_MOD(MOD)IN size_t hash<MOD>::OP()(CO MOD& n)CO{ST CO hash<decldecay_t(n.RP())> h;RE h(n.RP());}
 #endif
 TE <uint M> DC_OF_HASH(Mod<M>);TE <uint M> DF_OF_HASH_FOR_MOD(Mod<M>);
-#endif
