@@ -1,7 +1,7 @@
 // c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SqrtDecomposition/Dual/a.hpp
 
 #pragma once
-#include "../Sqrt/a.hpp"
+#include "../Coordinate/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/1015050（区間作用、一点取得）

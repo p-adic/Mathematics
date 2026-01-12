@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../Sqrt/a_Body.hpp"
+#include "../Coordinate/a_Body.hpp"
 
 template <typename R , typename PT_MAGMA , typename U , typename R_SET> template <typename...Args> inline DualSqrtDecomposition<R,PT_MAGMA,U,R_SET>::DualSqrtDecomposition( PT_MAGMA L , R_SET X , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_L( move( L ) ) , m_X( move( X ) ) , m_a( move( a ) ) , m_b( m_N_d , m_L.Point() ) { static_assert( is_same_v<R,inner_t<PT_MAGMA>> && is_same_v<U,inner_t<R_SET>> ); }
 
