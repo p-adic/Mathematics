@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/PlainCoordinate/PlainSort/Order/a_Body.hpp"
+#else
+TE <TY INT>CL ArgumentSortOrder{PU:INT m_x;INT m_y;IN ArgumentSortOrder(INT x,INT y);TE <TY PAIR> bool OP()(CO PAIR& v0,CO PAIR& v1)CO;};
+TE <TY INT> IN ArgumentSortOrder<INT>::ArgumentSortOrder(INT x,INT y):m_x(MO(x)),m_y(MO(y)){}TE <TY INT> TE <TY PAIR> IN bool ArgumentSortOrder<INT>::OP()(CO PAIR& v0,CO PAIR& v1)CO{auto&[x0,y0]= v0;auto&[x1,y1]= v1;CO ll S = Area<ll>(m_x,m_y,x0,y0,x1,y1);RE S > 0 ||(S == 0 &&(abs(x0 - m_x)< abs(x1 - m_x)|| abs(y0 - m_y)< abs(y1 - m_y)));}
+#endif
+
