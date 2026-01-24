@@ -4,130 +4,82 @@
 #include "a.hpp"
 
 #include "../Area/a_Body.hpp"
+#include "../../../../Utility/Vector/a_Body.hpp"
 
-template <typename INT , template <typename...> typename PAIR> template <template <typename...> typename VEC> inline ConvexHull<INT,PAIR>::ConvexHull( const VEC<PAIR<INT,INT>>& xy ) : ConvexHull()  { for( auto& p : xy ){ insert( p ); } }
-
-template <typename INT , template <typename...> typename PAIR> inline void ConvexHull<INT,PAIR>::insert( const Pair<INT,INT>& xy ) { insert( get<0>( xy ) , get<1>( xy ) ); }
-
-template <typename INT , template <typename...> typename PAIR>
-void ConvexHull<INT,PAIR>::insert( const INT& x , const INT& y )
+template <typename INT> template <template <typename...> typename PAIR>
+ConvexHull<INT>::ConvexHull( const vector<PAIR<INT,INT>>& xy ) : m_size( xy.size() ) , m_ext() , m_ext_inv() , m_non_ext_end() , m_interior()
 {
 
-  vector<tuple<int,INT,INT,int>> update = {{0,x,y,m_size++}};
-  auto end = m_ext_cyc.end();
-  using iterator = typename set<tuple<int,INT,INT,int>>::iterator;
+  if( m_size > 0 ){
 
-  auto eval = [&]( const iterator& itr ){
+    auto [x0,y0] = Min( xy );
+    ArgumentSortOrder ord{ x0 , y0 };
+    auto index_ord = [&]( const int& i0 , const int& i1 ){ return ord( xy[i0] , xy[i1] ); };
+    auto index = id<int>( xy.size() );
+    sort( index.begin() , index.end() , index_ord );
+    int L = 0;
 
-    auto [t,x,y,i] = *itr;
-    
-    if( t == 1 ){
+    for( auto& i : index ){
 
-      x *= -1;
-      y *= -1;
+      auto& [x1,y1] = xy[i];
 
-    }
+      if( L > 1 ){
+        
+        auto& [x2,y2] = xy[m_ext[L-1]];
+        const ll S = Area<ll>( x2 , y2 , x1 , y1 , x0 , y0 );
+        assert( S >= 0 );
 
-    return tuple{t,x,y,i};
+        if( S == 0 ){
 
-  };
+          m_non_ext_end <<= pop( m_ext );
+          L--;
 
-  auto decr = [&]( iterator& itr ) -> iterator& {
-
-    return --( itr == m_ext_cyc.begin() ? itr = end : itr );
-    
-  };
-
-  auto incr = [&]( iterator& itr ) -> iterator& {
-
-    return ++itr == end ? itr = m_ext_cyc.begin() : itr;
-    
-  };
-
-  auto valid = [&]( iterator& itr ){
-
-    if( m_ext_cyc.size() < 3 ){
-
-      return true;
-
-    }
-    
-    auto prev = itr , next = itr;
-    auto [t1,x1,y1,i1] = eval( decr( prev ) );
-    auto [t2,x2,y2,i2] = eval( itr );
-    auto [t3,x3,y3,i3] = eval( incr( next ) );
-    auto S = Area( x1 , y1 , x2 , y2 , x3 , y3 );
-
-    if( S > 0 || ( t2 == 0 && ( t3 == 1 || tuple{x3,i3,i3} < tuple{x2,y2,i2} || tuple{x2,y2,i2} < tuple{x1,y1,i1} ) ) ){
-
-      return true;
-
-    }
-
-    if( S < 0 ){
-
-      if( t2 == 0 ){
-
-        update.push_back( {1,-x2,-y2,i2} );
-
-      } else {
-
-        m_interior.push_back( i2 );
-
+        }
+      
       }
 
-    } else {
+      while( L > 1 ){
 
-      m_non_ext_end.push_back( i2 );      
+        auto& [x2,y2] = xy[m_ext[L-1]];
+        auto& [x3,y3] = xy[m_ext[L-2]];
+        const ll S = Area<ll>( x3 , y3 , x2 , y2 , x1 , y1 );
+
+        if( S > 0 ){
+
+          break;
+              
+        }
+            
+        ( S < 0 ? m_interior : m_non_ext_end ) <<= pop( m_ext );
+        L--;
+
+      }
+      
+      m_ext <<= i;
+      L++;
 
     }
 
-    m_ext.erase( i2 );
-    itr = m_ext_cyc.erase( itr );
-
-    if( itr == end ){
-
-      itr = m_ext_cyc.begin();
+    for( int i = 0 ; i < L ; i++ ){
+      
+      m_ext_inv[m_ext[i]] = i;
 
     }
     
-    return false;
-
-  };
-
-  while( !update.empty() ){
-    
-    auto p = update.back();
-    update.pop_back();
-    m_ext_cyc.insert( p );
-    m_ext.insert( get<3>( p ) );
-    auto itr = m_ext_cyc.lower_bound( p );
-
-    if( valid( itr ) ){
-
-      auto temp = itr;
-
-      while( !valid( decr( temp ) ) ){}
-
-      temp = itr;
-
-      while( !valid( incr( temp ) ) ){}
-
-    }
-
   }
-
-  return;
 
 }
 
-template <typename INT , template <typename...> typename PAIR> inline const int& ConvexHull<INT,PAIR>::TotalSize() const noexcept { return m_size; }
-template <typename INT , template <typename...> typename PAIR> inline int ConvexHull<INT,PAIR>::ExtremalPointSize() const noexcept { return m_ext.size(); }
-template <typename INT , template <typename...> typename PAIR> inline int ConvexHull<INT,PAIR>::NonExtremalEndPointSize() const noexcept { return m_non_ext_end.size(); }
-template <typename INT , template <typename...> typename PAIR> inline int ConvexHull<INT,PAIR>::EndPointSize() const noexcept { return ExtremalPointSize() + NonExtremalEndPointSize(); }
-template <typename INT , template <typename...> typename PAIR> inline int ConvexHull<INT,PAIR>::InteriorPointSize() const noexcept { return m_interior.size(); }
+template <typename INT> inline const int& ConvexHull<INT>::TotalSize() const noexcept { return m_size; }
+template <typename INT> inline int ConvexHull<INT>::ExtremalPointSize() const noexcept { return m_ext.size(); }
+template <typename INT> inline int ConvexHull<INT>::NonExtremalEndPointSize() const noexcept { return m_non_ext_end.size(); }
+template <typename INT> inline int ConvexHull<INT>::EndPointSize() const noexcept { return ExtremalPointSize() + NonExtremalEndPointSize(); }
+template <typename INT> inline int ConvexHull<INT>::InteriorPointSize() const noexcept { return m_interior.size(); }
 
-template <typename INT , template <typename...> typename PAIR> inline const set<int>& ConvexHull<INT,PAIR>::ExtremalPoints() const noexcept { return m_ext; }
-template <typename INT , template <typename...> typename PAIR> inline const vector<int>& ConvexHull<INT,PAIR>::NonExtremalEndPoints() const noexcept { return m_non_ext_end; }
-template <typename INT , template <typename...> typename PAIR> inline const vector<int>& ConvexHull<INT,PAIR>::InteriorPoints() const noexcept { return m_interior; }
+template <typename INT> inline const vector<int>& ConvexHull<INT>::ExtremalPointIndex() const noexcept { return m_ext; }
+template <typename INT> inline const vector<int>& ConvexHull<INT>::NonExtremalEndPointIndex() const noexcept { return m_non_ext_end; }
+template <typename INT> inline const vector<int>& ConvexHull<INT>::InteriorPointIndex() const noexcept { return m_interior; }
 
+template <typename INT> inline int ConvexHull<INT>::Index( const int& i ) const noexcept { auto itr = m_ext_inv.find( i ); return itr == m_ext_inv.end() ? -1 : itr->second; }
+template <typename INT> inline int ConvexHull<INT>::Prev( const int& i ) const noexcept { return m_ext[0] == i ? m_ext.back() : m_ext[m_ext_inv.at( i ) - 1]; }
+template <typename INT> inline int ConvexHull<INT>::Next( const int& i ) const noexcept { return m_ext.back() == i ? m_ext[0] : m_ext[m_ext_inv.at( i ) + 1]; }
