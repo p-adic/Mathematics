@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Algebra/Monoid/Group/XOR/a_Body.hpp"
+#else
+TE <TY U>CL XORGroup:VI PU VirtualGroup<U>,PU PointedSet<U>{PU:IN XORGroup{U zero};IN U Product(U u0,CO U& u1);IN U Transfer(CO U& u);};
+TE <TY U> IN XORGroup<U>::XORGroup{U zero}:PointedSet<U>(MO(zero)){}TE <TY U> IN U XORGroup<U>::Product(U u0,CO U& u1){RE MO(u0 ^= u1);}TE <TY U> IN U XORGroup<U>::Transfer(CO U& u){RE u;}
+#endif
+
