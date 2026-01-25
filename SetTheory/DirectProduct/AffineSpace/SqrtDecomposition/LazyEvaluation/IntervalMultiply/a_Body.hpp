@@ -2,13 +2,13 @@
 
 #include "a.hpp"
 
-#include "../../Sqrt/a_Body.hpp"
+#include "../../Coordinate/a_Body.hpp"
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename...Args> inline IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_L( move( L ) ) , m_M( move( M ) ) , m_a( N , m_M.One() ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_b ) , m_suspended( m_N_d ) , m_lazy_action( m_N_d , m_L.Point() ) , m_lazy_multiplication( m_b ) { Construct(); }
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename...Args> inline IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_L( move( L ) ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_b ) , m_suspended( m_N_d ) , m_lazy_action( m_N_d , m_L.Point() ) , m_lazy_multiplication( m_b ) { Construct(); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename...Args> inline IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_L( move( L ) ) , m_M( move( M ) ) , m_a( N , m_M.One() ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_b ) , m_suspended( m_N_d ) , m_lazy_action( m_N_d , m_L.Point() ) , m_lazy_multiplication( m_b ) { Construct(); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename...Args> inline IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , vector<U> a , const Args&... args ) : SqrtDecompositionCoordinate( a.size() , args... ) , m_L( move( L ) ) , m_M( move( M ) ) , m_a( move( a ) ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_b ) , m_suspended( m_N_d ) , m_lazy_action( m_N_d , m_L.Point() ) , m_lazy_multiplication( m_b ) { Construct(); }
 
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Construct()
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Construct()
 {
 
   static_assert( is_same_v<R,inner_t<PT_MAGMA>> && is_same_v<U,inner_t<RN_BIMODULE>> );
@@ -33,9 +33,9 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename...Args> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Initialise( Args&&...args ) { IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE> temp{ m_L , m_M , forward<Args>( args )... }; SqrtDecompositionCoordinate::operator=( temp ); m_a = move( temp.m_a ); m_b = move( temp.m_b ); m_lazy_substitution = move( temp.m_lazy_substitution ); m_suspended = move( temp.m_suspended ); m_lazy_action = move( temp.m_lazy_action ); m_lazy_multiplication = move( temp.m_lazy_multiplication ); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename...Args> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Initialise( Args&&...args ) { IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U> temp{ m_L , m_M , forward<Args>( args )... }; SqrtDecompositionCoordinate::operator=( temp ); m_a = move( temp.m_a ); m_b = move( temp.m_b ); m_lazy_substitution = move( temp.m_lazy_substitution ); m_suspended = move( temp.m_suspended ); m_lazy_action = move( temp.m_lazy_action ); m_lazy_multiplication = move( temp.m_lazy_multiplication ); }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Set( const int& i , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Set( const int& i , const U& u )
 {
 
   const int d = i / m_N_sqrt;
@@ -72,7 +72,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalSet( const int& i_start , const int& i_final , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalSet( const int& i_start , const int& i_final , const U& u )
 {
 
   const int i_min = max( i_start , 0 );
@@ -156,7 +156,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalAct( const int& i_start , const int& i_final , const R& r )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalAct( const int& i_start , const int& i_final , const R& r )
 {
 
   const R& point = m_L.Point();
@@ -305,7 +305,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalMultiply( const int& i_start , const int& i_final , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalMultiply( const int& i_start , const int& i_final , const U& u )
 {
   
   const U& one = m_M.One();
@@ -445,10 +445,10 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline U IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::operator[]( const int& i ) { assert( 0 <= i && i < m_N ); const int d = i / m_N_sqrt; return m_suspended[d] ? m_lazy_substitution[d] : m_M.Product( m_M.ScalarProduct( m_lazy_action[d] , m_a[i] ) , m_lazy_multiplication[d] ); }
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline U IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Get( const int& i ) { return operator[]( i ); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline U IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::operator[]( const int& i ) { assert( 0 <= i && i < m_N ); const int d = i / m_N_sqrt; return m_suspended[d] ? m_lazy_substitution[d] : m_M.Product( m_M.ScalarProduct( m_lazy_action[d] , m_a[i] ) , m_lazy_multiplication[d] ); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline U IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Get( const int& i ) { return operator[]( i ); }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline U IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalProduct( const int& i_start , const int& i_final )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline U IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalProduct( const int& i_start , const int& i_final )
 {
 
   const int i_min = max( i_start , 0 );
@@ -487,7 +487,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::SetProduct( const int& d )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::SetProduct( const int& d )
 {
 
   U& m_bd = m_b[d] = m_M.One();
@@ -504,7 +504,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::SolveSuspendedSubstitution( const int& d , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::SolveSuspendedSubstitution( const int& d , const U& u )
 {
 
   const int i_min = d * m_N_sqrt;
@@ -514,7 +514,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalSet_Body( const int& i_min , const int& i_ulim , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalSet_Body( const int& i_min , const int& i_ulim , const U& u )
 {
 
   for( int i = i_min ; i < i_ulim ; i++ ){
@@ -527,18 +527,16 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::SolveSuspendedAction( const int& d )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::SolveSuspendedAction( const int& d )
 {
 
   const int i_min = d * m_N_sqrt;
   const int i_ulim = i_min + m_N_sqrt;
-  U& m_bd = m_b[d];
   R& m_lazy_action_d = m_lazy_action[d];
 
   if( m_lazy_action_d != m_L.Point() ){
     
     IntervalAct_Body( i_min , i_ulim , m_lazy_action_d );
-    m_bd = m_M.ScalarProduct( m_lazy_action_d , m_bd );
     m_lazy_action_d = m_L.Point();
 
   }
@@ -549,8 +547,6 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   if( m_lazy_multiplication_d != one ){
     
     IntervalMultiply_Body( i_min , i_ulim , m_lazy_multiplication_d );
-    // Nâ¡åQê´ÇégÇ¡ÇΩÅB
-    m_bd = m_M.Product( move( m_bd ) , m_M.Power( m_lazy_multiplication_d , m_N_sqrt ) );
     m_lazy_multiplication_d = one;
 
   }
@@ -559,7 +555,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalAct_Body( const int& i_min , const int& i_ulim , const R& r )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalAct_Body( const int& i_min , const int& i_ulim , const R& r )
 {
 
   for( int i = i_min ; i < i_ulim ; i++ ){
@@ -573,7 +569,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline void IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalMultiply_Body( const int& i_min , const int& i_ulim , const U& u )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline void IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalMultiply_Body( const int& i_min , const int& i_ulim , const U& u )
 {
 
   for( int i = i_min ; i < i_ulim ; i++ ){
@@ -587,7 +583,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline U IntervalMultiplyLazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::IntervalProduct_Body( const int& i_min , const int& i_ulim )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline U IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::IntervalProduct_Body( const int& i_min , const int& i_ulim )
 {
 
   U answer = m_M.One();
@@ -602,10 +598,10 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> in
   
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename F , SFINAE_FOR_SD_S> inline int LazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Search( const int& i_start , const F& f , const bool& reversed ) { return reversed ? SearchReverse_Body( i_start , f , m_M.One() ) : Search_Body( i_start , f , m_M.One() ); }
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> inline int LazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Search( const int& i_start , const U& u , const bool& reversed ) { return Search( i_start , [&]( const U& product , const int& ){ return !( product < u ); } , reversed ); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename F , SFINAE_FOR_SD_S> inline int IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Search( const int& i_start , const F& f , const bool& reversed ) { return reversed ? SearchReverse_Body( i_start , f , m_M.One() ) : Search_Body( i_start , f , m_M.One() ); }
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> inline int IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Search( const int& i_start , const U& u , const bool& reversed ) { return Search( i_start , [&]( const U& product , const int& ){ return !( product < u ); } , reversed ); }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename F> int LazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::Search_Body( const int& i_start , const F& f , U product_temp )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename F> int IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::Search_Body( const int& i_start , const F& f , U product_temp )
 {
 
   const int i_min = max( i_start , 0 );
@@ -660,7 +656,7 @@ template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> te
 
 }
 
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE> template <typename F> int LazySqrtDecomposition<R,PT_MAGMA,U,RN_BIMODULE>::SearchReverse_Body( const int& i_final , const F& f , U product_temp )
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R , typename U> template <typename F> int IntervalMultiplyLazySqrtDecomposition<PT_MAGMA,RN_BIMODULE,R,U>::SearchReverse_Body( const int& i_final , const F& f , U product_temp )
 {
 
   const int i_max = min( i_final , m_N - 1 );

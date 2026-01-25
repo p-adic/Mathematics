@@ -3,7 +3,7 @@
 #pragma once
 #include "../../a_Macro.hpp"
 
-#include "../../Sqrt/a.hpp"
+#include "../../Coordinate/a.hpp"
 
 // verify:
 // https://judge.yosupo.jp/submission/209796（配列初期化、区間作用、区間乗算、区間積取得）
@@ -36,7 +36,7 @@
 // (3) m_a,m_bの全ての成分がM.One()以上である。
 // を満たす場合にのみサポート。
 // M.Product()に関する区間積の値探索O(N^{1/2})
-template <typename R , typename PT_MAGMA , typename U , typename RN_BIMODULE>
+template <typename PT_MAGMA , typename RN_BIMODULE , typename R = inner_t<PT_MAGMA> , typename U = inner_t<RN_BIMODULE>>
 class IntervalMultiplyLazySqrtDecomposition :
   public SqrtDecompositionCoordinate
 {
@@ -45,6 +45,7 @@ protected:
   PT_MAGMA m_L;
   RN_BIMODULE m_M;
   vector<U> m_a;
+  // 総乗の平方分割。区間作用や区間乗法はここに即座に適用する。
   vector<U> m_b;
   // 代入の遅延評価。他の遅延評価を棄却する。
   // 最後に適用するように管理するため、区間作用や区間乗法はここに即座に適用する。
@@ -96,8 +97,7 @@ private:
   template <typename F> int SearchReverse_Body( const int& i_final , const F& f , U sum_temp );
 
 };
-template <typename PT_MAGMA , typename RN_BIMODULE , typename...Args> IntervalMultiplyLazySqrtDecomposition( PT_MAGMA L , RN_BIMODULE M , const Args&... args ) -> IntervalMultiplyLazySqrtDecomposition<inner_t<PT_MAGMA>,PT_MAGMA,inner_t<RN_BIMODULE>,RN_BIMODULE>;
 
 // 例えば
-// IntervalMultiplyLazySqrtDecomposition lsd{ RegularRSet( MultiplicativeMonoid<MP>( 1 ) ) , Module<MP,MP>() , move( a ) };
+// IntervalMultiplyLazySqrtDecomposition lsd{ MultiplicativeMonoid<MP>{ 1 } , Module<MP,MP>{} , move( a ) };
 // でMPによる区間スカラー倍更新、区間加算更新、区間和取得が可能。
