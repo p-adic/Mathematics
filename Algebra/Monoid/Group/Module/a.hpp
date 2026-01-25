@@ -8,6 +8,8 @@
 // https://yukicoder.me/submissions/961537（AbstractRSet）
 // https://yukicoder.me/submissions/950182（Module）
 
+// RがUに作用する。
+
 template <typename R , typename U>
 class VirtualRSet :
   virtual public UnderlyingSet<U>
