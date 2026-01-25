@@ -1,0 +1,41 @@
+#facesが曲面の三角形分割(V,E,F)の面である場合にのみサポート。
+#O(|F|)で{各連結成分の面番号,各連結成分の向き付け可能性}を返す。
+
+def hash(A,B):return A|B<<30
+def Orientability(faces):
+	M=len(faces)
+	edge_num={}
+	vertex=[]
+	edge=[[]for m in R(M)]
+	for m,face_m in zip(R(M),faces):
+		for i in R(2):
+			for j in R(i+1,3):
+				e=hash(face_m[i],face_m[j])
+				if e in edge_num:
+					v=vertex[edge_num[e]]
+					v+=[m]
+					assert len(v)<3
+					edge[m]+=[v[0]];edge[v[0]]+=[m]
+				else:size=len(edge_num);edge_num[e]=size;vertex+=[[m]]
+	dfs=[-1]*M
+	sigma=set()
+	cc=[]
+	solvable=[]
+	for m in R(M):
+		if dfs[m]>-1:continue
+		dfs[m]=len(cc)
+		stack=[m]
+		cc+=[[m]]
+		solvable+=[1]
+		while stack:
+			n=stack.pop();face_n=faces[n];
+			positive=all(not hash(face_n[i],face_n[(i+1)%3]) in sigma for i in R(3))
+			negative=all(not hash(face_n[(i+1)%3],face_n[i]) in sigma for i in R(3))
+			if not positive and not negative:solvable[-1]=0
+			if positive:
+				for i in R(3):sigma.add(hash(face_n[i],face_n[(i+1)%3]))
+			else:
+				for i in R(3):sigma.add(hash(face_n[(i+1)%3],face_n[i]))
+			for l in edge[n]:
+				if dfs[l]<0:dfs[l]=dfs[m];stack+=[l];cc[-1]+=[l]
+	return(cc,solvable)
