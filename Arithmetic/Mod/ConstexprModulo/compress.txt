@@ -2,7 +2,9 @@
 // (1) 常設ライブラリーのDynamicModsを消すか、DynamicModsの
 // - CEXPR(uint,P,998244353);
 // - US MP = DMod;
-// をコメントアウトする。いずれの場合も常設ライブラリーに下を追加する。
+// をコメントアウトする。いずれの場合も
+// - US MP = Mod<P>
+// のコメントアウトを解除して常設ライブラリーに下を追加する。
 CEXPR(uint,P,998244353);
 #define RP Represent
 #define DeRP Derepresent
