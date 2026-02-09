@@ -1,13 +1,15 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SegmentTree/a_Body.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SegmentTree/Debug/a_Body.hpp
 
 #pragma once
 #include "a.hpp"
 
-#include "../../../../Algebra/Monoid/Semilattice/a_Body.hpp"
+#include "../../../../../Algebra/Monoid/Semilattice/a_Body.hpp"
 
-template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::AbstractSegmentTree( MONOID M , const int& size ) : AbstractSegmentTree( M , vector<U>( size , M.One() ) ) {}
+#include "../../../../../../Error/Debug/a_Body.hpp"
 
-template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::AbstractSegmentTree( MONOID M , const vector<U>& a ) : m_M( move( M ) ) , m_size( a.size() ) , m_power( 1 ) , m_a()
+template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::AbstractSegmentTree( MONOID M , const int& size , const bool& output_mode ) : AbstractSegmentTree( M , vector<U>( size , M.One() ) , output_mode ) {}
+
+template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::AbstractSegmentTree( MONOID M , const vector<U>& a , const bool& output_mode ) : Debug( output_mode ) , m_M( move( M ) ) , m_size( a.size() ) , m_power( 1 ) , m_a()
 {
 
   static_assert( is_same_v<U,inner_t<MONOID>> );
@@ -33,6 +35,30 @@ template <typename U , typename MONOID> inline AbstractSegmentTree<U,MONOID>::Ab
 
   }
 
+  static bool init = true;
+
+  if( init ){
+
+    if( m_output_mode ){
+      
+      DERR( "SegmentTreeをデバッグモードで実行します。" );
+      DERR( "通常のSegmentTreeと比べると各種操作にO(N)かかることにご注意ください。" );
+      DERR( "" );
+
+    }
+
+    init = false;
+
+  }
+
+  if( m_output_mode ){
+      
+    DERR( "SegmentTreeの初期値：" );
+    DERR( *this );
+    DERR( "" );
+
+  }
+  
 }
 
 template <typename U> template <typename...Args> inline SegmentTree<U>::SegmentTree( const U& zero_U , const Args&... args ) : AbstractSegmentTree<U,MaxSemilattice<U>>( MaxSemilattice<U>( zero_U ) , args... ) {}
@@ -51,6 +77,15 @@ void AbstractSegmentTree<U,MONOID>::Set( const int& i , const U& u )
     
     int j2 = j << 1;
     m_a[j] = m_M.Product( m_a[j2] , m_a[j2 | 1] );
+
+  }
+
+  if( m_output_mode ){
+      
+    DERR( "SegmentTreeの第" , i , "成分に" , u , "を代入します。" );
+    DERR( "SegmentTreeの更新後の成分：" );
+    DERR( *this );
+    DERR( "" );
 
   }
 
@@ -89,8 +124,43 @@ U AbstractSegmentTree<U,MONOID>::IntervalProduct( const int& i_start , const int
 
   }
 
-  return m_M.Product( move( answer0 ), answer1 );
+  auto answer = m_M.Product( move( answer0 ), answer1 );
+  
+  if( m_output_mode ){
+      
+    DERR( "SegmentTreeの区間[" , i_start , "," , i_final , "] における総和：" , answer );
+
+  }
+
+  return answer;
 
 }
 
 template <typename U> inline U SegmentTree<U>::IntervalMax( const int& i_start , const int& i_final ) { return this->IntervalProduct( i_start , i_final ); }
+
+template <class Traits , typename U , typename MONOID> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const AbstractSegmentTree<U,MONOID>& st )
+{
+
+  auto&& size = st.size();
+
+  if( exec_mode == solve_mode ){
+
+    os << "[";
+
+  }
+
+  for( int i = 0 ; i < size ; i++ ){
+
+    ( i == 0 ? os : os << "," ) << st[i];
+
+  }
+
+  if( exec_mode == solve_mode ){
+
+    os << "]";
+
+  }
+
+  return os;
+
+}

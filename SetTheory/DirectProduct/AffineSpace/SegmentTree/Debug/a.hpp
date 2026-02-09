@@ -1,21 +1,16 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SegmentTree/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/SegmentTree/Debug/a.hpp
 
 #pragma once
-#include "../../../../Algebra/Monoid/Semilattice/a.hpp"
+#include "../../../../../Algebra/Monoid/Semilattice/a.hpp"
 
-// verify:
-// https://yukicoder.me/submissions/959653（Abstract、配列による初期化、一点更新、区間積取得）
-// https://yukicoder.me/submissions/1053217（配列による初期化、区間最大値取得）
+#include "../../../../../../Error/Debug/a.hpp"
 
-// M.One()による初期化O(size)
-// 配列による初期化O(N)
+// デバッグ用に通常の配列を折衷し出力機能を追加したもの。
+// 通常のSegmentTreeと比べると各種更新操作にO(N)かかることに注意。
 
-// 一点更新O(log_2 N)
-
-// 一点取得O(1)
-// 区間積取得O(log_2 N)
 template <typename U , typename MONOID>
-class AbstractSegmentTree
+class AbstractSegmentTree :
+  public Debug
 {
   
 private:
@@ -25,8 +20,8 @@ private:
   vector<U> m_a;
 
 public:
-  inline AbstractSegmentTree( MONOID M , const int& size = 0 );
-  inline AbstractSegmentTree( MONOID M , const vector<U>& a );
+  inline AbstractSegmentTree( MONOID M , const int& size = 0 , const bool& output_mode = true );
+  inline AbstractSegmentTree( MONOID M , const vector<U>& a , const bool& output_mode = true );
 
   template <typename...Args> inline void Initialise( const Args&... args );
   void Set( const int& i , const U& u );
@@ -52,3 +47,5 @@ public:
 };
 // 加法はBITで良いので、最大値に特殊化したものを扱う。
 // IntervalMaxBITより一点更新が速い。
+
+template <class Traits , typename U , typename MONOID> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const AbstractSegmentTree<U,MONOID>& st );
