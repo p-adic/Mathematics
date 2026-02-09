@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/EulerTour/a_Body.hpp"
+#else
+TE <TY TREE>CL EulerTour{PU:TREE& m_T;int m_le;VE<int> m_vertex;VE<VE<int>> m_vertex_inv;EulerTour(TREE& T,CRI root = 0);IN CRI Length()CO NE;IN T2<int> Subtree(CRI t)CO;IN CO VE<int>& Vertex()CO NE;IN CO VE<int>& Vertex_inv(CRI t)CO;};
+TE <TY TREE>EulerTour<TREE>::EulerTour(TREE& T,CRI root):m_T(T),m_le(),m_vertex(),m_vertex_inv(T.SZ()){VE<bool> found(T.SZ());VE<int> dfs ={root};int i = 0;WH(!dfs.empty()){CO int t = pop(dfs);m_vertex <<= t;if(!found[t]){found[t]= true;for(auto& v:T.Edge(t)){if(!found[v]){(dfs <<= t)<<= v;}}}m_vertex_inv[t]<<= i++;}m_le = i;}TE <TY TREE> IN CRI EulerTour<TREE>::Length()CO NE{RE m_le;}TE <TY TREE> IN T2<int> EulerTour<TREE>::Subtree(CRI t)CO{RE{m_vertex_inv[t][0],m_vertex_inv[t].back()};}TE <TY TREE> IN CO VE<int>& EulerTour<TREE>::Vertex()CO NE{RE m_vertex;}TE <TY TREE> IN CO VE<int>& EulerTour<TREE>::Vertex_inv(CRI t)CO{RE m_vertex_inv[t];}
+#endif
+
