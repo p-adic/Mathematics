@@ -6,6 +6,10 @@
 // DiscreteLogarithmの実用時に使う。
 #include "../../../Algebra/Monoid/a.hpp"
 
+// 和と積は
+// ../../Truncated/
+// で扱う。
+
 // O(log_2 e + 1)
 // 値の上限付き繰り返し二乗法で羃乗を計算する。
 template <typename INT1 , typename INT2> ll TruncatedPower( ll n , INT1 e , const INT2& bound );
