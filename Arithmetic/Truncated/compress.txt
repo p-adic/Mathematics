@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Truncated/a_Body.hpp"
+#else
+TE <TY INT> IN ll TruncatedSum(CRL n,CRL m,CO INT& bound){AS(m >= 0 && bound >= 0);RE n <= bound - m?n + m:bound + 1;}TE <TY INT> IN ll TruncatedProduct(CRL n,CRL m,CO INT& bound){AS(m >= 0 && bound >= 0);RE m == 0?m:n <= bound / m?n * m:bound + 1;}
+#endif
+
