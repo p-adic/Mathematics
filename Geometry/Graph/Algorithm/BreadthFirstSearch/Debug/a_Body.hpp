@@ -5,8 +5,9 @@
 
 #include "../../../a_Body.hpp"
 #include "../../../../../Utility/Set/Map/a_Body.hpp"
+#include "../../../../../Utility/Vector/a_Body.hpp"
 
-template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& not_found ) : m_G( G ) , m_not_found( not_found ) , m_initialised( false ) , m_next() , m_found() , m_prev() , m_ID()
+template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& external ) : m_G( G ) , m_external( external ) , m_initialised( false ) , m_next() , m_reached() , m_prev() , m_ID()
 {
 
   static_assert( is_same_v<inner_t<GRAPH>,T> );
@@ -52,7 +53,7 @@ template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>
 
 }
 
-template <typename T , typename GRAPH> template <typename Arg> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& not_found , Arg&& init ) : VirtualBreadthFirstSearch<T,GRAPH>( G , not_found ) { Initialise( forward<Arg>( init ) ); }
+template <typename T , typename GRAPH> template <typename Arg> inline VirtualBreadthFirstSearch<T,GRAPH>::VirtualBreadthFirstSearch( GRAPH& G , const T& external , Arg&& init ) : VirtualBreadthFirstSearch<T,GRAPH>( G , external ) { Initialise( forward<Arg>( init ) ); }
 
 template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Initialise()
 {
@@ -70,12 +71,12 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
 
   }
   
-  m_found = vector<bool>( V );
-  m_prev = vector<T>( V , m_not_found );
+  m_reached = vector<bool>( V );
+  m_prev = vector<T>( V , m_external );
 
 }
 
-template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Initialise( const T& init )
+template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Initialise( T init )
 {
 
   auto&& i = m_G.Enumeration_inv( init );
@@ -84,16 +85,15 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
   DERR( "s”Ô†:" , __LINE__ );
   DERRNS( "-> " );
   Initialise();
-  m_next.push_back( init );
-  m_found[i] = true;
+  m_next <<= { move( init ) , m_external };
   DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚É" , init , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
-  DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
-  DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
+  DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
+  DERRNS( "–K–âÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
 
   for( int j = 0 ; j < V ; j++ ){
 
-    if( m_found[j] ){
+    if( m_reached[j] ){
 
       DERRNS( " " , m_G.Enumeration( j ) );
 
@@ -115,28 +115,20 @@ template <typename T , typename GRAPH> template <template <typename...> typename
 
   for( auto& init : inits ){
 
-    m_next.push_back( move( init ) );
+    m_next <<= { move( init ) , m_external };
 
   }
   
   const int& V = size();
 
-  for( auto& u : m_next ){
-
-    auto&& i = m_G.Enumeration_inv( u );
-    assert( 0 <= i && i < V );
-    m_found[i] = true;
-
-  }
-
   DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
   DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚É" , inits , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
-  DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
-        DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
+  DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
+  DERRNS( "–K–âÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
 
   for( int j = 0 ; j < V ; j++ ){
 
-    if( m_found[j] ){
+    if( m_reached[j] ){
 
       DERRNS( " " , m_G.Enumeration( j ) );
 
@@ -149,7 +141,7 @@ template <typename T , typename GRAPH> template <template <typename...> typename
 
 }
 
-template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Shift( const T& init )
+template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Shift( T init )
 {
 
   if( m_initialised ){
@@ -157,37 +149,23 @@ template <typename T , typename GRAPH> inline void VirtualBreadthFirstSearch<T,G
     const int& V = size();
     auto&& i = m_G.Enumeration_inv( init );
     assert( 0 <= i && i < V );
-    m_next.clear();
+    m_next = { { move( init ) , m_external } };
     DERR( "s”Ô†:" , __LINE__ );
     DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
+    DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ" , init , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
+    DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
+    DERRNS( "–K–âÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
 
-    if( m_found[i] ){
+    for( int j = 0 ; j < V ; j++ ){
 
-      DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ‚Ü‚µ‚½B" );
-      DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
+      if( m_reached[j] ){
 
-    } else {
-      
-      m_next.push_back( init );
-      m_found[i] = true;
-      DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ" , init , "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
-      DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
-      DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
-
-      for( int j = 0 ; j < V ; j++ ){
-
-	if( m_found[j] ){
-
-          DERRNS( " " , m_G.Enumeration( j ) );
-
-        }
+        DERRNS( " " , m_G.Enumeration( j ) );
 
       }
-  
-      DERR( "" );
 
     }
-
+  
     DERR( "" );
 
   } else {
@@ -209,17 +187,9 @@ template <typename T , typename GRAPH> template <template <typename...> typename
     const int& V = size();
     DERR( "s”Ô†:" , __LINE__ );
 
-    for( auto& u : m_next ){
+    for( auto& init : inits ){
 
-      auto&& i = m_G.Enumeration_inv( u );
-      assert( 0 <= i && i < V );
-
-      if( ! m_found[i] ){
-
-	m_next.push_back( u );
-	m_found[i] = true;
-
-      }
+      m_next <<= { move( init ) , m_external };
 
     }
 
@@ -228,26 +198,28 @@ template <typename T , typename GRAPH> template <template <typename...> typename
       DERR( "s”Ô†:" , __LINE__ );
       DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
       DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ‚Ü‚µ‚½B" );
-      DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
+      DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
 
     } else {
       
       DERR( "s”Ô†:" , __LINE__ );
       DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
       DERRNS( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚ğíœ‚µ" );
+      bool init = true;
 
-      for( auto begin = m_next.begin() , itr = begin , end = m_next.end() ; itr != end ; itr++ ){
+      for( auto& [t,p] : m_next ){
 
-	DERRNS( itr == begin ? "" : ", " , *itr );
+        DERRNS( init ? "" : ", " , t );
+        init = false;
 
       }
 
       DERR( "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
-      DERRNS( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
+      DERRNS( "–K–âÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
 
       for( int j = 0 ; j < V ; j++ ){
 
-	if( m_found[j] ){
+	if( m_reached[j] ){
 
           DERRNS( " " , m_G.Enumeration( j ) );
 
@@ -271,7 +243,7 @@ template <typename T , typename GRAPH> template <template <typename...> typename
 }
 
 template <typename T , typename GRAPH> inline const int& VirtualBreadthFirstSearch<T,GRAPH>::size() const noexcept { return m_G.size(); }
-template <typename T , typename GRAPH> inline vector<bool>::reference VirtualBreadthFirstSearch<T,GRAPH>::found( const T& t ) { auto&& i = m_G.Enumeration_inv( t ); assert( 0 <= i && i < size() ); if( !m_initialised ){ Initialise(); } return m_found[i]; }
+template <typename T , typename GRAPH> inline vector<bool>::reference VirtualBreadthFirstSearch<T,GRAPH>::reached( const T& t ) { auto&& i = m_G.Enumeration_inv( t ); assert( 0 <= i && i < size() ); if( !m_initialised ){ Initialise(); } return m_reached[i]; }
 template <typename T , typename GRAPH> inline const T& VirtualBreadthFirstSearch<T,GRAPH>::prev( const T& t ) { auto&& i = m_G.Enumeration_inv( t ); assert( 0 <= i && i < size() ); if( !m_initialised ){ Initialise(); } return m_prev[i]; }
 
 template <typename T , typename GRAPH> inline T VirtualBreadthFirstSearch<T,GRAPH>::Next()
@@ -279,57 +251,54 @@ template <typename T , typename GRAPH> inline T VirtualBreadthFirstSearch<T,GRAP
 
   if( m_next.empty() ){
 
-    return m_not_found;
+    return m_external;
 
   }
 
-  const T t_curr = m_next.front();
+  auto [t_curr,p] = m_next.front();
   m_next.pop_front();
-  vector<T> new_next{};
+  auto&& i = m_G.Enumeration_inv( t_curr );
 
-  for( auto& t : m_G.Edge( t_curr ) ){
+  if( m_reached[i] ){
 
-    auto&& i = m_G.Enumeration_inv( t );
-    auto&& found_i = m_found[i];
-
-    if( ! found_i ){
-
-      Push( m_next , t );
-      m_prev[i] = t_curr;
-      found_i = true;
-      new_next.push_back( m_G.Vertex( t ) );
-
-    }
+    return Next();
 
   }
 
-  if( new_next.empty() ){
+  m_reached[i] = true;
+  m_prev[i] = p;
+
+  if( m_G.Edge( t_curr ).empty() ){
 
     DERR( "s”Ô†:" , __LINE__ );
     DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
     DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚©‚ç" , t_curr , "‚ğæ‚èo‚µ‚Ü‚µ‚½B" );
-    DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
+    DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
 
   } else {
     
+
     DERR( "s”Ô†:" , __LINE__ );
     DERR( "•^[‚³’Tõ—Dæ’Tõ(ID:" + m_ID + ")‚Ì" );
     DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg‚©‚ç" , t_curr , "‚ğæ‚èo‚µ" );
+    bool init = true;
 
-    for( auto begin = new_next.begin() , itr = begin , end = new_next.end() ; itr != end ; itr++ ){
+    for( auto& t : m_G.Edge( t_curr ) ){
 
-      DERRNS( itr == begin ? "" : ", " , *itr );
+      Push( m_next , m_G.Vertex( t ) , t_curr );
+      DERRNS( init ? "" : ", " , t );
+      init = false;
 
     }
 
     DERR( "‚ğ’Ç‰Á‚µ‚Ü‚µ‚½B" );
-    DERR( "–K–â—\’è‚Ì’¸“_ƒŠƒXƒg:" , m_next );
-    DERR( "–K–â—\’è‚É’Ç‰ÁÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
+    DERR( "–K–â—\’è‚Ì•Ó(I“_,n“_)ƒŠƒXƒg:" , m_next );
+    DERR( "–K–âÏ‚İ‚Ì’¸“_ƒŠƒXƒg:" );
     const int& V = size();
   
     for( int j = 0 ; j < V ; j++ ){
 
-      if( m_found[j] ){
+      if( m_reached[j] ){
 
         DERRNS( " " , m_G.Enumeration( j ) );
 
@@ -344,63 +313,6 @@ template <typename T , typename GRAPH> inline T VirtualBreadthFirstSearch<T,GRAP
   DERR( "" );
   return t_curr;
 
-}
-
-template <typename T , typename GRAPH> template <typename U>
-auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<is_same_v<GRAPH,MemorisationGraph<U,decldecay_t(declval<GRAPH>().edge())>>,Map<T,int>>
-{
-
-  Map<T,int> answer{};
-
-  for( auto itr = m_next.begin() , end = m_next.end() ; itr != end ; itr++ ){
-
-    answer[*itr] = 0;
-
-  }
-  
-  T t;
-  
-  while( ( t = Next() ) != m_not_found ){
-
-    assert( answer.count( t ) == 0 );
-
-    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
-    if( answer.count( t ) == 0 ){
-      
-      answer[t] = answer[m_prev[m_G.Enumeration_inv( t )]] + 1;
-
-    }
-
-  }
-
-  return answer;
-  
-}
-
-template <typename T , typename GRAPH> template <typename U>
-auto VirtualBreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v<GRAPH,MemorisationGraph<U,decldecay_t(declval<GRAPH>().edge())>>,vector<int>>
-{
-
-  vector answer( size() , -1 );
-
-  for( auto itr = m_next.begin() , end = m_next.end() ; itr != end ; itr++ ){
-
-    answer[m_G.Enumeration_inv( *itr )] = 0;
-
-  }
-  
-  T t;
-  
-  while( ( t = Next() ) != m_not_found ){
-
-    auto&& i = m_G.Enumeration_inv( t );
-    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
-    answer[i] == -1 ? answer[i] = answer[m_G.Enumeration_inv( m_prev[i] )] + 1 : answer[i];
-    
-  }
-
-  return answer;
-  
 }
 
 template <typename T , typename GRAPH>
@@ -420,19 +332,18 @@ tuple<vector<int>,vector<vector<T>>,int> VirtualBreadthFirstSearch<T,GRAPH>::Get
       Shift( m_G.Enumeration( i ) );
       T t = Next();
 
-      if( t != m_not_found ){
+      if( t != m_external ){
 
-        cc_num_inv.push_back( {} );
+        cc_num_inv <<= {};
 
-	while( t != m_not_found ){
+        while( t != m_external ){
 
-	  cc_num[m_G.Enumeration_inv( t )] = count;
-          cc_num_inv[count].push_back( t );
-	  t = Next();
+          cc_num_inv[cc_num[m_G.Enumeration_inv( t )] = count] <<= t;
+          t = Next();
 
-	}
+        }
 
-	count++;
+        count++;
 
       }
 
@@ -452,9 +363,9 @@ vector<T> VirtualBreadthFirstSearch<T,GRAPH>::GetNodeEnumeration()
   vector<T> answer{};
   T t = Next();
 
-  while( t != m_not_found ){
+  while( t != m_external ){
 
-    answer.push_back( t );
+    answer <<= t;
     t = Next();
     
   }
@@ -467,23 +378,22 @@ template <typename T , typename GRAPH>
 vector<T> VirtualBreadthFirstSearch<T,GRAPH>::GetReversedNodeEnumeration()
 {
 
-  vector<T> answer{};
-  vector<T> next{};
+  vector<T> answer{} , next{};
   T t;
   bool searched;
 
-  while( !( searched = ( t = Next() ) == m_not_found ) || !next.empty() ){
+  while( !( searched = ( t = Next() ) == m_external ) || !next.empty() ){
 
     while( !next.empty() && ( searched || next.back() != m_prev[m_G.Enumeration_inv( t )] ) ){
 
-      answer.push_back( next.back() );
-      next.pop_back();
+      answer <<= next.back();
+      pop( next );
 
     }
 
     if( !searched ){
       
-      next.push_back( t );
+      next <<= t;
 
     }
     
@@ -493,7 +403,61 @@ vector<T> VirtualBreadthFirstSearch<T,GRAPH>::GetReversedNodeEnumeration()
 
 }
 
-template <typename T , typename GRAPH> template <typename PATH> inline void VirtualBreadthFirstSearch<T,GRAPH>::Push( list<T>& next , const PATH& p ) { Push( next , get<0>( p ) ); }
+template <typename T , typename GRAPH> template <typename...Args> inline BreadthFirstSearch<T,GRAPH>::BreadthFirstSearch( GRAPH& G , const T& not_reached , Args&&... args ) : VirtualBreadthFirstSearch<T,GRAPH>( G , not_reached , forward<Args>( args )... ) {}
 
-template <typename T , typename GRAPH> template <typename...Args> inline BreadthFirstSearch<T,GRAPH>::BreadthFirstSearch( GRAPH& G , const T& not_found , Args&&... args ) : VirtualBreadthFirstSearch<T,GRAPH>( G , not_found , forward<Args>( args )... ) {}
-template <typename T , typename GRAPH> inline void BreadthFirstSearch<T,GRAPH>::Push( list<T>& next , const T& t ) { next.push_back( t ); }
+template <typename T , typename GRAPH> template <typename U>
+auto BreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<is_same_v<GRAPH,MemorisationGraph<U,decldecay_t(declval<GRAPH>().edge())>>,Map<T,int>>
+{
+
+  Map<T,int> answer{};
+
+  for( auto& [t,u] : this->m_next ){
+
+    answer[t] = 0;
+
+  }
+  
+  T t;
+  
+  while( ( t = this->Next() ) != this->m_external ){
+
+    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
+    if( answer.count( t ) == 0 ){
+      
+      answer[t] = answer[this->m_prev[this->m_G.Enumeration_inv( t )]] + 1;
+
+    }
+
+  }
+
+  return answer;
+  
+}
+
+template <typename T , typename GRAPH> template <typename U>
+auto BreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v<GRAPH,MemorisationGraph<U,decldecay_t(declval<GRAPH>().edge())>>,vector<int>>
+{
+
+  vector answer( this->size() , -1 );
+
+  for( auto& [t,p] : this->m_next ){
+
+    answer[this->m_G.Enumeration_inv( t )] = 0;
+
+  }
+  
+  T t;
+  
+  while( ( t = this->Next() ) != this->m_external ){
+
+    auto&& i = this->m_G.Enumeration_inv( t );
+    // ê‡•ª‚¯‚ğ‚µ‚È‚¢‚Æt‚ªn“_‚Ì‚É–â‘è‚Æ‚È‚éB
+    answer[i] == -1 ? answer[i] = answer[this->m_G.Enumeration_inv( this->m_prev[i] )] + 1 : answer[i];
+
+  }
+
+  return answer;
+  
+}
+
+template <typename T , typename GRAPH> inline void BreadthFirstSearch<T,GRAPH>::Push( list<pair<T,T>>& next , const T& t , const T& p ) { next <<= {t,p}; }
