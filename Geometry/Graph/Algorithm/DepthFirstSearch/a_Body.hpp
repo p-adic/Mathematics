@@ -9,6 +9,6 @@
   #include "../BreadthFirstSearch/a_Body.hpp"
 #endif
 
-template <typename T , typename GRAPH> template <typename...Args> inline DepthFirstSearch<T,GRAPH>::DepthFirstSearch( GRAPH& G , const T& not_found , Args&&... args ) : VirtualBreadthFirstSearch<T,GRAPH>( G , not_found , forward<Args>( args )... ) {}
+template <typename T , typename GRAPH> template <typename...Args> inline DepthFirstSearch<T,GRAPH>::DepthFirstSearch( GRAPH& G , const T& external , Args&&... args ) : VirtualBreadthFirstSearch<T,GRAPH>( G , external , forward<Args>( args )... ) {}
 
-template <typename T , typename GRAPH> inline void DepthFirstSearch<T,GRAPH>::Push( list<T>& next , const T& t ) { next.push_front( t ); }
+template <typename T , typename GRAPH> inline void DepthFirstSearch<T,GRAPH>::Push( list<pair<T,T>>& next , const T& t , const T& p ) { next.push_front( {t,p} ); }

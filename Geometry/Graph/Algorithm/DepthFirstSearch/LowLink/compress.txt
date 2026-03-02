@@ -1,6 +1,6 @@
 #define DFS DepthFirstSearch
 #ifdef DEBUG
-  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/a_Body.hpp"
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/LowLink/a_Body.hpp"
 #else
 #define VBFS VirtualBreadthFirstSearch
 
@@ -9,6 +9,8 @@ TE <TY T,TY GRAPH> IN VBFS<T,GRAPH>::VBFS(GRAPH& G,CO T& external):m_G(G),m_exte
 
 TE <TY T,TY GRAPH>CL DFS:PU VBFS<T,GRAPH>{PU:TE <TY...Args> IN DFS(GRAPH& G,CO T& external,Args&&... args);IN VO Push(LI<pair<T,T>>& next,CO T& t,CO T& p);};
 TE <TY T,TY GRAPH> TE <TY...Args> IN DFS<T,GRAPH>::DFS(GRAPH& G,CO T& external,Args&&... args):VBFS<T,GRAPH>(G,external,forward<Args>(args)...){}TE <TY T,TY GRAPH> IN VO DFS<T,GRAPH>::Push(LI<pair<T,T>>& next,CO T& t,CO T& p){next.push_front({t,p});}
-#endif
 
+TE <TY GRAPH>CL LowLink:PU DFS<int,GRAPH>{PU:int m_cSZ;VE<int> m_ord;VE<int> m_ord_inv;VE<int> m_link;VE<int> m_child_link;TE <TY Arg> IN LowLink(GRAPH& G,Arg starts);IN CRI cSZ()CO NE;IN CRI Ord(CRI t)CO;IN CRI Ord_inv(CRI i)CO;IN CRI Link(CRI t)CO;IN bool IsBridge(int t,int u);IN bool IsJoint(CRI t);};
+TE <TY GRAPH> TE <TY Arg> IN LowLink<GRAPH>::LowLink(GRAPH& G,Arg starts):DFS<int,GRAPH>(G,-1,MO(starts)),m_cSZ(),m_ord(G.SZ(),-1),m_ord_inv(TH->GetNodeEnumeration()),m_link(G.SZ(),-1),m_child_link(G.SZ(),-1){m_cSZ = m_ord_inv.SZ();for(int i = 0;i < m_cSZ;i++){m_ord[m_ord_inv[i]]= m_link[m_ord_inv[i]]= i;}for(int i = m_cSZ - 1;i >= 0;i--){CRI t = m_ord_inv[i];CRI p = TH->prev(t);for(auto& u:G.Edge(t)){if(p == u){continue;}SetMin(m_link[t],m_ord[u]);if(TH->prev(u)== t){SetMax(m_child_link[t],m_link[u]);}}if(p != -1){SetMin(m_link[p],m_link[t]);}}}TE <TY GRAPH> IN CRI LowLink<GRAPH>::cSZ()CO NE{RE m_cSZ;}TE <TY GRAPH> IN CRI LowLink<GRAPH>::Ord(CRI t)CO{RE m_ord[t];}TE <TY GRAPH> IN CRI LowLink<GRAPH>::Ord_inv(CRI i)CO{RE m_ord_inv[i];}TE <TY GRAPH> IN CRI LowLink<GRAPH>::Link(CRI t)CO{RE m_link[t];}TE <TY GRAPH> IN bool LowLink<GRAPH>::IsBridge(int t,int u){if(m_ord[t]> m_ord[u]){swap(t,u);}RE t == TH->prev(u)&& m_ord[t]< m_link[u];}TE <TY GRAPH> IN bool LowLink<GRAPH>::IsJoint(CRI t){RE m_ord[t]!= -1 &&(TH->prev(t)== -1?TH->m_G.Edge(t).SZ()> 1:m_ord[t]<= m_child_link[t]);}
+#endif
 
