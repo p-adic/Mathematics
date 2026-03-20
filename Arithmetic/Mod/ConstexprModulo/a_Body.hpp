@@ -4,6 +4,7 @@
 #include "a.hpp"
 
 #include "Constant/a_Body.hpp"
+#include "../Function/Residue/a_Body.hpp"
 #include "../Function/Residue/Inverse/a_Body.hpp"
 
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>::Mod() noexcept : m_n() {}
