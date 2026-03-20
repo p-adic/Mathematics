@@ -6,7 +6,7 @@
 // ROBERT E. DRESSLER, SUMS OF DISTINCT PRIMES, Nordisk Matematisk Tidskrift, Vol. 21, No. 1 (1973), pp. 31--32.
 // TORLEIV KLOVE, SUMS OF DISTINCT PRIMES, Nordisk Matematisk Tidskrift, Vol. 21, No. 4 (1974), pp. 138--140.
 // をもとに実装。
-// 1+i番目の素数以上の相異なる素数有限個の和で表せない最小の非負整数を返す。
+// 1+i番目の素数以上の相異なる素数有限個の和で表せない最大の非負整数を返す。
 uint GetKloveSequence( const uint& i ) noexcept;
 // https://oeis.org/A007414
 // [p(i),Klove(i)]:

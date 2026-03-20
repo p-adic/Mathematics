@@ -50,10 +50,10 @@ def MillerRabin(n):
 
 #hack‘Îô—p
 import random
+P=[2,3,5,7,11,13,17,19,23,29]
 def MillerRabin(n):
 	assert n>0
 	if n<2:return 0
-	P=[2,3,5,7,11,13,17,19,23,29]
 	if n in P:return 1
 	if any(n%p<1 for p in P):return 0
 	for t in range(10):P+=[random.randint(30,n-1)]
@@ -68,3 +68,16 @@ def MillerRabin(n):
 			else:return 0
 	return 1
 
+#ˆÀ‘S‘f”¶¬iæ–@ŒQ‚ð¬‚³‚ÈŒQ‚É‹A’…‚³‚¹‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß‚ÉŽg‚¦‚éj
+def SafePrime(n):
+	while 1:
+		if MillerRabin(n)and MillerRabin((n<<1)|1):return(n<<1)|1
+		n+=1
+
+#p-1‚Ì‘fˆö”‚Ì‘½‚¢‘f”p¶¬iŒ´Žnª‚ð’T‚µ‚É‚­‚­‚·‚é‚½‚ß‚ÉŽg‚¨‚¤‚É‚àA‚»‚ñ‚È‚É’T‚µ‚É‚­‚­‚È‚ç‚È‚¢j
+prod=1
+for p in P:prod*=p
+def UnsafePrime(n):
+	n=(n+prod-1)//prod*prod+1
+	while not MillerRabin(n):n+=prod
+	return n

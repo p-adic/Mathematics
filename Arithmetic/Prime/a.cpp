@@ -1,7 +1,7 @@
 // c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Prime/a.cpp
 
 #pragma once
-#include "Header.hpp"
+#include "../../Header.hpp"
 #include "a_Body.hpp"
 
 // vector‚Ìpush_back‚ð”º‚¤‚Ì‚ÅconstŽQÆ‚É‚µ‚È‚¢
@@ -46,7 +46,8 @@ int GetPrime( const int& i )
 
 }
 
-bool MillerRabin( const int& n )
+// –@næŽZ‚ðs‚¤‚½‚ßn‚ÍintŒ^‚ÉŒÀ‚éB
+bool MillerRabin( const int& n , int T )
 {
 
   assert( n > 0 );
@@ -57,8 +58,14 @@ bool MillerRabin( const int& n )
 
   }
 
-  constexpr int T = 20;
   vector<int> P = {2,3,5,7,11,13,17,19,23,29};
+
+  if( T < int( P.size() ) ){
+
+    P.resize( T );
+
+  }
+  
   const int T_half = P.size();
 
   for( auto& p : P ){
