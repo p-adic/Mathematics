@@ -44,9 +44,8 @@ template <typename RET , typename INT1 , typename INT2> inline RET CombinationCu
 template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const bool& reset )
 {
 
-  static const int L = factor.size();
-  assert( L == int( factor.size() ) );
   static Map<INT,tuple<vector<MOD>,vector<vector<int>>>> memory{};
+  const int L = factor.size();
 
   if( n < m ){
 
