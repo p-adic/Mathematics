@@ -179,7 +179,7 @@ auto BreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v<GRAPH,
 
   for( auto& [t,p] : this->m_next ){
 
-    answer[m_G.Enumeration_inv( t )] = 0;
+    answer[this->m_G.Enumeration_inv( t )] = 0;
 
   }
   
@@ -189,7 +189,7 @@ auto BreadthFirstSearch<T,GRAPH>::GetDistance() -> enable_if_t<!is_same_v<GRAPH,
 
     auto&& i = this->m_G.Enumeration_inv( t );
     // ê‡•ª‚¯‚ð‚µ‚È‚¢‚Æt‚ªŽn“_‚ÌŽž‚É–â‘è‚Æ‚È‚éB
-    answer[i] == -1 ? answer[i] = answer[this->m_G.Enumeration_inv( m_pthis->rev[i] )] + 1 : answer[i];
+    answer[i] == -1 ? answer[i] = answer[this->m_G.Enumeration_inv( this->m_prev[i] )] + 1 : answer[i];
 
   }
 
