@@ -6,6 +6,7 @@
 
 // verify:
 // https://yukicoder.me/submissions/970730ÅiAbstractFastZetaTransform, InitialSegmentSumÅj
+// https://yukicoder.me/submissions/1154439 (FastZetaTransform, *=, GetTotal)
 
 template <typename U , typename Z_ALG> class AbstractFastZetaTransform;
 

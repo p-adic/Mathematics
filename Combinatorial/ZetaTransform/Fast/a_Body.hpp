@@ -15,7 +15,7 @@ inline vector<int> SubsetEdge::operator()( const int& t ) const
   
   while( s > 0 ){
 
-    const int lsb = s & ~s;
+    const int lsb = s & -s;
 
     for( int i = 0 ; i < power ; i++ ){
 
@@ -40,7 +40,7 @@ inline vector<int> SupsetEdge::operator()( const int& t ) const
   
   while( s > 0 ){
 
-    const int lsb = s & ~s;
+    const int lsb = s & -s;
 
     for( int i = 0 ; i < power ; i++ ){
 
@@ -61,6 +61,7 @@ template <typename U , typename Z_ALG> inline AbstractFastZetaTransform<U,Z_ALG>
 template <typename U , typename Z_ALG> inline AbstractFastZetaTransform<U,Z_ALG>::AbstractFastZetaTransform( Z_ALG R , const int& size , vector<U>& a , const bool& transformed ) : VirtualZetaTransform<int,Graph<SubsetEdge>,Graph<SupsetEdge>,U,Z_ALG>( Graph( size , SubsetEdge() ) , Graph( size , SupsetEdge() ) , move( R ) , move( a ) , true ) , m_digit() , m_size_minus( size - 1 )
 {
 
+  this->m_G.edge().m_p_size_minus = this->m_G_inv.edge().m_p_size_minus = &m_size_minus;
   int power = 1;
   
   while( power < size ){
@@ -91,10 +92,10 @@ template <typename U , typename Z_ALG> inline AbstractFastZetaTransform<U,Z_ALG>
     }
 
   }
-  
+
 }
 
-template <typename U> template <typename...Args> inline FastZetaTransform<U>::FastZetaTransform( const U& one , Args&&... args ) : AbstractFastZetaTransform<U,Algebra<int,U>>( Algebra<int,U>( one ) , forward<Args>( args )... ) {}
+template <typename U> template <typename...Args> inline FastZetaTransform<U>::FastZetaTransform( const U& one , Args&&... args ) : AbstractFastZetaTransform<U,Algebra<int,U>>( Algebra<int,U>( 0 , one ) , forward<Args>( args )... ) {}
 
 template <typename U , typename Z_ALG>
 vector<U> AbstractFastZetaTransform<U,Z_ALG>::TotalGet()
