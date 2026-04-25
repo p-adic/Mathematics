@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/CostOne/Interval/a_Body.hpp"
+#else
+TE <TY U,TY GROUP>VE<int> AbstractCostOneIntervalKnapsack(GROUP M,CO VE<U>& value,CO U& value_prod_ubound){CO int N = value.SZ();VE<int> AN(N,N);if(N > 0){int left = 0,right = 0;U prod = value[0];WH(left < N){WH(right + 1 < N && prod < value_prod_ubound){prod = M.Product(MO(prod),value[++right]);}if(prod < value_prod_ubound){break;}AN[left]= right;prod = M.Product(M.Inverse(value[left++]),prod);}}RE AN;}TE <TY INT> IN VE<int> CostOneIntervalKnapsack(CO VE<INT>& value,CO INT& value_sum_ubound){RE AbstractCostOneIntervalKnapsack(AdditiveGroup<INT>{},value,value_sum_ubound);}
+#endif
+
