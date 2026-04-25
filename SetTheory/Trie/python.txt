@@ -1,0 +1,155 @@
+# 以下文字の種類数をS、長さの上限をL、要素数をNと置く。
+
+# 構築O(S)
+
+# 全要素数取得O(1)
+# 区間要素数取得O(LS)
+
+# 要素挿入O(LS)（元々要素があればO(L)）
+# 要素削除O(L)
+# 特定の値に等しい要素数／特定の値を始切片に持つ要素数取得O(L)
+class TrieTree:
+	def __init__(self,base=2,length=-1):
+		self.base=base
+		self.length=length
+		self.edge=[[0]*self.base]
+		self.count=[0]
+		self.sum=[0]
+
+	def insert(self,v,c):
+		if c==0:return
+		node=0
+		self.sum[node]+=c
+		for i in self.ToArray(v):
+			assert 0<=i<self.base,(i,self.base)
+			if self.edge[node][i]<1:
+				self.edge[node][i]=node=len(self.edge)
+				self.edge+=[[0]*self.base]
+				self.count+=[0]
+				self.sum+=[0]
+			else:
+				node=self.edge[node][i]
+			self.sum[node]+=c
+		self.count[node]+=c
+
+	def erase(self,v,c=None):
+		v=self.ToArray(v)
+		if c is None:c=count(v)
+		insert(v,-c)
+
+	def clear(self):
+		self.edge=[[0]*self.base]
+		self.count=[0]
+		self.sum=[0]
+
+	def empty(self):
+		return self.size()==0
+
+	def size(self):
+		return self.sum[0]
+
+	def count(v):
+		found=1
+		node=0
+		self.sum[node]+=c
+		for i in self.ToArray(v):
+			assert(0<=i<self.base)
+			if self.edge[node][i]<1:
+				found=0
+				break
+			else:
+				node=self.edge[node][i]
+		return (self.count[node],self.sum[node])if found else(0,0)
+
+	def InitialSegmentCount(self,v_ulim):
+		v=self.ToArray(v_ulim)
+		L=len(v)
+		node=[0]
+		for i in R(L):
+			assert(0<=v[i]<self.base)
+			if self.edge[node[-1]][v[i]]<1:
+				L=i+1
+				break
+			node+=[self.edge[node[-1]][v[i]]]
+		answer=0
+		while L:
+			L-=1
+			for j in R(v[L]):
+				if self.edge[node[L]][j]:
+					answer+=self.sum[self.edge[node[L]][j]]
+		return answer
+
+	def IntervalCount(self,v_min,v_ulim):
+		return self.InitialSegmentCount(v_ulim)-self.InitialSegmentCount(v_min)if v_min<v_ulim else 0
+
+	def ToArray(self,v):
+		if v.__class__==[].__class__:return v
+		if v.__class__=="".__class__:return[(ord(c)-ord('a'))%26 for c in v]
+		answer=[]
+		if self.length==-1:
+			while v:
+				answer+=[v%self.base]
+				v//=self.base
+		else:
+			assert self.length>=0
+			for i in R(self.length):
+				answer+=[v%self.base]
+				v//=self.base
+		answer.reverse()
+		return answer
+
+
+# 構築O(1)
+
+# 要素挿入O(L)
+# マッチする深さ取得O(L)
+class TrieTree:
+	def __init__(self,base=2,length=-1):
+		self.base=base
+		self.length=length
+		self.edge=[{}]
+
+	def insert(self,v):
+		node=0
+		for i in self.ToArray(v):
+			assert 0<=i<self.base,(i,self.base)
+			if i in self.edge[node]:
+				node=self.edge[node][i]
+			else:
+				self.edge[node][i]=node=len(self.edge)
+				self.edge+=[{}]
+
+	def clear(self):
+		self.edge=[{}]
+
+	def empty(self):
+		return self.size()==0
+
+	def size(self):
+		return len(self.edge)-1
+
+	def depth(self,v):
+		node=0
+		depth=0
+		for i in self.ToArray(v):
+			assert(0<=i<self.base)
+			if i in self.edge[node]:node,depth=self.edge[node][i],depth+1
+			else:break
+		return depth
+
+	def ToArray(self,v):
+		if v.__class__==[].__class__:return v
+		if v.__class__=="".__class__:return[(ord(c)-ord('a'))%26 for c in v]
+		answer=[]
+		if self.length==-1:
+			while v:
+				answer+=[v%self.base]
+				v//=self.base
+		else:
+			assert self.length>=0
+			for i in R(self.length):
+				answer+=[v%self.base]
+				v//=self.base
+		answer.reverse()
+		return answer
+

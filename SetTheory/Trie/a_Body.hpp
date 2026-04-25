@@ -39,6 +39,48 @@ pair<U,U> TrieTree<U,ABEL_GROUP>::count( const V& v )
 
 }
 
+template <typename U , typename ABEL_GROUP> template <typename V>
+U TrieTree<U,ABEL_GROUP>::InitialSegmentCount( const V& v_ulim )
+{
+
+  auto&& val = ToArray( v_ulim );
+  int L = val.size();
+  vector<int> node( L + 1 );
+  
+  for( int i = 0 ; i < L ; i++ ){
+
+    auto itr = m_edge[node[i]].lower_bound( val[i] );
+
+    // val[i]‚ªkey‚Å‚ ‚é‚©”Û‚©‚ðŠm”F
+    if( itr == m_edge[node[i]].end() || val[i] < itr->first ){
+
+      L = i + 1;
+      break;
+
+    }
+
+    node[i+1] = itr->second;
+
+  }
+
+  U answer = m_M.Zero();
+
+  while( --L >= 0 ){
+
+    for( auto itr = m_edge[node[L]].begin() , end = m_edge[node[L]].end() ; itr != end && itr->first < val[L] ; ++itr ){
+
+      answer = m_M.Sum( move( answer ) , m_count[itr->second].second );
+
+    }
+
+  }
+
+  return answer;
+  
+}
+
+template <typename U , typename ABEL_GROUP> template <typename V> inline U TrieTree<U,ABEL_GROUP>::IntervalCount( const V& v_min , const V& v_ulim ) { return v_min < v_ulim ? m_M.Sum( InitialSegmentCount( v_ulim ) , m_M.Inverse( InitialSegmentCount( v_min ) ) ) : m_M.Zero(); }
+
 template <typename U , typename ABEL_GROUP>
 void TrieTree<U,ABEL_GROUP>::Increment( vector<int>& v ) const
 {
@@ -419,7 +461,13 @@ void TrieTree<U,ABEL_GROUP>::swap( const V& v0 , const V& v1 )
 
 }
 
+template <typename U , typename ABEL_GROUP> inline void TrieTree<U,ABEL_GROUP>::SetBase( const int& base ) { m_base = base; }
+template <typename U , typename ABEL_GROUP> inline void TrieTree<U,ABEL_GROUP>::SetLength( const int& length ) { m_length = length; }
+
 template <typename U , typename ABEL_GROUP> inline const vector<int>& TrieTree<U,ABEL_GROUP>::ToArray( const vector<int>& v ) { return v; }
+
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::ToArray( const int& v ) { return ToArray( ll( v ) ); }
+template <typename U , typename ABEL_GROUP> inline vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v ) { assert( m_base >= 1 ); return m_length == -1 ? ToArray( v , m_base ) : ToArray( v , m_base , m_length ); }
 
 template <typename U , typename ABEL_GROUP>
 vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v , const int& M ) 
@@ -440,7 +488,7 @@ vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v , const int& M )
 
   for( int i = 0 ; i < L_half ; i++ ){
 
-    swap( answer[i] , answer[L-1-i] );
+    ::swap( answer[i] , answer[L-1-i] );
 
   }
 
@@ -452,7 +500,7 @@ template <typename U , typename ABEL_GROUP>
 vector<int> TrieTree<U,ABEL_GROUP>::ToArray( ll v , const int& M , const int& L )
 {
 
-  assert( v >= 0 );
+  assert( 0 <= L && 0 <= v );
   vector<int> answer( L );
 
   for( int i = 0 ; i < L ; i++ ){
