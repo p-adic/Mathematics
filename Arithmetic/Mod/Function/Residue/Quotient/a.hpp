@@ -1,6 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/Function/Residue/Quotient/a.hpp
 
 #pragma once
+// verify:
+// https://yukicoder.me/submissions/1161668 (ModularQuotient, positive = true)
 
 // O(log(min(base,abs(c))+1))で
 // ca \equiv gcd(c,base) mod baseを満たすaとgcdの組(a,gcd)を返す。
@@ -11,4 +13,5 @@ template <typename INT> pair<INT,ll> CoprimeFactorInverse( const ll& base , cons
 // O(log(min(base,abs(d))+1))で
 // n \equiv da mod baseを満たす0<=a<baseが存在するならばその最小値を返し、
 // 存在しないならば-1を返す。
-template <typename INT> inline INT ModularQuotient( const ll& base , const INT& n , const ll& d );
+// positiveの時は0<a<=baseの範囲で解く。
+template <typename INT> inline INT ModularQuotient( const ll& base , const INT& n , const ll& d , const bool& positive = false );

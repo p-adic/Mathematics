@@ -8,5 +8,4 @@
 
 template <typename INT> inline pair<INT,ll> CoprimeFactorInverse( const ll& base , const INT& c ) { assert( base > 0 ); auto [u_0,u_1,g] = PartitionOfUnity<ll,ll>( base, c ); return { Residue( u_1 , base ) , move( g ) }; }
 
-template <typename INT> inline INT ModularQuotient( const ll& base , const INT& n , const ll& d , const ll& coef , const ll& gcd ) { assert( 0 <= coef && coef < base && ( d % base * coef - gcd ) % base == 0 ); return n % gcd == 0 ? Residue( n / gcd % base * coef , base / gcd ) : -1; }
-template <typename INT> inline INT ModularQuotient( const ll& base , const INT& n , const ll& d ) { auto [coef,gcd] = CoprimeFactorInverse( base , d ); return ModularQuotient( base , n , d , coef ,gcd ); }
+template <typename INT> inline INT ModularQuotient( const ll& base , const INT& n , const ll& d , const bool& positive ) { auto [coef,gcd] = CoprimeFactorInverse( base , d ); return positive && n % base == 0 ? base / gcd : n % gcd == 0 ? Residue( n / gcd * coef , base / gcd ) : -1; }

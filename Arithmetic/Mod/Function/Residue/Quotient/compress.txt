@@ -3,6 +3,6 @@
 #else
 TE <TY RET,TY INT>tuple<RET,RET,INT> PartitionOfUnity(CO INT& base_0,CO INT& base_1){if(base_1 == 0){RE{base_0<0?-1:1,0,abs(base_0)};}auto[c_1,c_0,gcd]= PartitionOfUnity<RET,INT>(base_1,base_0 % base_1);c_1 -= base_0 / base_1 * c_0;RE{MO(c_0),MO(c_1),MO(gcd)};}
 
-TE <TY INT> IN pair<INT,ll> CoprimeFactorInverse(CRL base,CO INT& c){AS(base > 0);auto[u_0,u_1,g]= PartitionOfUnity<ll,ll>(base,c);RE{Residue(u_1,base),MO(g)};}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d,CRL coef,CRL gcd){AS(0 <= coef && coef < base &&(d % base * coef - gcd)% base == 0);RE n % gcd == 0?Residue(n / gcd % base * coef,base / gcd):-1;}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d){auto[coef,gcd]= CoprimeFactorInverse(base,d);RE ModularQuotient(base,n,d,coef,gcd);}
+TE <TY INT> IN pair<INT,ll> CoprimeFactorInverse(CRL base,CO INT& c){AS(base > 0);auto[u_0,u_1,g]= PartitionOfUnity<ll,ll>(base,c);RE{Residue(u_1,base),MO(g)};}TE <TY INT> IN INT ModularQuotient(CRL base,CO INT& n,CRL d,CO bool& positive = false){auto[coef,gcd]= CoprimeFactorInverse(base,d);RE positive && n % base == 0?base / gcd:n % gcd == 0?Residue(n / gcd * coef,base / gcd):-1;}
 #endif
 
