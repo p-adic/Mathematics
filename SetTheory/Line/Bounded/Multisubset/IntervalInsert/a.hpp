@@ -1,6 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/Bounded/Multisubset/IntervalInsert/a.hpp
 
 #pragma once
+// verify:
+// https://yukicoder.me/submissions/1119950 (IntervalInsert, IntervalErase, count)
 
 #include "../a.hpp"
 

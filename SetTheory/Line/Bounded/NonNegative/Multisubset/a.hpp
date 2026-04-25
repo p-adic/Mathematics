@@ -5,7 +5,8 @@
 #include "../../Multisubset/a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/1008610iinsert, InitialSegmentCount, IntervalCountj
+// https://yukicoder.me/submissions/1008610 (insert, InitialSegmentCount, IntervalCount)
+// https://yukicoder.me/submissions/1021052 (insert, ItervalCount)
 
 // BoundedLineMultiSubset‚Ì’è””{‚‘¬‰»B
 
