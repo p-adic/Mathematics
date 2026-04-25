@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Interval/CostMinimisation/a_Body.hpp"
+#else
+TE <TY U,TY GROUP>VE<int> AbstractCostOneIntervalKnapsack(GROUP M,CO VE<U>& value,CO U& value_prod_ubound){CO int N = value.SZ();VE<int> AN(N,N);if(N > 0){int left = 0,right = 0;U prod = value[0];WH(left < N){WH(right + 1 < N && prod < value_prod_ubound){prod = M.Product(MO(prod),value[++right]);}if(prod < value_prod_ubound){break;}AN[left]= right;prod = M.Product(M.Inverse(value[left++]),prod);}}RE AN;}TE <TY INT> IN VE<int> CostOneIntervalKnapsack(CO VE<INT>& value,CO INT& value_sum_ubound){RE AbstractCostOneIntervalKnapsack(AdditiveGroup<INT>{},value,value_sum_ubound);}
+
+TE <TY U1,TY GROUP1,TY U2,TY GROUP2>VE<pair<U2,int>> AbstractCostMinimisationIntervalKnapsack(GROUP1 M1,GROUP2 M2,CO VE<U1>& value,CO U1& value_prod_ubound,CO VE<U2>& cost,CO U2& exceptional){CO int N = value.SZ();CO VE<int> r = AbstractCostOneIntervalKnapsack(MO(M1),value,value_prod_ubound);VE<U2> ccost(N + 1,M2.One());for(int i = 0;i < N;i++){ccost[i+1]= M2.Product(ccost[i],cost[i]);}VE<pair<U2,int>> AN(N,{exceptional,N});for(int i = 0;i < N && r[i]< N;i++){AN[i]={M2.Product(M2.Inverse(ccost[i]),ccost[r[i]+1]),r[i]};}RE AN;}TE <TY INT1,TY INT2> IN VE<pair<INT2,int>> CostMinimisationIntervalKnapsack(CO VE<INT1>& value,CO INT1& value_sum_bound,CO VE<INT2>& cost){RE AbstractCostMinimisationIntervalKnapsack(AdditiveGroup<INT1>{},AdditiveGroup<INT2>{},value,value_sum_bound,cost,-1);}
+#endif
+

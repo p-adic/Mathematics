@@ -6,7 +6,7 @@
 #include "../../../Algebra/Monoid/Group/a_Body.hpp"
 
 template <typename U1 , typename ABEL_GROUP1 , typename U2 , typename ABEL_GROUP2>
-pair<U1,U2> NonNegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2 , const int& N , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , const int& diff_max )
+pair<U1,U2> NonNegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP2 M2 , const int& N , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , const int& diff_max )
 {
 
   U1 value_sum = value[0];
@@ -57,7 +57,7 @@ pair<U1,U2> NonNegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2
 }
 
 template <typename U1 , typename ABEL_GROUP1 , typename U2 , typename ABEL_GROUP2>
-pair<U1,U2> NegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2 , const int& N , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , const int& diff_max )
+pair<U1,U2> NegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP2 M2 , const int& N , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , const int& diff_max )
 {
 
   U1 value_sum = value[0];
@@ -106,7 +106,7 @@ pair<U1,U2> NegativeAbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2 , 
 }
 
 template <typename U1 , typename ABEL_GROUP1 , typename U2 , typename ABEL_GROUP2>
-pair<U1,U2> AbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2 , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , int diff_max )
+pair<U1,U2> AbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP2 M2 , const vector<U1>& value , const U1& value_sum_bound , const vector<U2>& cost , const U2& cost_sum_bound , const int& diff_min , int diff_max )
 {
 
   const int N = value.size();
@@ -135,8 +135,5 @@ pair<U1,U2> AbstractIntervalKnapsack( ABEL_GROUP1 M1 , ABEL_GROUP1 M2 , const ve
 }
 
 template <typename INT1 , typename INT2> inline pair<INT1,INT2> IntervalKnapsack( const vector<INT1>& value , const INT1& value_sum_bound , const vector<INT2>& cost , const INT2& cost_sum_bound , const int& diff_min = 0 , int diff_max ) { return AbstractIntervalKnapsack( AddiiveGroup<INT1>() , AddiiveGroup<INT2>() , value , value_sum_bound , cost , cost_sum_bound , diff_min , move( diff_max ) ); }
-
-template <typename U , typename ABEL_GROUP> inline U AbstractIntervalCostfreeKnapsack( ABEL_GROUP1 M , const vector<U>& value , const U& value_sum_bound , const int& diff_min = 0 , int diff_max ) { return AbstractIntervalKnapsack( AddiiveGroup<int>() , M , value , value_sum_bound , vector<int>( value.size() ) , int( 0 ) , diff_min , move( diff_max ) ); }
-template <typename INT> inline INT IntervalCostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound , const int& diff_min , int diff_max ) { return AbstractIntervalCostfreeKnapsack( AddiiveGroup<INT>() , value , value_sum_bound , diff_min , move( diff_max ) ); }
 
 #include "../ValueSumBound/a_Body.hpp"
