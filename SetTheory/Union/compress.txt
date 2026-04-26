@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/Union/a_Body.hpp"
+#else
+#define ENUM_SUB(UPDATE)CO int K = S_inv[i].SZ(),p = 1 << K;for(int s = 1;s < p;s++){VE<int> t{};for(int k = 0;k < K;k++){if((s >> k)& 1){t <<= S_inv[i][k];}}UPDATE;}
+TE <TY VEC>VE<int> UnionCardinality(CRI N,CO VE<VEC>& S){CO int M = S.SZ();VE<VE<int>> S_inv(N);for(int j = 0;j < M;j++){for(auto& i:S[j]){S_inv[i]<<= j;}}map<VE<int>,int> count{};int K_max = 0;for(int i = 0;i < N;i++){Sort(S_inv[i],1);ENUM_SUB(count[t]++);SetMax(K_max,K);}CO int p_max = 1 << K_max;VE<int> sign(p_max,-1);for(int s = 1;s < p_max;s++){sign[s]= -sign[s^(-s&s)];}VE<int> a(N);for(int i = 0;i < N;i++){ENUM_SUB(a[i]+= sign[s]* count[t]);}RE a;}
+#endif
+
