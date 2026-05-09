@@ -1,102 +1,71 @@
-// c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/Bounded/a.hpp
+// c:/Users/user/Documents/Programming/Mathematics/SetTheory/Line/a.hpp
 
 #pragma once
 #include "Iterator/a.hpp"
 
-#ifdef DEBUG
-  #include "../../DirectProduct/AffineSpace/BIT/Debug/a.hpp"
-#else
-  #include "../../DirectProduct/AffineSpace/BIT/a.hpp"
-#endif
-
 // verify:
-// https://yukicoder.me/submissions/1008247 (insert, erase, ConnectedComponentOf)
+// https://yukicoder.me/submissions/1002789（insert, erase, ConnectedComponentOf）
+// https://yukicoder.me/submissions/1123304 (IntervalInsert, ConnectedComponentOf, GetConnectedComponent)
 
-// 構築O(ubound - lbound)
-// 一点挿入O(log (ubound - lbound))
-// 一点削除O(log (ubound - lbound))
-// 一点帰属判定O(log (ubound - lbound))
-// 区間要素数取得O(log (ubound - lbound))
+// 構築O(1)
+// 一点挿入O(log Q)
+// 区間挿入O(log Q)（均し）
+// 一点削除O(log Q)
+// 区間削除O(log Q)（均し）
+// 一点帰属判定O(log Q)
+// サイズ取得O(1)
 
-// 先頭イテレータ取得O(log (ubound - lbound))
-// 末尾イテレータ取得O(log (ubound - lbound))
-// 上限/下限二分探索O(log (ubound - lbound))
+// 先頭イテレータ取得O(1)
+// 末尾イテレータ取得O(1)
+// 上限/下限二分探索O(log Q)
 
-// 最大値/最小値取得O(log (ubound - lbound))
+// 最大値/最小値取得O(1)
 
-// 一点連結成分取得O(log (ubound - lbound))
-// 全連結成分取得O(連結成分数 log (ubound - lbound))
+// 一点連結成分取得O(log Q)
 
-template <typename INT , typename RET_NOR , typename RET_DEN , template <typename...> typename DATA_STR>
-class VirtualBoundedLineSubset
+// イテレータへの*は要素への値返し。
+
+template <typename INT>
+class LineSubset
 {
 
-protected:
-  INT m_lbound;
-  INT m_ubound;
-  DATA_STR<INT> m_ds;
+private:
+  // 区間[l,r]ごとにm_l[r] = lとして直線の部分集合を管理する。
+  map<INT,INT> m_l;
+  int m_size;
 
 public:
-  using iterator = IteratorOfBoundedLineSubset<VirtualBoundedLineSubset<INT,RET_NOR,RET_DEN,DATA_STR>,INT>;
+  using iterator = IteratorOfLineSubset<INT>;
   
-  inline void insert( const INT& i );
-  inline void erase( const INT& i ) noexcept;
+  void insert( const INT& i ) noexcept;
+  void IntervalInsert( const INT& i_start , const INT& i_final ) noexcept;
+  void erase( const INT& i ) noexcept;
   // itrをインクリメントして書き換え、それへの参照を返す。
   inline iterator& erase( iterator& itr );
-  inline void clear();
+  void IntervalErase( const INT& i_start , const INT& i_final ) noexcept;
 
-  inline INT count( const INT& i ) noexcept;
-  bool find( const INT& i ) noexcept;
+  inline int count( const INT& i ) const noexcept;
+  bool find( const INT& i ) const noexcept;
 
-  inline INT InitialSegmentCount( const INT& i_final );
-  inline INT IntervalCount( const INT& i_start , const INT& i_final );
-  inline bool empty() noexcept;
+  inline const int& size() const noexcept;
+  inline bool empty() const noexcept;
+  inline void clear() noexcept;
 
-  inline iterator begin() noexcept;
-  inline iterator end() noexcept;
+  inline iterator begin() const noexcept;
+  inline iterator end() const noexcept;
 
-  inline iterator MaximumLeq( const INT& i , const INT& k = 0 );
-  inline iterator MaximumLt( const INT& i , const INT& k = 0 );
-  inline iterator MinimumGeq( const INT& i , const INT& k = 0 );
-  inline iterator MinimumGt( const INT& i , const INT& k = 0 );
+  inline iterator MaximumLeq( const INT& i ) const noexcept;
+  inline iterator MaximumLt( const INT& i ) const noexcept;
+  inline iterator MinimumGeq( const INT& i ) const noexcept;
+  inline iterator MinimumGt( const INT& i ) const noexcept;
 
-  inline INT Maximum( const INT& k = 0 );
-  inline INT Minimum( const INT& k = 0 );
-
-  // iを含む連結成分の右端を返す。存在しない場合はi-1を返す。
-  INT RightEndPointOf( const INT& i , int d = -1 , int comp_minus = -1 , const bool& in = false );
-  // iを含む連結成分の左端を返す。存在しない場合はi+1を返す。
-  INT LeftEndPointOf( const INT& i , int d = -1 , int comp_minus = -1 , const bool& in = false );
+  inline INT Maximum() const;
+  inline INT Minimum() const;
 
   // iを含む連結成分を返す。存在しない場合は[1+1,i-1]を返す。
-  inline pair<INT,INT> ConnectedComponentOf( const INT& i , bool in = false );
+  pair<INT,INT> ConnectedComponentOf( const INT& i ) const noexcept;
 
-  vector<pair<INT,INT>> GetConnectedComponent() noexcept;
-
-  inline const INT& lbound() const noexcept;
-  inline const INT& ubound() const noexcept;
-
-protected:
-  virtual bool InRange( const INT& i ) = 0;
-  virtual RET_NOR Normalise( const INT& i ) = 0;
-  virtual RET_DEN Denormalise( const decay_t<RET_NOR>& d ) = 0;
-
+  // [r,l]の列をmapとして参照する。
+  inline const map<INT,INT>& GetConnectedComponent() const noexcept;
+  
 };
-
-template <typename INT , template <typename...> typename DATA_STR>
-class AbstractBoundedLineSubset :
-  virtual public VirtualBoundedLineSubset<INT,INT,INT,DATA_STR>
-{
-
-public:
-  inline AbstractBoundedLineSubset( const INT& lbound , const INT& ubound );
-
-protected:
-  inline bool InRange( const INT& i );
-  inline INT Normalise( const INT& i );
-  inline INT Denormalise( const INT& d );
-
-};
-
-#include "a_Alias.hpp"
-
