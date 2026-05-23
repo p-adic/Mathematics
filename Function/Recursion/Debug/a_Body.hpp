@@ -6,6 +6,7 @@
 #include "../../../Utility/Random/a_Body.hpp"
 
 string CURRENT_NAME_FOR_RECURSION = "";
+template <typename F , typename REC , typename...Args> unordered_map<F*,unordered_map<tuple<Args...>,ret_t<REC,MemorisationRecursion<REC>&,const Args&...>>> memo_for_recursion{};
 
 template <typename REC> inline NonMemorisationRecursion<REC>::NonMemorisationRecursion( REC rec ) : REC( move( rec ) ) , m_name( CURRENT_NAME_FOR_RECURSION )
 {
@@ -22,19 +23,18 @@ template <typename REC> inline NonMemorisationRecursion<REC>::NonMemorisationRec
 
 }
 
-template <typename REC> inline MemorisationRecursion<REC>::MemorisationRecursion( REC rec ) : REC( move( rec ) ) , m_name( CURRENT_NAME_FOR_RECURSION ) , m_num()
+template <typename REC> inline MemorisationRecursion<REC>::MemorisationRecursion( REC rec ) : REC( move( rec ) ) , m_name( CURRENT_NAME_FOR_RECURSION )
 {
 
-  static int num = -1;
+  static bool init = true;
 
-  if( num == -1 ){
+  if( init ){
     
     DERR( "MemorisationRecursion" , m_name , "をデバッグモードで実行します。" );
     DERR( "エラー出力以外に変更はありません。" );
+    init = false;
 
   }
-
-  m_num = ++num;
 
 }
 
@@ -52,27 +52,19 @@ template <typename REC> template <typename...Args>
 inline const ret_t<REC,MemorisationRecursion<REC>&,const Args&...>& MemorisationRecursion<REC>::operator()( const Args&... args )
 {
 
-  static unordered_map<tuple<Args...>,ret_t<REC,MemorisationRecursion<REC>&,const Args&...>> memory{};
-  static int num = -1;
-
-  if( num != m_num ){
-
-    assert( num < m_num );
-    num = m_num;
-    memory.clear();
-
-  }
-  
+  auto& memo = memo_for_recursion<decldecay_t(*this),REC,Args...>[this];
   const tuple<Args...> v{ args... };
 
-  if( memory.count( v ) == 0 ){
+  if( memo.count( v ) == 0 ){
 
-    auto& answer = memory[v] = REC::operator()( *this , args... );
+    auto& answer = memo[v] = REC::operator()( *this , args... );
     DERR( "メモ化再帰：" , m_name , "(" , v , ") =" , answer );
     return answer;
 
   }
   
-  return memory[v];
+  return memo[v];
 
 }
+
+template <typename REC> template <typename...Args> inline void MemorisationRecursion<REC>::clear() { memo_for_recursion<decldecay_t(*this),REC,Args...>[this].clear(); }

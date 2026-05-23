@@ -26,10 +26,10 @@ class MemorisationRecursion : REC
 
 private:
   string m_name;
-  int m_num;
   
 public:
   inline MemorisationRecursion( REC rec );
   template <typename...Args> inline const ret_t<REC,MemorisationRecursion<REC>&,const Args&...>& operator()( const Args&... args );
+  template <typename...Args> inline void clear();
 
 };

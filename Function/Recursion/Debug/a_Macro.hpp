@@ -7,6 +7,10 @@
   template <typename F , typename...Args> using ret_t = decltype( declval<F>()( declval<Args>()... ) );
 #endif
 
+#ifndef decldecay_t
+  #define decldecay_t(VAR)decay_t<decltype(VAR)>
+#endif
+
 #define Recursion( RET , FUNC , ... ) CURRENT_NAME_FOR_RECURSION = #FUNC; NonMemorisationRecursion FUNC = [&]( auto& FUNC , __VA_ARGS__ ) -> RET
-#define MemoRecursion( RET , FUNC , ... ) CURRENT_NAME_FOR_RECURSION = #FUNC; MemorisationRecursion FUNC = [&]( auto& FUNC , __VA_ARGS__ ) -> RET
+#define MemoRecursion( RET , FUNC , ... ) CURRENT_NAME_FOR_RECURSION = #FUNC; static MemorisationRecursion FUNC = [&]( auto& FUNC , __VA_ARGS__ ) -> RET
 

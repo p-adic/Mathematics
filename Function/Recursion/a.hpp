@@ -9,6 +9,7 @@
 // https://yukicoder.me/submissions/998766（Recursion）
 // https://atcoder.jp/contests/math-and-algorithm/submissions/56175446（MemoRecursion）
 
+// 再帰の有向グラフの無向化が木をなす場合は同じ引数を一度しか使わないのでこちらを使う。
 // Recursion( int , f , const int& n ){
 //   return n <= 1 ? n : ( f( n - 1 ) + f( n - 2 ) ) % 1000000007;
 // };
@@ -16,6 +17,7 @@
 // MemoRecursion( int , f , const int& n ){
 //   return n <= 1 ? n : ( f( n - 1 ) + f( n - 2 ) ) % 1000000007;
 // };
+// f.clear();
 
 // koturn, C++のラムダで再帰する(https://koturn.hatenablog.com/entry/2018/06/10/060000), koturnの日記, Hatena Blog, 2018-06-10.
 // を元に実装。
@@ -33,12 +35,10 @@ public:
 template <typename REC>
 class MemorisationRecursion : REC
 {
-
-private:
-  int m_num;
   
 public:
   inline MemorisationRecursion( REC rec );
   template <typename...Args> inline const ret_t<REC,MemorisationRecursion<REC>&,const Args&...>& operator()( const Args&... args );
+  template <typename...Args> inline void clear();
 
 };
