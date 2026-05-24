@@ -3,8 +3,8 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../Arithmetic/Iteration/a_Body.hpp"
 #include "../../Utility/Set/Map/a_Body.hpp"
+#include "../../Utility/Vector/a_Body.hpp"
 
 template <typename RET , typename INT>
 RET CombinationCumulativeProductRecursion( const INT& n , const INT& m , const bool& reset )
@@ -15,15 +15,15 @@ RET CombinationCumulativeProductRecursion( const INT& n , const INT& m , const b
   
   if( memory_n.empty() ){
 
-    memory_n.push_back( 1 );
+    memory_n <<= 1;
 
   }
 
-  INT size;
+  INT M;
 
-  while( ( size = memory_n.size() ) <= m ){
+  while( ( M = memory_n.size() ) <= m ){
 
-    memory_n.push_back( memory_n.back() * ( n - size + 1 ) / size );
+    memory_n <<= memory_n.back() * ( n - M + 1 ) / M;
 
   }
 
@@ -41,90 +41,17 @@ RET CombinationCumulativeProductRecursion( const INT& n , const INT& m , const b
 
 template <typename RET , typename INT1 , typename INT2> inline RET CombinationCumulativeProduct( const INT1& n , INT2 m  , const bool& reset ){ const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? CombinationCumulativeProductRecursion<RET>( n , INT1{ 0 } , reset ) - 1 : CombinationCumulativeProductRecursion<RET>( n , min( m_copy , n - m_copy ) , reset ); }
 
-template <typename MOD , typename INT , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuativeRecursion( const INT& n , const INT& m , const VEC& factor , const bool& reset )
-{
-
-  static Map<INT,tuple<vector<MOD>,vector<vector<int>>>> memory{};
-  const int L = factor.size();
-
-  if( n < m ){
-
-    if( reset ){
-
-      memory.erase( n );
-
-    }
-
-    return { MOD{ 0 } , vector<int>( L ) };
-
-  }
-  
-  auto& [comb,exponent] = memory[n];
-  
-  if( comb.empty() ){
-
-    comb.push_back( 1 );
-    exponent.push_back( vector<int>( L ) );
-
-  }
-
-  INT size;
-
-  while( ( size = comb.size() ) <= m ){
-
-    MOD c = comb.back();
-    vector<int> e = exponent.back();
-
-    for( int num = 0 ; num < 2 ; num++ ){
-
-      INT r = num == 0 ? n - size + 1 : size;
-
-      for( int i = 0 ; i < L ; i++ ){
-
-        auto& p = factor[i];
-
-        while( r % p == 0 ){
-
-          r /= p;
-          num == 0 ? ++e[i] : --e[i];
-
-        }
-
-      }
-
-      num == 0 ? c *= r : c /= r;
-
-    }
-
-    comb.push_back( move( c ) );
-    exponent.push_back( move( e ) );
-
-  }
-  
-  if( reset ){
-
-    pair<MOD,vector<int>> answer{ move( comb[m] ) , move( exponent[m] ) };
-    memory.erase( n );
-    return answer;
-
-  }
-  
-  return { comb[m] , exponent[m] };
-
-}
-
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationCumulativeProductValuative( const INT1& n , INT2 m , const VEC& factor , const bool& reset ){ const INT1 m_copy = move( m ); return CombinationCumulativeProductValuativeRecursion<MOD>( n , m < 0 || n < m_copy ? n + 1 : min( m_copy , n - m_copy ) , factor , reset ); }
 
 template <typename INT>
 INT CombinationFactorialRecursion( const INT& n , const INT& m )
 {
 
   static vector<INT> factorial{ 1 };
-  INT size;
+  INT N;
 
-  while( ( size = factorial.size() ) <= n ){
+  while( ( N = factorial.size() ) <= n ){
 
-    factorial.push_back( factorial.back() * size );
+    factorial <<= factorial.back() * N;
 
   }
 
@@ -134,79 +61,32 @@ INT CombinationFactorialRecursion( const INT& n , const INT& m )
 
 template <typename INT1 , typename INT2> inline INT1 CombinationFactorial( const INT1& n , INT2 m ){ assert( ( ( is_same_v<INT1,int> || is_same_v<INT1,uint> ) && n <= 12 ) || ( ( is_same_v<INT1,ll> || is_same_v<INT1,ull> ) && n <= 20 ) ); const INT1 m_copy = move( m ); return m < 0 || n < m_copy ? INT1( 0 ) : CombinationFactorialRecursion( n , m_copy ); }
 
-template <typename MOD , typename INT1 , typename INT2 , typename VEC>
-pair<MOD,vector<int>> CombinationFactorialValuativeRecursion( const INT1& n , const vector<INT2>& m , const VEC& factor )
+
+template <typename RET>
+RET CombinationPascal( const int& n , const int& m )
 {
 
-  // ÇPéÌóﬁÇÃfactorÇ≈ÇµÇ©åƒÇ—èoÇ≥Ç»Ç¢ëzíËÅB
-  static const int L = factor.size();
-  assert( L == int( factor.size() ) );
+  if( n < 0 || m < 0 || n < m ){
 
-  if( m.empty() ){
-
-    return { MOD{ 1 } , vector<int>( L ) };
-
-  }
-
-  const INT1 sum = Sum<INT1>( m );
-
-  if( n < sum || Min( m ) < 0 ){
-
-    return { MOD{ 0 } , vector<int>( L ) };
+    return 0;
 
   }
   
-  static vector<MOD> factorial{ 1 };
-  static vector<MOD> factorial_inv{ 1 };
-  static vector exponent( 1 , vector<int>( L ) );
-  INT1 size;
+  static vector<vector<RET>> memory = {{1}};
+  int N;
 
-  while( ( size = factorial.size() ) <= n ){
+  while( ( N = memory.size() ) <= n ){
 
-    vector<int> e = exponent.back();
+    memory <<= vector<RET>( N + 1 , 1 );
 
-    for( int i = 0 ; i < L ; i++ ){
+    for( int i = 1 ; i < N ; i++ ){
 
-      auto& p = factor[i];
-
-      while( size % p == 0 ){
-
-        size /= p;
-        e[i]++;
-
-      }
-
-    }
-
-    factorial.push_back( factorial.back() * size );
-    factorial_inv.push_back( factorial_inv.back() / size );
-    exponent.push_back( move( e ) );
-
-  }
-
-  MOD f = factorial[n];
-  vector<int> e = exponent[n];
-  const int M = m.size();
-
-  for( int j = 0 ; j <= M ; j++ ){
-
-    const int k = j < M ? INT1( m[j] ) : n - sum;
-    f *= factorial_inv[k];
-    auto& denom = exponent[k];
-
-    for( int i = 0 ; i < L ; i++ ){
-
-      e[i] -= denom[i];
+      memory[N][i] = memory[N-1][i-1] + memory[N-1][i];
 
     }
 
   }
 
-  return { move( f ) , move( e ) };
+  return memory[n][m];
 
 }
-
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , const vector<INT2> m , const VEC& factor ){ return CombinationFactorialValuativeRecursion<MOD>( n , m , factor ); }
-template <typename MOD , typename INT1 , typename INT2 , typename VEC> inline pair<MOD,vector<int>> CombinationFactorialValuative( const INT1& n , INT2 m , const VEC& factor ){ return CombinationFactorialValuativeRecursion<MOD>( n , vector<INT1>{ move( m ) } , factor ); }
-
-#include "../../Arithmetic/Prime/Factorisation/a_Body.hpp"
