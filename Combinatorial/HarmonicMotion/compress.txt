@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/HarmonicMotion/a_Body.hpp"
+#else
+ll HarmonicMotionBody(CRL n,CRL x,CRL L,CRL R){ll l = 0;if(L > 0 && R > 0 && -R <= x && x < L){l =(L - 1 -(x - R * n))/(L + R);}else{if(x < 0){if(x + L * n < 0){l = n;}else{l =(-x + L - 1)/ L;l += HarmonicMotionBody(n - l,x + L * l,L,R);}}else{if(x - R * n < 0){ll r =(x + R)/ R;l = HarmonicMotionBody(n - r,x - R * r,L,R);}}}RE l;}IN T3<ll> HarmonicMotion(CRL n,CRL x,CRL L,CRL R,CO bool& right){ll l = right?HarmonicMotionBody(n,x,L,R):n - HarmonicMotionBody(n,-x,-R,-L);ll r = n - l;RE{l,r,x + L * l - R * r};}
+#endif
+
