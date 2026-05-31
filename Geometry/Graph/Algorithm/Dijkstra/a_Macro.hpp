@@ -2,14 +2,7 @@
 
 #pragma once
 
-#define DIJKSTRA_PREP( INITIALISE_PREV )		\
-  const U& one = m_M.One();				\
-  assert( one < infty );				\
-  auto&& i_start = m_G.Enumeration_inv( t_start );	\
-  assert( 0 <= i_start && i_start < size );		\
-  INITIALISE_PREV;					\
-
-// mane_edge == true‚ÌŽž(O(V^2))
+// many_edge == true‚ÌŽž(O(V^2))
 #define DIJKSTRA_BODY_1( SET_PREV )					\
   if( path_length == -1 ){						\
 									\
@@ -75,7 +68,7 @@
 									\
   }									\
 
-// mane_edge == true‚ÌŽž(O((|V|+|E|)log |V|))
+// many_edge == true‚ÌŽž(O((|V|+|E|)log |V|))
 #define DIJKSTRA_BODY_2( CHECK_FINAL , SET_PREV )			\
   assert( path_length == -1 );						\
   set<pair<U,int>> vertex{};						\
@@ -128,7 +121,11 @@
   }									\
 
 #define DIJKSTRA_BODY( INITIALISE_PREV , CHECK_FINAL , SET_PREV )	\
-  DIJKSTRA_PREP( INITIALISE_PREV );					\
+  const U& one = m_M.One();				\
+  assert( one < infty );				\
+  auto&& i_start = m_G.Enumeration_inv( t_start );	\
+  assert( 0 <= i_start && i_start < size );		\
+  INITIALISE_PREV;					\
 									\
   if( many_edges ){							\
 									\
@@ -141,3 +138,4 @@
   }									\
   
 
+// changed_vertex‚Ílog |E_G|‚ðlog|V_G|‚É—Ž‚Æ‚·‚½‚ß‚Ì‚à‚ÌB

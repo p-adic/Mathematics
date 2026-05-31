@@ -11,7 +11,7 @@
 
 template <typename E>
 class GridDijkstra :
-  public DoubleDijkstra<int,LinearGraph,int,decldecay_t(declval<E>()({0,0}).front().second),GridGraph<E>,vector<int>(&)(const int&)>
+  public DoubleDijkstra<LinearGraph,GridGraph<E>,vector<int>(&)(const int&)>
 {
 
 public:

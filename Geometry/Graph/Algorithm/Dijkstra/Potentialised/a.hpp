@@ -18,7 +18,7 @@
 // BellmanFord法で自動で計算する場合はAbstractBellmanFordPotentialisedDijkstraを用いる。
 
 // 構築O(|V_G|)
-// 単一始点全終点最短経路探索／経路復元なしO((min(|V_G|^2+|E_G|,|V_G|+|E_G|)log |V_G|))
+// 単一始点全終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
 // 単一始点全終点最短経路探索／経路復元ありO(|V_G|^2+|E_G|)
 template <typename T , typename GRAPH , typename U , typename GROUP , typename On>
 class AbstractPotentialisedDijkstra :

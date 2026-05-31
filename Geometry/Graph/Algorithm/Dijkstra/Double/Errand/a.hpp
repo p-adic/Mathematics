@@ -12,7 +12,7 @@
 
 // GRAPHはグラフG=(V_G,E_G:T->(T \times U)^{< \omega})に相当するMemorisationGraphでない型。
 // SUBGOALは写像subgoal : int \times T -> \{0,1\}に相当する型。
-template <typename T , typename GRAPH>
+template <typename GRAPH , typename T>
 class ErrandEnumeration
 {
 
@@ -25,7 +25,7 @@ public:
 
 };
 
-template <typename T , typename GRAPH>
+template <typename GRAPH , typename T>
 class ErrandEnumeration_inv
 {
 
@@ -38,7 +38,7 @@ public:
 
 };
 
-template <typename T , typename U , typename GRAPH , typename SUBGOAL>
+template <typename GRAPH , typename SUBGOAL , typename T , typename U>
 class ErrandEdge
 {
 
@@ -54,7 +54,7 @@ public:
 
 };
 
-template <typename T , typename GRAPH>
+template <typename GRAPH , typename T>
 class ErrandVertex
 {
 
@@ -68,9 +68,9 @@ public:
 
 };
 
-template <typename T , typename GRAPH , typename U , typename COMM_MONOID , typename SUBGOAL>
+template <typename GRAPH , typename COMM_MONOID , typename SUBGOAL , typename T = inner_t<GRAPH>, typename U = inner_t<COMM_MONOID>>
 class ErrandDijkstra :
-  public DoubleDijkstra<int,LinearGraph,T,U,EnumerationGraph<pair<int,T>,ErrandEnumeration<T,GRAPH>,ErrandEnumeration_inv<T,GRAPH>,ErrandEdge<T,U,GRAPH,SUBGOAL>>,ErrandVertex<T,GRAPH>>
+  public DoubleDijkstra<LinearGraph,EnumerationGraph<pair<int,T>,ErrandEnumeration<GRAPH,T>,ErrandEnumeration_inv<GRAPH,T>,ErrandEdge<GRAPH,SUBGOAL,T,U>>,ErrandVertex<GRAPH,T>>
 {
 
 private:
@@ -93,5 +93,4 @@ public:
   inline vector<U> GetDistance( const vector<T>& t_starts , const bool& many_edges = true );
 
 };
-template <typename GRAPH , typename COMM_MONOID , typename SUBGOAL , typename...Args> ErrandDijkstra( GRAPH G , COMM_MONOID M , SUBGOAL subgoal , const Args&... ) -> ErrandDijkstra<inner_t<GRAPH>,GRAPH,inner_t<COMM_MONOID>,COMM_MONOID,SUBGOAL>;
 

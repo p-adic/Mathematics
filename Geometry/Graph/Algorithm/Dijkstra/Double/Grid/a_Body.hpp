@@ -11,4 +11,4 @@
 
 inline vector<int> GridVertex( const int& i ){ return id<>( W ); }
 
-template <typename E> inline GridDijkstra<E>::GridDijkstra( E e , const int& direction ) : DoubleDijkstra<int,LinearGraph,int,decldecay_t(declval<E>()({0,0}).front().second),GridGraph<E>,vector<int>(&)(const int&)>( LinearGraph( H , direction ) , GridGraph( move( e ) ) , GridVertex ) { assert( direction == 1 || direction == 2 ); }
+template <typename E> inline GridDijkstra<E>::GridDijkstra( E e , const int& direction ) : DoubleDijkstra<LinearGraph,GridGraph<E>,vector<int>(&)(const int&)>( LinearGraph( H , direction ) , GridGraph( move( e ) ) , GridVertex ) { assert( direction == 1 || direction == 2 ); }

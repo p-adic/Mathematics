@@ -11,14 +11,14 @@
 
 #include "../../../Acyclic/a_Body.hpp"
 
-template <typename T1 , typename ACYCLIC_GRAPH , typename T2 , typename U , typename GRAPH , typename VERTEX> inline DoubleDijkstra<T1,ACYCLIC_GRAPH,T2,U,GRAPH,VERTEX>::DoubleDijkstra( ACYCLIC_GRAPH G1 , GRAPH G2 , VERTEX vertex ) : DoubleDijkstra( move( G1 ) , move( G2 ) , move( vertex ) , TopologicalSort( G1 ) ) {}
-template <typename T1 , typename ACYCLIC_GRAPH , typename T2 , typename U , typename GRAPH , typename VERTEX> inline DoubleDijkstra<T1,ACYCLIC_GRAPH,T2,U,GRAPH,VERTEX>::DoubleDijkstra( ACYCLIC_GRAPH G1 , GRAPH G2 , VERTEX vertex  , vector<T1> top_sort ) :
+template <typename ACYCLIC_GRAPH , typename GRAPH , typename VERTEX , typename T1 , typename T2 , typename U> inline DoubleDijkstra<ACYCLIC_GRAPH,GRAPH,VERTEX,T1,T2,U>::DoubleDijkstra( ACYCLIC_GRAPH G1 , GRAPH G2 , VERTEX vertex ) : DoubleDijkstra( move( G1 ) , move( G2 ) , move( vertex ) , TopologicalSort( G1 ) ) {}
+template <typename ACYCLIC_GRAPH , typename GRAPH , typename VERTEX , typename T1 , typename T2 , typename U> inline DoubleDijkstra<ACYCLIC_GRAPH,GRAPH,VERTEX,T1,T2,U>::DoubleDijkstra( ACYCLIC_GRAPH G1 , GRAPH G2 , VERTEX vertex  , vector<T1> top_sort ) :
   m_G1( move( G1 ) ) , m_G2( move( G2 ) ) , m_vertex( move( vertex ) ) , m_top_sort( move( top_sort ) )
 { static_assert( is_same_v<T1,inner_t<ACYCLIC_GRAPH>> && is_same_v<pair<T1,T2>,inner_t<GRAPH>> && is_same_v<U,decldecay_t( declval<GRAPH>().Edge( declval<inner_t<GRAPH>>() ).front().second )> && is_invocable_v<VERTEX,const T1&> ); }
 
-template <typename T1 , typename ACYCLIC_GRAPH , typename T2 , typename U , typename GRAPH , typename VERTEX> inline const vector<T1>& DoubleDijkstra<T1,ACYCLIC_GRAPH,T2,U,GRAPH,VERTEX>::GetTopologicalSort() const noexcept { return m_top_sort; }
+template <typename ACYCLIC_GRAPH , typename GRAPH , typename VERTEX , typename T1 , typename T2 , typename U> inline const vector<T1>& DoubleDijkstra<ACYCLIC_GRAPH,GRAPH,VERTEX,T1,T2,U>::GetTopologicalSort() const noexcept { return m_top_sort; }
 
-template <typename T1 , typename ACYCLIC_GRAPH , typename T2 , typename U , typename GRAPH , typename VERTEX> template <typename COMM_MONOID> vector<U> DoubleDijkstra<T1,ACYCLIC_GRAPH,T2,U,GRAPH,VERTEX>::GetDistance( const vector<pair<T1,T2>>& t_starts , COMM_MONOID M , const U& infty , const bool& many_edges )
+template <typename ACYCLIC_GRAPH , typename GRAPH , typename VERTEX , typename T1 , typename T2 , typename U> template <typename COMM_MONOID> vector<U> DoubleDijkstra<ACYCLIC_GRAPH,GRAPH,VERTEX,T1,T2,U>::GetDistance( const vector<pair<T1,T2>>& t_starts , COMM_MONOID M , const U& infty , const bool& many_edges )
 {
 
   vector<U> weight( m_G2.size() , infty );

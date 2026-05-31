@@ -1,17 +1,17 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/Dijkstra/a.hpp
 
 #pragma once
-#include "a_Macro.hpp"
-
-#include "../../a.hpp"
-#include "../../../../Algebra/Monoid/a.hpp"
-
 // verify:
-// https://yukicoder.me/submissions/989021（GetDistance、many_edges=false）
+// https://yukicoder.me/submissions/1167916（GetDistance、many_edges=false）
 // https://yukicoder.me/submissions/961784（GetDistance、many_edges=true）
 // https://yukicoder.me/submissions/961385（SetDistance、many_edges=true）
 // https://yukicoder.me/submissions/961826（GetPath、many_edged=false）
 
+
+#include "a_Macro.hpp"
+
+#include "../../a.hpp"
+#include "../../../../Algebra/Monoid/a.hpp"
 
 // GRAPHはグラフG=(V_G,E_G:T->(T \times U)^{< \omega})に相当する型。
 
@@ -21,11 +21,11 @@
 // (2) inftyがE_Gの値の各成分の第2成分|V_G|個以下の和で表せるいかなる数よりも大きい。
 // が成り立つ場合にのみサポート。
 
-// 単一始点単一終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|),(|V_G|+|E_G|)log |E_G|))
-// 単一始点単一終点最短経路探索／経路復元ありO(min(|V_G|^2+|E_G|),(|V_G|+|E_G|)log |E_G|))
-// 単一始点全終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|),(|V_G|+|E_G|)log |E_G|))
+// 単一始点単一終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
+// 単一始点単一終点最短経路探索／経路復元ありO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
+// 単一始点全終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
 // 単一始点全終点最短経路探索／経路復元ありO(|V_G|^2+|E_G|)
-template <typename T , typename GRAPH , typename U , typename COMM_MONOID>
+template <typename GRAPH , typename U , typename COMM_MONOID , typename T = inner_t<GRAPH>>
 class AbstractDijkstra :
   public PointedSet<U>
 {
@@ -64,11 +64,10 @@ public:
   pair<vector<U>,vector<list<T>>> GetPath( const T& t_start , const bool& many_edges = false , int path_length = -1 );
   
 };
-template <typename GRAPH , typename U , typename COMM_MONOID> AbstractDijkstra( GRAPH& G , COMM_MONOID M , const U& infty ) -> AbstractDijkstra<inner_t<GRAPH>,GRAPH,U,COMM_MONOID>;
 
-template <typename T , typename GRAPH>
+template <typename GRAPH , typename T = inner_t<GRAPH>>
 class Dijkstra :
-  public AbstractDijkstra<T,GRAPH,ll,AdditiveMonoid<>>
+  public AbstractDijkstra<GRAPH,ll,AdditiveMonoid<>,T>
 {
 
 public:
@@ -76,4 +75,3 @@ public:
   inline Dijkstra( GRAPH& G , const ll& infty = 1e18 );
 
 };
-template <typename GRAPH , typename...ARGS> Dijkstra( GRAPH& G , const ARGS&... args ) -> Dijkstra<inner_t<GRAPH>,GRAPH>;
