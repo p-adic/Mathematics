@@ -2,7 +2,7 @@
 
 #pragma once
 
-// https://qiita.com/drken/items/a207e5ae3ea2cf17f4bd
+// https://yukicoder.me/problems/no/3566/editorial
 // を参考に実装。
 
 // 文字の種類数をCと置く。
