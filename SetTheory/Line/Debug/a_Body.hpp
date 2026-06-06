@@ -5,13 +5,27 @@
 
 #include "../Iterator/a_Body.hpp"
 
-template <typename INT> inline LineSubset<INT>::LineSubset() :
-  m_l() , m_size() , m_set()
+#include "../../../../Error/Debug/a_Body.hpp"
+
+template <typename INT> inline LineSubset<INT>::LineSubset( const bool& output_mode ) : Debug( output_mode ) , m_l() , m_size() , m_set() , m_num()
 {
 
-  DERR( "LineSubsetをデバッグモードで実行します。" );
-  DERR( "各計算量にO(m_size)が加わることに注意してください。" );
-  Display();
+  static int num = 0;
+  m_num = num++;
+
+  if( m_output_mode ){
+    
+    if( m_num == 0 ){
+
+      DERR( "LineSubsetをデバッグモードで実行します。" );
+      DERR( "各計算量にO(m_size)が加わることに注意してください。" );
+
+    }
+
+    DERRNS( "LineSubSet" , m_num , "の初期値\n" );
+    Display();
+
+  }
 
 }
 
@@ -27,8 +41,14 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
     m_size++;
     assert( m_set.count( i ) == 0 );
     m_set.insert( i );
-    DERR( "LineSubsetに" , i , "が挿入されました。" );
-    Display();
+
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "に" , i , "が挿入されました。\n" );
+      Display();
+
+    }
+    
     return;
 
   }
@@ -38,8 +58,14 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
   if( l0 <= i && i <= r0 ){
 
     assert( m_set.count( i ) == 1 );
-    DERR( "LineSubsetに" , i , "の挿入を試みましたが元々属していました。" );
-    DERR( "" );
+
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "に" , i , "の挿入を試みましたが元々属していました。\n" );
+      DERR( "" );
+
+    }
+    
     return;
 
   }
@@ -51,8 +77,14 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
     l0--;
     assert( m_set.count( i ) == 0 );
     m_set.insert( i );
-    DERR( "LineSubsetに" , i , "が挿入されました。" );
-    Display();
+    
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "に" , i , "が挿入されました。\n" );
+      Display();
+
+    }
+
     return;
 
   }
@@ -62,8 +94,14 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
     m_l[i] = i;
     assert( m_set.count( i ) == 0 );
     m_set.insert( i );
-    DERR( "LineSubsetに" , i , "が挿入されました。" );
-    Display();
+
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "に" , i , "が挿入されました。\n" );
+      Display();
+
+    }
+    
     return;
 
   }
@@ -93,8 +131,14 @@ void LineSubset<INT>::insert( const INT& i ) noexcept
   m_l.erase( itr0 );
   assert( m_set.count( i ) == 0 );
   m_set.insert( i );
-  DERR( "LineSubsetに" , i , "が挿入されました。" );
-  Display();
+
+  if( m_output_mode ){
+
+    DERRNS( "LineSubset" , m_num , "に" , i , "が挿入されました。\n" );
+    Display();
+
+  }
+    
   return;
 
 }
@@ -103,16 +147,24 @@ template <typename INT>
 void LineSubset<INT>::IntervalInsert( const INT& i_start , const INT& i_final ) noexcept
 {
 
+  bool output_mode = m_output_mode;
+  m_output_mode = false;
   
-  DERRNS( "LineSubsetに閉区間[" , i_start , "," , i_final , "]の各要素を挿入します。\n" );
-
   for( int i = i_start ; i <= i_final ; i++ ){
 
     insert( i );
 
   }
 
-  DERRNS( "LineSubsetに閉区間[" , i_start , "," , i_final , "]の各要素を挿入しました。\n" );
+  m_output_mode = output_mode;
+
+  if( m_output_mode ){
+
+    DERRNS( "LineSubset" , m_num , "に閉区間[" , i_start , "," , i_final , "]の各要素が挿入されました。\n" );
+    Display();
+
+  }
+    
   return;
 
 }
@@ -126,7 +178,14 @@ void LineSubset<INT>::erase( const INT& i ) noexcept
   if( itr == m_l.end() ){
 
     assert( m_set.count( i ) == 0 );
-    DERR( "LineSubsetから" , i , "の削除を試みましたが元々属していませんでした。" );
+
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "から" , i , "の削除を試みましたが元々属していませんでした。\n" );
+      DERR( "" );
+
+    }
+  
     return;
 
   }
@@ -136,7 +195,14 @@ void LineSubset<INT>::erase( const INT& i ) noexcept
   if( i < l ){
 
     assert( m_set.count( i ) == 0 );
-    DERR( "LineSubsetから" , i , "の削除を試みましたが元々属していませんでした。" );
+
+    if( m_output_mode ){
+
+      DERRNS( "LineSubset" , m_num , "から" , i , "の削除を試みましたが元々属していませんでした。\n" );
+      DERR( "" );
+
+    }
+  
     return;
 
   }
@@ -161,8 +227,14 @@ void LineSubset<INT>::erase( const INT& i ) noexcept
   
   assert( m_set.count( i ) == 1 );
   m_set.erase( i );
-  DERR( "LineSubsetから" , i , "が削除されました。" );
-  Display();
+
+  if( m_output_mode ){
+
+    DERRNS( "LineSubset" , m_num , "から" , i , "が削除されました。\n" );
+    Display();
+
+  }
+
   return;
 
 }
@@ -172,12 +244,37 @@ template <typename INT> inline IteratorOfLineSubset<INT>& LineSubset<INT>::erase
 
   m_size--;
   INT i = *itr;
-  auto [l,r] = itr.ConnectedComponent();
+  auto [l,r] = itr.Interval();
   auto& itr_ref = itr.erase_from( m_l );
   assert( m_set.count( i ) == 1 );
   m_set.erase( i );
-  DERRNS( "LineSubsetから " , i , " in [" , l , "," , r , "] が削除されました。" );
+  DERRNS( "LineSubset" , m_num , "から " , i , " in [" , l , "," , r , "] が削除されました。" );
   Display();
+
+}
+
+template <typename INT> void LineSubset<INT>::IntervalErase( const INT& i_start , const INT& i_final ) noexcept
+{
+
+  bool output_mode = m_output_mode;
+  m_output_mode = false;
+
+  for( int i = i_start ; i <= i_final ; i++ ){
+
+    erase( i );
+
+  }
+
+  m_output_mode = output_mode;
+
+  if( m_output_mode ){
+
+    DERRNS( "LineSubset" , m_num , "から閉区間[" , i_start , "," , i_final , "]の各要素が削除されました。\n" );
+    Display();
+
+  }
+  
+  return;
 
 }
 
@@ -199,11 +296,29 @@ bool LineSubset<INT>::find( const INT& i ) const noexcept
 
 }
 
-template <typename INT> inline const int& LineSubset<INT>::size() const noexcept { return m_size; }
+template <typename INT> inline const INT& LineSubset<INT>::size() const noexcept { return m_size; }
 template <typename INT> inline bool LineSubset<INT>::empty() const noexcept { return m_size == 0; }
 
-template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::begin() const noexcept { return IteratorOfLineSubset<INT>{ m_l , m_l.begin() , m_l.empty() ? 0 : m_l.begin()->second }; }
-template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::end() const noexcept { return IteratorOfLineSubset<INT>{ m_l , m_l.end() , 0 }; }
+template <typename INT> inline void LineSubset<INT>::clear() noexcept
+{
+
+  m_l.clear();
+  m_size = 0;
+  m_set.clear();
+
+  if( m_output_mode ){
+
+    DERRNS( "LineSubset" , m_num , "の全ての要素が削除されました。\n" );
+    Display();
+
+  }
+  
+  return;
+
+}
+
+template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::begin() noexcept { return IteratorOfLineSubset<INT>{ m_l , m_l.begin() , m_l.empty() ? 0 : m_l.begin()->second }; }
+template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::end() noexcept { return IteratorOfLineSubset<INT>{ m_l , m_l.end() , 0 }; }
 
 template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::MaximumLeq( const INT& i ) const noexcept { auto itr = m_l.lower_bound( i ); if( itr != m_l.end() && itr->second <= i ){ return IteratorOfLineSubset<INT>( m_l , itr , i ); } if( itr == m_l.begin() ){ return end(); } --itr; return IteratorOfLineSubset<INT>{ m_l , itr , itr->first }; }
 template <typename INT> inline IteratorOfLineSubset<INT> LineSubset<INT>::MaximumLt( const INT& i ) const noexcept { auto itr = m_l.lower_bound( i ); if( itr != m_l.end() && itr->second < i ){ return IteratorOfLineSubset<INT>( m_l , itr , i - 1 ); } if( itr == m_l.begin() ){ return end(); } --itr; return IteratorOfLineSubset<INT>{ m_l , itr , itr->first }; }
@@ -214,7 +329,7 @@ template <typename INT> inline INT LineSubset<INT>::Maximum() const { assert( !m
 template <typename INT> inline INT LineSubset<INT>::Minimum() const { assert( !m_l.empty() ); return m_l.begin()->second; }
 
 template <typename INT>
-pair<INT,INT> LineSubset<INT>::ConnectedComponentOf( const INT& i ) const noexcept
+pair<INT,INT> LineSubset<INT>::IntervalOf( const INT& i ) const noexcept
 {
 
   auto itr = m_l.lower_bound( i );
@@ -229,7 +344,7 @@ pair<INT,INT> LineSubset<INT>::ConnectedComponentOf( const INT& i ) const noexce
 
 }
 
-template <typename INT> inline const map<INT,INT>& LineSubset<INT>::GetConnectedComponent() const noexcept { return m_l; }
+template <typename INT> inline const map<INT,INT>& LineSubset<INT>::GetInterval() const noexcept { return m_l; }
 
 
 template <typename INT> inline void LineSubset<INT>::Display() const noexcept
