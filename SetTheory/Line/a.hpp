@@ -4,8 +4,9 @@
 #include "Iterator/a.hpp"
 
 // verify:
-// https://yukicoder.me/submissions/1002789（insert, erase, ConnectedComponentOf）
-// https://yukicoder.me/submissions/1123304 (IntervalInsert, ConnectedComponentOf, GetConnectedComponent)
+// https://yukicoder.me/submissions/1002789 (insert, erase, IntervalOf)
+// https://yukicoder.me/submissions/1123304 (IntervalInsert, IntervalOf, GetInterval)
+// https://yukicoder.me/submissions/1168481 (IntervalInsert, IntervalErase, GetInterval, clear)
 
 // 構築O(1)
 // 一点挿入O(log Q)
@@ -21,7 +22,10 @@
 
 // 最大値/最小値取得O(1)
 
+// kth取得O(Q)
 // 一点連結成分取得O(log Q)
+
+// イテレータへの*は要素への値返し。
 
 template <typename INT>
 class LineSubset
@@ -30,7 +34,7 @@ class LineSubset
 private:
   // 区間[l,r]ごとにm_l[r] = lとして直線の部分集合を管理する。
   map<INT,INT> m_l;
-  int m_size;
+  INT m_size;
 
 public:
   using iterator = IteratorOfLineSubset<INT>;
@@ -45,25 +49,26 @@ public:
   inline int count( const INT& i ) const noexcept;
   bool find( const INT& i ) const noexcept;
 
-  inline const int& size() const noexcept;
+  // （区間数でなく）要素数を返す。
+  inline const INT& size() const noexcept;
   inline bool empty() const noexcept;
   inline void clear() noexcept;
 
-  inline iterator begin() const noexcept;
-  inline iterator end() const noexcept;
+  inline iterator begin() noexcept;
+  inline iterator end() noexcept;
 
-  inline iterator MaximumLeq( const INT& i ) const noexcept;
-  inline iterator MaximumLt( const INT& i ) const noexcept;
-  inline iterator MinimumGeq( const INT& i ) const noexcept;
-  inline iterator MinimumGt( const INT& i ) const noexcept;
+  inline iterator MaximumLeq( const INT& i , const INT& k = 0 ) const noexcept;
+  inline iterator MaximumLt( const INT& i , const INT& k = 0 ) const noexcept;
+  inline iterator MinimumGeq( const INT& i , const INT& k = 0 ) const noexcept;
+  inline iterator MinimumGt( const INT& i , const INT& k = 0 ) const noexcept;
 
-  inline INT Maximum() const;
-  inline INT Minimum() const;
+  inline INT Maximum( const INT& k = 0 ) const;
+  inline INT Minimum( const INT& k = 0 ) const;
 
   // iを含む連結成分を返す。存在しない場合は[1+1,i-1]を返す。
-  pair<INT,INT> ConnectedComponentOf( const INT& i ) const noexcept;
+  pair<INT,INT> IntervalOf( const INT& i ) const noexcept;
 
   // [r,l]の列をmapとして参照する。
-  inline const map<INT,INT>& GetConnectedComponent() const noexcept;
+  inline const map<INT,INT>& GetInterval() const noexcept;
   
 };
