@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/Subsequence/Distinct/RollingHashSum/Periodic/a_Body.hpp"
+#else
+TE <TY VEC,TY CHAR,TY VALID,TY FUNC,TY T>T PeriodicSubsequenceRollingHashSum(CO VEC& S,ll K,CO CHAR& zero,CRI C,VALID valid,FUNC f,CO T& base){AS(K >= 0);CO int C2 =(C + 1)* 2 + 1;VE D(C2,VE<T>(C2));for(int j = 0;j < C2;j++){D[j][j]= 1;}for(auto& c:S){CO int j = c - zero;AS(j < C);auto temp0 = D[C];temp0[(C+1)*2]+= valid(c)?1:0;auto temp1 = D[(C+1)+C]* base + temp0 * T{f(c)};D[C]+= temp0 - D[j];D[(C+1)+C]+= temp1 - D[(C+1)+j];D[j]= MO(temp0);D[(C+1)+j]= MO(temp1);}auto mul =[&](CO VE<VE<T>>& X,CO VE<VE<T>>& Y){CO int L = Y[0].SZ();VE a(C2,VE<T>(L));for(int i = 0;i < C2;i++){for(int j = 0;j < C2;j++){for(int k = 0;k < L;k++){a[i][k]+= X[i][j]* Y[j][k];}}}RE a;};VE dp(C2,VE<T>(1));dp[(C+1)*2][0]= 1;WH(K > 0){if(K & 1){dp = mul(D,dp);}D = mul(D,D);K >>= 1;}RE dp[(C+1)+C][0];}
+#endif
+
