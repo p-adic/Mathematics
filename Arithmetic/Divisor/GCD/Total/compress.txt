@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Divisor/GCD/Total/a_Body.hpp"
+#else
+TE <TY INT = int>VE<INT> TotalGCD(CRI n){VE<INT> a(n + 1,1);int m = n;for(int p = 2;p <= m;p++){int q = 1;WH(m % p == 0){m /= p;q *= p;}if(q > 1){for(int i = 0;i <= n;i++){int temp = 1;WH(temp < q && i %(a[i]* temp * p)== 0){temp *= p;}a[i]*= temp;}}}RE a;}TE <TY T = int>VE<VE<T>> InverseImageGCD(CRI n){auto gcd = TotalGCD<int>(n);VE<VE<T>> a(n + 1);for(int i = 0;i <= n;i++){a[gcd[i]]<<= i;}RE a;}
+#endif
+
