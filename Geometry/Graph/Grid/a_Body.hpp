@@ -7,8 +7,6 @@
 
 #include "../../../Utility/Tuple/a_Body.hpp"
 
-#include "../../../../Utility/StdStream/a_Body.hpp"
-
 inline T2<int> EnumHW( const int& v ) { return { v / W , v % W }; }
 inline int EnumHW_inv( const T2<int>& ij ) { auto& [i,j] = ij; return i * W + j; }
 
