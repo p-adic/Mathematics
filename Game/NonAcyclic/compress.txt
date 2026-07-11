@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Game/NonAcyclic/Debug/a_Body.hpp"
+#else
+TE <TY GRAPH>VE<int> NonAcyclicGameState(GRAPH& G){CRI N = G.SZ();VE<int> AN(N),deg(N),bfs{};VE e_inv(N,VE<int>());for(int i = 0;i < N;i++){auto& ei = G.Edge(i);if((deg[i]= ei.SZ())== 0){AN[i]= -1;bfs <<= i;}for(auto& j:ei){e_inv[j]<<= i;}}WH(!bfs.empty()){int i = pop(bfs);AS(AN[i]!= 0);for(auto& j:e_inv[i]){deg[j]--;if(AN[i]== -1){if(AN[j]== 0){AN[j]= 1;bfs <<= j;}}else{if(AN[j]== 0 && deg[j]== 0){AN[j]= -1;bfs <<= j;}}}}RE AN;}
+#endif
+

@@ -1,0 +1,9 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Game/OptionalEdge/a_Body.hpp"
+#else
+CL MexSet{PU:int m_QuerySZ;VE<bool> m_in;int m_mex;IN MexSet(CRI QuerySZ);IN VO insert(CRI i);IN CRI mex()CO NE;};
+IN MexSet::MexSet(CRI QuerySZ):m_QuerySZ(QuerySZ),m_in(m_QuerySZ + 1),m_mex(0){}IN VO MexSet::insert(CRI i){AS(i >= 0);if(i < m_QuerySZ){m_in[i]= true;WH(m_in[m_mex]){m_mex++;}}}IN CRI MexSet::mex()CO NE{RE m_mex;}
+
+TE <TY OEdge,TY T>CRI OptionalEdgeGrundyNumber(OEdge& oedge,CO T& t,CO bool& reset = false){ST_AS(is_invocable_v<OEdge,CO T&>);ST Map<T,int> g{};if(reset){g.clear();}if(g.count(t)== 1){RE g[t];}auto&& next = oedge(t);bool first = true;Set<int> cap{};for(auto&& a:next){Set<int> ncap{};for(auto&& u:a){auto& val = OptionalEdgeGrundyNumber(oedge,u);if(first || In(val,cap)){ncap <<= val;}}cap = MO(ncap);first = false;}MexSet S{int(next.SZ())};for(auto& val:cap){S.insert(val);}RE g[t]= S.mex();}
+#endif
+

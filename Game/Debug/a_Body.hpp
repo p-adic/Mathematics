@@ -3,9 +3,8 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../SetTheory/Mex/a_Body.hpp"
+#include "../../SetTheory/Mex/Debug/a_Body.hpp"
 #include "../../Utility/Set/Map/a_Body.hpp"
-#include "../../Utility/Vector/a_Body.hpp"
 
 template <typename Edge , typename T>
 const bool& IsWinningState( Edge& edge , const T& t , const bool& reset )
@@ -49,12 +48,13 @@ const bool& IsWinningState( Edge& edge , const T& t , const bool& reset )
 
 }
 
-template <typename AEdge , typename T>
-const int& GrundyNumber( AEdge& aedge , const T& t , const bool& reset )
+template <typename Edge , typename T>
+const int& GrundyNumber( Edge& edge , const T& t , const bool& reset )
 {
 
-  static_assert( is_invocable_v<AEdge,const T&> );
+  static_assert( is_invocable_v<Edge,const T&> );
   static Map<T,int> g{};
+
   static bool init = true;
 
   if( init ){
@@ -64,10 +64,10 @@ const int& GrundyNumber( AEdge& aedge , const T& t , const bool& reset )
     init = false;
 
   }
-
+  
   if( reset ){
 
-    DERR( "IsWinningStateを初期化しました。" );
+    DERR( "GrundyNumberを初期化しました。" );
     g.clear();
 
   }
@@ -78,150 +78,16 @@ const int& GrundyNumber( AEdge& aedge , const T& t , const bool& reset )
 
   }
 
-  auto&& next = aedge( t );
+  auto&& next = edge( t );
   MexSet S{ int( next.size() ) };
 
-  for( auto&& a : next ){
+  for( auto&& u : next ){
 
-    int temp = 0;
-
-    for( auto&& u : a ){
-
-      temp ^= GrundyNumber( aedge , u );
-
-    }
-
-    S.insert( temp );
+    S.insert( GrundyNumber( edge , u ) );
     
   }
 
   DERR( "GrundyNumber:" , t , "->" , S.mex() );
   return g[t] = S.mex();
-
-}
-
-
-template <typename Edge , typename T , typename INVARIANT>
-const int& WinningConstantsOf( Edge& edge , const T& t , const INVARIANT& invariant , const bool& reset )
-{
-
-
-  static_assert( is_invocable_v<Edge,const T&> );
-  static Map<T,int> g{};
-  static bool init = true;
-
-  if( init ){
-
-    DERR( "WinningConstantsOfをデバッグモードで実行します。" );
-    DERR( "デバッグ出力以外に変更点はありません。" );
-    init = false;
-
-  }
-
-  if( reset ){
-
-    DERR( "WinningConstantsOfを初期化しました。" );
-    g.clear();
-
-  }
-
-  if( g.count( t ) == 1 ){
-
-    return g[t];
-
-  }
-
-  auto&& e = edge( t );
-  int c = e.empty() ? ( 1 << invariant( t ) ) : 0;
-
-  for( auto&& u : e ){
-
-    int temp = WinningConstantsOf( edge , u , invariant );
-
-    for( int d = 0 ; d <= 1 ; d++ ){
-
-      c |= ( ( temp >> ( 1 ^ d ) ) & 1 ) << d;
-
-    }
-
-  }
-
-  DERR( "WinningConstantsOf:" , t , "->" , c );
-  return g[t] = c;
-
-}
-
-template <typename GRAPH>
-vector<int> GameState( GRAPH& G )
-{
-
-  DERR( "GameStateをデバッグモードで実行します。" );
-  DERR( "デバッグ出力以外に変更点はありません。" );
-  const int& N = G.size();
-  vector<int> answer( N ) , deg( N ) , bfs{};
-  vector e_inv( N , vector<int>() );
-  
-  for( int i = 0 ; i < N; i++ ){
-
-    auto& ei = G.Edge( i );
-    
-    if( ( deg[i] = ei.size() ) == 0 ){
-
-      answer[i] = -1;
-      bfs <<= i;
-
-    }
-
-    for( auto& j : ei ){
-
-      e_inv[j] <<= i;
-
-    }
-    
-  }
-
-  DERR( "初期値として状態" , bfs , "がP位置（必敗）判定されました。" );
-  DERR( "" );
-
-  while( !bfs.empty() ){
-
-    int i = pop( bfs );
-    assert( answer[i] != 0 );
-
-    for( auto& j : e_inv[i] ){
-
-      deg[j]--;
-
-      if( answer[i] == -1 ){
-
-        if( answer[j] == 0 ){
-
-          answer[j] = 1;
-          bfs <<= j;
-          DERR( "状態" , j , "がN位置（必勝）判定されました。" );
-          DERR( "e[" , j , "] =" , G.Edge( j ) );
-          DERR( "" );
-
-        }
-
-      } else {
-
-        if( answer[j] == 0 && deg[j] == 0 ){
-          
-          answer[j] = -1;
-          bfs <<= j;
-          DERR( "状態" , j , "がP位置（必敗）判定されました。" );
-          DERR( "e[" , j , "] =" , G.Edge( j ) );
-          DERR( "" );
-
-        }
-
-      }
-
-    }
-
-  }
-
-  return answer;
 
 }
