@@ -1,0 +1,35 @@
+#verify:https://yukicoder.me/submissions/1172010
+
+#‘Å‚¿Ø‚è”Å
+def add(f,g):L,M=len(f),len(g);return[(f[i]+(g[i]if i<M else 0))%P for i in R(L)]
+def mul(f,g):L,M=len(f),len(g);return[sum(f[i-j]*g[j]for j in R(max(0,i-L+1),min(i+1,M)))%P for i in R(L)]
+
+def Composition(f,g):
+	N=len(f)
+	if N==1:return f
+	N_minus=N-1
+	H=int(N_minus**0.5)
+	K=N_minus//H
+	g_power=[[]for k in R(max(2,K))]
+	g_power[0]=[1]+[0]*(N-1)
+	g_power[1]=(g+[0]*(N-len(g)))[:N]
+	for k in R(2,K):g_power[k]=mul(g_power[k-1],g_power[1])
+	g_power2=[[]for h in R(H+1)]
+	g_power2[0]=g_power[0]
+	g_power2[1]=mul(g_power[-1],g_power[1])
+	for h in R(2,H+1):g_power2[h]=mul(g_power2[h-1],g_power2[1])
+	k=h=0
+	n_lim=N
+	answer=[0]*N
+	answer_h=[0]*N
+	for d in R(N):
+		for n in R(k,n_lim):answer_h[n]=(answer_h[n]+f[d]*g_power[k][n])%P
+		k+=1
+		if k==K or d==N_minus:
+			if h:answer_h=mul(answer_h,g_power2[h])
+			answer=add(answer,answer_h)
+			k=0
+			h+=1
+			n_lim-=K
+			answer_h=[0]*N
+	return answer

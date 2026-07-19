@@ -9,7 +9,7 @@
 // ExponentialCompositionにExponentialSumを使う。
 #include "../../IteratedArithmetic/a_Body.hpp"
 // LogarithmCompositionにSetPointTreeなどを使う。
-#include "../MultipointEvaluation/a_Body.hpp"
+#include "../../MultipointEvaluation/a_Body.hpp"
 
 template <typename T>
 FormalPowerSeries<T> Composite( const FormalPowerSeries<T>& f  , const FormalPowerSeries<T>& g )
@@ -21,13 +21,15 @@ FormalPowerSeries<T> Composite( const FormalPowerSeries<T>& f  , const FormalPow
 
   if( N_minus == 0 ){
 
-    return *this;
+    return f;
 
   }
 
   const int H = sqrt( N_minus );
   const int K = N_minus / H;
-  vector<FormalPowerSeries<T> > g_power( K < 2 ? 2 : K );
+  vector<FormalPowerSeries<T> > g_power( max( 2 , K ) );
+  g_power[0].SetTruncation( N );
+  g_power[0][0] = 1;
   ( g_power[1] = g ).SetTruncation( N );
   
   for( int k = 2 ; k < K ; k++ ){
@@ -37,7 +39,8 @@ FormalPowerSeries<T> Composite( const FormalPowerSeries<T>& f  , const FormalPow
   }
 
   vector<FormalPowerSeries<T> > g_power2( H + 1 );
-  g_power2[1] = K < 2 ? g_power[1] : g_power[K-1] * g_power[1];
+  g_power2[0] = g_power[0];
+  g_power2[1] = g_power[K-1] * g_power[1];
 
   for( int h = 2 ; h <= H ; h++ ){
 
@@ -55,7 +58,7 @@ FormalPowerSeries<T> Composite( const FormalPowerSeries<T>& f  , const FormalPow
 
     for( int n = k ; n <= n_max ; n++ ){
 
-      answer_h[n] += k == 0 ? n == 0 ? f[d] : T{} : f[d] * g_power[k][n];
+      answer_h[n] += f[d] * g_power[k][n];
 
     }
     

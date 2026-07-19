@@ -4,12 +4,12 @@
 
 #include "../a.hpp"
 // includeìWäJèá:
-// Poynomial/a.hpp
-// FormalPowerSeries/a.hpp
+// Polynomial/a.hpp
+// FPS/a.hpp
 // FFT/a.hpp
 // FFT/a_Body.hpp
-// FormalPowerSeries/a_Body.hpp
-// Poynomial/a_Body.hpp
+// FPS/a_Body.hpp
+// Polynomial/a_Body.hpp
 
 // verify:
 // https://judge.yosupo.jp/submission/276540 (ãtå≥)
@@ -27,7 +27,7 @@ private:
   int m_N;
   
 public:
-  inline FormalPowerSeries( const int& N = 0 );
+  inline FormalPowerSeries( const int& N );
   inline FormalPowerSeries( const FormalPowerSeries<T>& f );
   inline FormalPowerSeries( FormalPowerSeries<T>&& f );
   inline FormalPowerSeries( const int& N , T t );

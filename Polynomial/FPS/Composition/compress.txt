@@ -2,9 +2,11 @@
   #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/FPS/Composition/a_Body.hpp"
 #else
 // ../../FFT/compress.txtを先に貼る。
+// ../../FFT/NonFFT/compress.txtを貼る場合はDEBUG用のincludeをしない。
+// （compress前を貼っても良い）
 
 // 一般の合成
-TE <TY T>FPS<T> Composite(CO FPS<T>& f,CO FPS<T>& g){CRI N = f.GetTruncation();AS(N > 0 && g[0]== PO<T>::c_zero());CO int N_minus = N - 1;if(N_minus == 0){RE *TH;}CO int H = sqrt(N_minus);CO int K = N_minus / H;VE<FPS<T> > g_pw(K < 2?2:K);(g_pw[1]= g).SetTruncation(N);for(int k = 2;k < K;k++){g_pw[k]= g_pw[k-1]* g_pw[1];}VE<FPS<T> > g_pw2(H + 1);g_pw2[1]= K < 2?g_pw[1]:g_pw[K-1]* g_pw[1];for(int h = 2;h <= H;h++){g_pw2[h]= g_pw2[h-1]* g_pw2[1];}int k = 0;int h = 0;int n_max = N_minus;FPS<T> AN{N};FPS<T> AN_h{N};for(int d = 0;d < N;d++){for(int n = k;n <= n_max;n++){AN_h[n]+= k == 0?n == 0?f[d]:T{}:f[d]* g_pw[k][n];}if(++k == K || d == N_minus){AN += h == 0?AN_h:AN_h *= g_pw2[h];k = 0;h++;n_max -= K;AN_h = FPS<T>(N);}}RE AN;}
+TE <TY T>FPS<T> Composite(CO FPS<T>& f,CO FPS<T>& g){CRI N = f.GetTruncation();AS(N > 0 && g[0]== PO<T>::c_zero());CO int N_minus = N - 1;if(N_minus == 0){RE f;}CO int H = sqrt(N_minus);CO int K = N_minus / H;VE<FPS<T> > g_pw(K < 2?2:K);g_pw[0].SetTruncation(N);g_pw[0][0]= 1;(g_pw[1]= g).SetTruncation(N);for(int k = 2;k < K;k++){g_pw[k]= g_pw[k-1]* g_pw[1];}VE<FPS<T> > g_pw2(H + 1);g_pw2[0]= g_pw[0];g_pw2[1]= K < 2?g_pw[1]:g_pw[K-1]* g_pw[1];for(int h = 2;h <= H;h++){g_pw2[h]= g_pw2[h-1]* g_pw2[1];}int k = 0;int h = 0;int n_max = N_minus;FPS<T> AN{N};FPS<T> AN_h{N};for(int d = 0;d < N;d++){for(int n = k;n <= n_max;n++){AN_h[n]+= f[d]* g_pw[k][n];}if(++k == K || d == N_minus){AN += h == 0?AN_h:AN_h *= g_pw2[h];k = 0;h++;n_max -= K;AN_h = FPS<T>(N);}}RE AN;}
 
 // メビウス変換のN次打ち切り（反転のN次打ち切りを使用）
 TE <TY T>FPS<T> MoeviusComposition(CRI N,PO<T> f,T a,T b,T c,T d){CO T& zero = PO<T>::c_zero();CO T& one = PO<T>::c_one();if(c == zero){d = one / d;AffineTransformation(f,a *= d,b *= d);}else{a /= c;b -= a * d;if(b == zero){f = f(a);}else{b = one / b;c *= b;d *= b;Shift(f,a);CRI SZ = f.SZ();if(SZ > 0){f.TP(SZ);AffineTransformation(f,c,d);FPS<T> g{N};g[0]= MO(d);g[1]= MO(c);g = Inverse(Power(g,SZ - 1));g *= f;f = MO(g);}}}RE FPS<T>(N,f);}

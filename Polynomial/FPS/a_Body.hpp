@@ -5,14 +5,15 @@
 
 #include "../FFT/a_Body.hpp"
 // include展開順:
-// Poynomial/a.hpp
-// FormalPowerSeries/a.hpp
+// Polynomial/a.hpp
+// FPS/a.hpp
 // FFT/a.hpp
 // FFT/a_Body.hpp
-// FormalPowerSeries/a_Body.hpp
-// Poynomial/a_Body.hpp
+// FPS/a_Body.hpp
+// Polynomial/a_Body.hpp
 
-template <typename T> inline FormalPowerSeries<T>::FormalPowerSeries( const int& N ) : Polynomial<T>() , m_N( N ) { assert( m_N > 0 ); }
+// assert( m_N > 0 );を入れるとvector<FormalPowerSeries<T>>( 1 );で実行時エラーとなる。
+template <typename T> inline FormalPowerSeries<T>::FormalPowerSeries( const int& N ) : Polynomial<T>() , m_N( N ) {}
 template <typename T> inline FormalPowerSeries<T>::FormalPowerSeries( const FormalPowerSeries<T>& f ) : Polynomial<T>( f ) , m_N( f.m_N ) {}
 template <typename T> inline FormalPowerSeries<T>::FormalPowerSeries( FormalPowerSeries<T>&& f ) : Polynomial<T>( move( f.m_f ) ) , m_N( f.m_N ) {}
 template <typename T> inline FormalPowerSeries<T>::FormalPowerSeries( const int& N , T t ) : Polynomial<T>( move( t ) ) , m_N( N ) { assert( m_N > 0 ); }
@@ -122,7 +123,7 @@ FormalPowerSeries<T> FormalPowerSeries<T>::Inverse() const
     auto temp = f_inv * this_ref;
     temp[0]--;
     int v = temp.Valuation();
-    assert( v == -1 || 1 << v >= power );
+    assert( v == -1 || v >= power );
     temp *= f_inv;
 
     for( int i = power ; i < power_2 ; i++ ){
@@ -304,13 +305,13 @@ FormalPowerSeries<T> Exp( const FormalPowerSeries<T>& f )
 
 template <typename T> inline FormalPowerSeries<T> Log( const FormalPowerSeries<T>& f ) { assert( f[0] == f.c_one() ); return Integral<T>( Differential<T>( f ) /= f ); }
 
-template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const FormalPowerSeries<T>& f ) { const int N = f.GetTruncation(); for( int i = 0 ; i < N ; i++ ){ os << f[i] << " \n"[i==N-1]; } return os; }
+template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const FormalPowerSeries<T>& f ) { const int N = f.GetTruncation(); for( int i = 0 ; i < N ; i++ ){ ( i > 0 ? os << " " : os ) << f[i]; } return os; }
 
 #include "../a_Body.hpp"
 // include展開順:
-// Poynomial/a.hpp
-// FormalPowerSeries/a.hpp
+// Polynomial/a.hpp
+// FPS/a.hpp
 // FFT/a.hpp
 // FFT/a_Body.hpp
-// FormalPowerSeries/a_Body.hpp
-// Poynomial/a_Body.hpp
+// FPS/a_Body.hpp
+// Polynomial/a_Body.hpp

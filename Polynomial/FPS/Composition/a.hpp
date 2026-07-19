@@ -4,6 +4,7 @@
 #include "../a.hpp"
 
 // verify:
+// https://yukicoder.me/submissions/1172007（一般の合成）
 // https://yukicoder.me/submissions/938613 (メビウス変換)
 
 // 以下次数の上限をDとし、断りのない限り乗算の計算量をO(D log D)とする。
