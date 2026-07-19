@@ -1,0 +1,151 @@
+#ŠÈˆÕ”Å
+def add(f,g):L,M=len(f),len(g);return[((f[i]if i<L else 0)+(g[i]if i<M else 0))%P for i in R(max(L,M))]
+def mul(f,g):L,M=len(f),len(g);return[sum(f[i-j]*g[j]for j in R(max(0,i-L+1),min(i+1,M)))%P for i in R(L+M-1)]
+
+#class”Å
+def copy(n):return n.copy()if hasattr(n,"copy")else n
+
+class Polynomial:
+	zero=None
+	c_zero=0 #User' definition
+	c_one=1 #User's definition
+	def __init__(self,f=None):
+		if f is None:self.f=[]
+		elif f.__class__==[].__class__:self.f=[copy(x)for x in f]
+		else:self.f=[f]
+		self.Reduce()
+	def copy(self):
+		return __class__(self.f)
+	def __str__(self):
+		return"["+','.join(str(x)for x in self.f)+"]"
+
+	def deg(self):
+		return len(self.f)-1
+	def size(self):
+		return len(self.f)
+
+	def Get(self,i):
+		assert i>=0 #Aboiding [-1] because degree -1 can be confusing.
+		return self.f[i]if i<len(self.f)else copy(__class__.c_zero)
+	def Set(self,i,x):
+		assert i>=0 #Aboiding [-1] because degree -1 can be confusing.
+		while len(self.f)<=i:self.f+=[copy(__class__.c_zero)]
+		self.f[i]=copy(x)if x.__class__==__class__.c_one.__class__ else __class__.c_one*x
+	def Add(self,i,x):
+		self.Set(i,self.Get(i)+x)
+
+	def __eq__(self,g):
+		other=__class__.ref(g)
+		return self.f==other.f
+	def __ne__(self,g):
+		return not(self==g)
+
+	def __iadd__(self,g):
+		other=__class__.ref(g)
+		lf,lg=len(self.f),len(other.f)
+		for i in R(min(lf,lg)):self.f[i]+=other.f[i]
+		self.f+=other.f[lf:]
+		self.Reduce()
+		return self
+	def __add__(self,g):
+		a=self.copy()
+		a+=g
+		return a
+	def __radd__(self,g):
+		return self+g
+
+	def __neg__(self):
+		return __class__([-c for c in self.f])
+	def __isub__(self,g):
+		other=__class__.ref(g)
+		lf,lg=len(self.f),len(other.f)
+		for i in R(min(lf,lg)):self.f[i]-=other.f[i]
+		self.f+=[-x for x in other.f[lf:]]
+		self.Reduce()
+		return self
+	def __sub__(self,g):
+		a=self.copy()
+		a-=g
+		return a
+	def __rsub__(self,g):
+		other=__class__.ref(g)
+		other-=self
+		return other
+
+	#naive multiplication
+	#O(deg(f)deg(g))
+	def __mul__(self,g):
+		other=__class__.ref(g)
+		lf,lg=len(self.f),len(other.f)
+		l=lf+lg-1
+		return __class__([sum(self.f[i-j]*other.f[j]for j in R(max(0,i-lf+1),min(i+1,lg)))for i in R(l)])
+	def __imul__(self,g):
+		self.f=(self*g).f[:]
+		return self
+	def __rmul__(self,g):
+		return self*g
+
+	#naive division
+	#O(deg(f)deg(g))
+	def __itruediv__(self,g):
+		other=__class__.ref(g)
+		lf,lg=len(self.f),len(other.f)
+		diff=lf-lg
+		a=[0]*(diff+1)
+		while diff>=0:
+			a[diff]=r=self.f[-1]/g.f[-1]
+			self.f.pop()
+			for i in R(diff,lf-1):self.f[i]-=r*g.f[i-diff]
+			self.Reduce()
+			lf=len(self.f)
+			diff=lf-lg
+		self.f=a
+		return self
+	def __truediv__(self,g):
+		a=self.copy()
+		a/=g
+		return a
+	def __rtruediv__(self,g):
+		return __class__(g)/self
+	def __imod__(self,g):
+		other=__class__.ref(g)
+		lf,lg=len(self.f),len(other.f)
+		diff=lf-lg
+		while diff>=0:
+			r=self.f[-1]/g.f[-1]
+			self.f.pop()
+			for i in R(diff,lf-1):self.f[i]-=r*g.f[i-diff]
+			self.Reduce()
+			lf=len(self.f)
+			diff=lf-lg
+		return self
+	def __mod__(self,g):
+		a=self.copy()
+		a%=g
+		return a
+	def __rmod__(self,g):
+		return __class__(g)%self
+
+	def Differential(self,n):
+		assert n>=0
+		a=self[n:len(self.f)]
+		for i in R(len(a.f)):
+			c=copy(__class__.c_one)
+			for j in R(i+1,i+1+n):c*=j
+			a[i]*=c
+		a.Reduce()
+		return a
+
+	#naive computation of f(x)
+	def eval(self,x):
+		a=copy(__class__.c_zero)
+		p=copy(__class__.c_one)
+		for c in self.f:a,p=a+p*c,p*x
+		return a
+
+	#private:
+	def ref(x):
+		return x if x.__class__==__class__ else __class__(x)
+	def Reduce(self):
+		while self.f and self.f[-1]==self.c_zero:self.f.pop()
+Polynomial.zero=Polynomial()
