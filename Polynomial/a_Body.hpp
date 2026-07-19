@@ -329,7 +329,11 @@ Polynomial<T> Differential( const int& n , const Polynomial<T>& f )
 
 }
 
-// 以下FormalPowerSeries<T>を使用時は不使用。
+template <typename T> inline Polynomial<T> Differential( const Polynomial<T>& f ) { return Differential( 1 , f ); }
+
+
+template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Polynomial<T>& f ) { auto& size = f.size(); for( int i = 0 ; i < size ; i++ ){ ( i == 0 ? os : os << " " ) << f[i]; } return os; }
+
 template <typename T>
 Polynomial<T> Polynomial<T>::NaiveConvolution( Polynomial<T> f0 , const int& valuation0 , const Polynomial<T>& f1 , const int& valuation1 , const int& N_trunc )
 {
@@ -338,9 +342,8 @@ Polynomial<T> Polynomial<T>::NaiveConvolution( Polynomial<T> f0 , const int& val
   assert( 0 <= valuation0 && valuation0 < size0 );
   const int size1 = f1.size();
   assert( 0 <= valuation1 && valuation1 < size1 );
-  const int i_ulim = min( size0 , N_trunc - valuation1 );
 
-  for( int i = i_ulim - 1 ; i >= valuation0 ; i-- ){
+  for( int i = size0 ; i >= valuation0 ; i-- ){
 
     const T f0i = f0[i];
     f0[i] *= f1[0];
@@ -358,120 +361,116 @@ Polynomial<T> Polynomial<T>::NaiveConvolution( Polynomial<T> f0 , const int& val
 
 }
 
-template <typename T>
-Polynomial<T> Polynomial<T>::NaiveQuotient( Polynomial<T> f0 , const Polynomial<T>& f1 )
-{
+// 以下FormalPowerSeries<T>を使用時は不使用。
+// template <typename T>
+// Polynomial<T> Polynomial<T>::NaiveQuotient( Polynomial<T> f0 , const Polynomial<T>& f1 )
+// {
 
-  const int diff = f0.m_size - f1.m_size;
+//   const int diff = f0.m_size - f1.m_size;
 
-  if( diff < 0 ){
+//   if( diff < 0 ){
 
-    return move( f0 );
+//     return move( f0 );
 
-  }
+//   }
 
-  const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
-  f0.m_f.pop_back();
-  f0.m_size--;
-  f0.Reduce();
+//   const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
+//   f0.m_f.pop_back();
+//   f0.m_size--;
+//   f0.Reduce();
 
-  for( int i = diff ; i < f0.m_size ; i++ ){
+//   for( int i = diff ; i < f0.m_size ; i++ ){
 
-    f0[i] -= r * f1[i - diff];
+//     f0[i] -= r * f1[i - diff];
 
-  }
+//   }
 
-  f0.Reduce();
-  f0 = NaiveQuotient( move( f0 ) , f1 );
-  f0[diff] = r;
-  return move( f0 );
+//   f0.Reduce();
+//   f0 = NaiveQuotient( move( f0 ) , f1 );
+//   f0[diff] = r;
+//   return move( f0 );
 
-}
+// }
 
-template <typename T>
-Polynomial<T> Polynomial<T>::NaiveResidue( Polynomial<T> f0 , const Polynomial<T>& f1 )
-{
+// template <typename T>
+// Polynomial<T> Polynomial<T>::NaiveResidue( Polynomial<T> f0 , const Polynomial<T>& f1 )
+// {
 
-  const int diff = f0.m_size - f1.m_size;
+//   const int diff = f0.m_size - f1.m_size;
 
-  if( diff < 0 ){
+//   if( diff < 0 ){
 
-    return move( f0 );
+//     return move( f0 );
 
-  }
+//   }
 
-  const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
-  f0.m_f.pop_back();
-  f0.m_size--;
-  f0.Reduce();
+//   const T r = f0[f0.m_size-1] / f1[f1.m_size-1];
+//   f0.m_f.pop_back();
+//   f0.m_size--;
+//   f0.Reduce();
 
-  for( int i = diff ; i < f0.m_size ; i++ ){
+//   for( int i = diff ; i < f0.m_size ; i++ ){
 
-    f0[i] -= r * f1[i - diff];
+//     f0[i] -= r * f1[i - diff];
 
-  }
+//   }
 
-  f0.Reduce();
-  return NaiveResidue( move( f0 ) , f1 );
+//   f0.Reduce();
+//   return NaiveResidue( move( f0 ) , f1 );
 
-}
+// }
 
 // 以下FormalPowerSeries<T>を使用時は特殊化で変更。
-template <typename T>
-Polynomial<T>& Polynomial<T>::operator*=( Polynomial<T> f )
-{
+// template <typename T>
+// Polynomial<T>& Polynomial<T>::operator*=( Polynomial<T> f )
+// {
 
-  Reduce();
+//   Reduce();
   
-  if( m_size == 0 ){
+//   if( m_size == 0 ){
 
-    return *this;
+//     return *this;
 
-  }
+//   }
 
-  f.Reduce();
+//   f.Reduce();
 
-  if( f.m_size == 0 ){
+//   if( f.m_size == 0 ){
 
-    return *this = move( f );
+//     return *this = move( f );
 
-  }
+//   }
   
-  const int valuation0 = this->Valuation();
-  const int valuation1 = f.Valuation();
-  const int length0 = m_size - valuation0;
-  const int length1 = f.m_size - valuation1;
-  const int size = m_size + f.m_size - 1;
+//   const int valuation0 = this->Valuation();
+//   const int valuation1 = f.Valuation();
+//   const int size = m_size + f.m_size - 1;
+//   return *this = NaiveConvolution( move( *this ) , valuation0 , f , valuation1 , size );;
 
-  m_f = NaiveConvolution( move( *this ) , valuation0 , f , valuation1 , size );
-  m_size = m_f.size();
-  return *this;
+// }
 
-}
+// template <typename T>
+// Polynomial<T>& Polynomial<T>::operator/=( const Polynomial<T>& f )
+// {
 
-template <typename T>
-Polynomial<T>& Polynomial<T>::operator/=( const Polynomial<T>& f )
-{
-
-  assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
-  Reduce();
+//   assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
+//   Reduce();
   
-  if( m_size < f.m_size ){
+//   if( m_size < f.m_size ){
 
-    return *this = zero();
+//     return *this = zero();
 
-  }
+//   }
 
-  return *this = NaiveQuotient( move( *this ) , f );
+//   return *this = NaiveQuotient( move( *this ) , f );
 
-}
+// }
 
-template <typename T>
-Polynomial<T>& Polynomial<T>::operator%=( const Polynomial<T>& f )
-{
+// template <typename T>
+// Polynomial<T>& Polynomial<T>::operator%=( const Polynomial<T>& f )
+// {
 
-  assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
-  Reduce();
-  return *this = NaiveResidue( move( *this ) , f );
+//   assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
+//   Reduce();
+//   return *this = NaiveResidue( move( *this ) , f );
 
-}
+// }

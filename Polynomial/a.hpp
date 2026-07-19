@@ -97,9 +97,9 @@ public:
   void Transpose( const int& N_trunc );
 
   static Polynomial<T> NaiveConvolution( Polynomial<T> f0 , const int& valuation0 , const Polynomial<T>& f1 , const int& valuation1 , const int& N_trunc );
-  // f1が0でなくReduceされている場合にのみサポート。
-  static Polynomial<T> NaiveQuotient( Polynomial<T> f0 , const Polynomial<T>& f1 );
-  static Polynomial<T> NaiveResidue( Polynomial<T> f0 , const Polynomial<T>& f1 );
+  // // f1が0でなくReduceされている場合にのみサポート。
+  // static Polynomial<T> NaiveQuotient( Polynomial<T> f0 , const Polynomial<T>& f1 );
+  // static Polynomial<T> NaiveResidue( Polynomial<T> f0 , const Polynomial<T>& f1 );
 
   static inline const Polynomial<T>& zero();
   static inline const Polynomial<T>& one();
@@ -113,6 +113,9 @@ private:
 
 };
 
+template <typename T> inline Polynomial<T> Differential( const Polynomial<T>& f );
 template <typename T> Polynomial<T> Differential( const int& n , const Polynomial<T>& f );
+
+template <typename T , class Traits> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Polynomial<T>& f );
 
 // PowerはSum/a_Body.hppで定義。
