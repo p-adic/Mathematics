@@ -1,6 +1,9 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Grid/a.hpp
 
 #pragma once
+// verify:
+// https://yukicoder.me/submissions/989021
+
 #include "a_Macro.hpp"
 
 #include "../a.hpp"
@@ -30,21 +33,22 @@ vector<Pair<T2<int>,ll>> WEdgeOnGrid( const T2<int>& v );
 
 inline void SetWallStringOnGrid( const int& i , vector<string>& S );
 
-// xy_axis = true: 右と上を正軸方向とする座標
-// (0,1) -> U
-// (1,0) -> R
-// (0,-1) -> D
-// (-1,0) -> L
-// xy_axis = false: 下と右を正軸方向とする座標
+// xy_axis = false; // 下と右を正軸方向とする座標
 // (-1,0) -> U
 // (0,1) -> R
 // (1,0) -> D
 // (0,-1) -> L
+// xy_axis = true; // 右と上を正軸方向とする座標
+// (0,1) -> U
+// (1,0) -> R
+// (0,-1) -> D
+// (-1,0) -> L
 const string direction = "URDL";
-bool grid_edge_i_plus = true;
-bool grid_edge_j_plus = true;
-bool grid_edge_i_minus = true;
-bool grid_edge_j_minus = true;
+bool grid_edge[3][3] = {
+  {false,true,false},
+  {true,false,true},
+  {false,true,false}
+};
 
 inline int DirectionNumberOnGrid( const int& i , const int& j , const int& k , const int& h , const bool& xy_axis = false );
 inline int DirectionNumberOnGrid( const T2<int>& v , const T2<int>& w , const bool& xy_axis = false );
