@@ -11,6 +11,8 @@ template <typename T> inline T& SetMax( T& t ) { return t; }
 template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , const U& u1 , const Args&... args ) { return SetMax( t0 < u1 ? t0 = u1 : t0 , args... ); }
 template <typename T> inline T& SetMin( T& t ) { return t; }
 template <typename T , typename U , typename... Args> inline T& SetMin( T& t0 , const U& u1 , const Args&... args ) { return SetMin( u1 < t0 ? t0 = u1 : t0 , args... ); }
+template <typename T> inline T& ExtendedSetMin( T& t ) { return t; }
+template <typename T , typename U , typename... Args> inline T& ExtendedSetMin( T& t0 , const U& u1 , const Args&... args ) { return ExtendedSetMin( u1 >= 0 && ( t0 < 0 || u1 < t0 ) ? t0 = u1 : t0 , args... ); }
 
 template <typename T> inline const T& Max( const vector<T>& f ) { return *max_element( f.begin() , f.end() ); }
 template <typename T , template <typename...> typename SET> inline const T& Max( const SET<T>& f ) { return *--f.end(); }

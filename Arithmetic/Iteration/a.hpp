@@ -19,6 +19,9 @@ template <typename T> inline T& SetMax( T& n );
 template <typename T , typename U , typename... Args> inline T& SetMax( T& t0 , const U& u1 , const Args&... args );
 template <typename T> inline T& SetMin( T& n );
 template <typename T , typename U , typename... Args> inline T& SetMin( T& t0 , const U& u1 , const Args&... args );
+// •‰’l‚ğ–³‹‚µ‚ÄSetMin‚ğs‚¤B
+template <typename T> inline T& ExtendedSetMin( T& n );
+template <typename T , typename U , typename... Args> inline T& ExtendedSetMin( T& t0 , const U& u1 , const Args&... args );
 template <typename T> inline const T& Max( const vector<T>& f );
 template <typename T , template <typename...> typename SET> inline const T& Max( const SET<T>& f );
 template <typename T , typename U , typename...Args> inline T Max( T t0 , const U& t1 , const Args&... args );
