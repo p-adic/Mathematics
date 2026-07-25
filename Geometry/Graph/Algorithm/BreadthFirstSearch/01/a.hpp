@@ -41,7 +41,7 @@ public:
   inline void Initialise();
   // m_nextとm_foundとm_prevとm_weightを初期化した上でinitを最初の探索点に設定する。
   inline void Initialise( const T& init );
-  inline void Initialise( list<T> inits );
+  inline void Initialise( vector<T> inits );
   // m_nextを初期化した上でm_foundとm_prevとm_weightを非初期化せずinitを次の探索点に設定する。
   inline void Shift( const T& init );
   inline void Shift( list<T> inits );
