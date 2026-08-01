@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Line/Centre/a_Body.hpp"
+#else
+TE <TY INT> IN T2<INT> Centre(CO INT& N){RE{(N-1)/2,N/2};}
+#endif
+
