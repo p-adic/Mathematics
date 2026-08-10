@@ -1,4 +1,5 @@
 #define DST DisjointSparseTable
+#define AbstractDST AbstractDisjointSparseTable
 #ifdef DEBUG
   #include "c:/Users/user/Documents/Programming/Mathematics/SetTheory/DirectProduct/AffineSpace/DisjointSparseTable/a_Body.hpp"
 #else
