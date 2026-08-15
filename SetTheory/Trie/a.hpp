@@ -1,6 +1,9 @@
 // c:/Users/user/Documents/Programming/Mathematics/SetTheory/Trie/a.hpp
 
 #pragma once
+// verify:
+// https://yukicoder.me/submissions/1177230 (AdditiveGroup, count, NodeNumber)
+
 #include "a_Macro.hpp"
 
 // 入力の範囲内で要件
@@ -18,8 +21,8 @@
 // 要素削除O(L log S)
 // 特定の値に等しい要素数／特定の値を始切片に持つ要素数などを取得O(L log S)
 
-// 要素のインクリメント、均しO(L)
-// 要素のディクリメント、均しO(L)
+// 要素のインクリメント、均しO(L)（node指定時は均しO(E/V)）
+// 要素のディクリメント、均しO(L)（node指定時は均しO(E/V)）
 
 // 最大要素取得、均しO(L log S)
 // 最小要素取得、均しO(L log S)
@@ -32,7 +35,7 @@ class TrieTree
 private:
   ABEL_GROUP m_M;
   // m_count[node]にnode番目に扱ったkeyをvとして{vでの値,vを始切片に持つkeyでの値の総和}を格納。
-  vector<pair<U,U>> m_count;
+  vector<T2<U>> m_count;
   // m_edge[node][i]にnode番目に扱ったkeyの末尾にiを挿入したkeyを何番目に扱ったかを格納。
   vector<map<int,int>> m_edge;
 
@@ -40,8 +43,14 @@ private:
   int m_length;
 
 public:
-  inline TrieTree( ABEL_GROUP M );
+  inline TrieTree( ABEL_GROUP M , int base = 0 , int length = -1 );
 
+  // ノード番号nodeの枝vに対応するノード番号を返す。
+  // 存在しない場合は-1を返す。
+  inline int NodeNumber( const int& v , const int& node );
+  // vに対応するノード番号列を返す。
+  template <typename V> vector<int> NodeSequence( const V& v );
+  
   // vをkeyとしてuを加算する。
   template <typename V> void insert( const V& v , const U& u );
   // vをkeyとする値を削除する（Mの単位元に置き換える）。
@@ -55,7 +64,9 @@ public:
   // 全てのkeyをわたる値の総和を取得する。
   inline const U& size() const noexcept;
   // {vをkeyとする値,vを始切片に持つkeyでの値の総和}
-  template <typename V> pair<U,U> count( const V& v );
+  template <typename V> T2<U> count( const V& v );
+  // {nodeでの値,nodeの部分木での値の総和}
+  inline T2<U> count( const int& node );
   // v_ulim未満における総和
   template <typename V> U InitialSegmentCount( const V& v_ulim );
   // 半開区間[v_min,v_ulim)における総和
@@ -63,10 +74,14 @@ public:
 
   // ここからMがoperator<(const U&,const U&)に関する全順序可換群構造である場合のみサポート。
 
-  // vより大きく値がMの単位元でない最小のkeyに置き換える。
-  void Increment( vector<int>& v ) const;
-  // vより小さく値がMの単位元でない最小のkeyに置き換える。
-  void Decrement( vector<int>& v ) const;
+  // keyがleafとは限らないnodeも指すことに注意。
+  // nodeは{}またはvに対応するノード番号列。
+  // vより大きく値がMの単位元でない最小のkeyにvが置き換わり、nodeも対応して置き換わる。
+  T2<U> Increment( vector<int>& v , vector<int>& node ) const;
+  // vより小さく値がMの単位元でない最小のkeyに置き換わり、nodeも対応して置き換わる。
+  T2<U> Decrement( vector<int>& v , vector<int>& node ) const;
+  // 存在しない場合はどちらも{-1}に置き換える。
+  // 返り値はnode.back()におけるm_countの値。 
 
   // 値がMの単位元でない最大のkeyを取得する。
   inline vector<int> Maximum();
@@ -110,16 +125,16 @@ private:
   static inline vector<int> ToArray( const char* const& v );
   template <typename V> static vector<int> ToArray( const V& v );
 
-  template <typename RANGE> void SetNextNode( const map<int,int>& edge , vector<int>& answer , int& node , RANGE range ) const;
+  template <typename RANGE> void SetNextNode( const map<int,int>& edge , vector<int>& v , vector<int>& node , RANGE range ) const;
 
-  template <typename SEARCH , typename RANGE> void SetMaximum_Body( vector<int>& answer , int& node , SEARCH search , RANGE range ) const;
-  inline void SetMaximum( vector<int>& answer , int& node ) const;
-  inline void SetMinimum( vector<int>& answer , int& node ) const;
+  template <typename SEARCH , typename RANGE> void SetMaximum_Body( vector<int>& v , vector<int>& node , SEARCH search , RANGE range ) const;
+  inline void SetMaximum( vector<int>& v , vector<int>& node ) const;
+  inline void SetMinimum( vector<int>& v , vector<int>& node ) const;
 
-  template <typename RANGE> void SetMaximumLeq_Body( const vector<int>& v , vector<int>& answer , int& node , bool& lt , RANGE range ) const;
+  template <typename RANGE> void SetMaximumLeq_Body( const vector<int>& v , vector<int>& answer , vector<int>& node , bool& lt , RANGE range ) const;
 
 };
-template <typename ABEL_GROUP> TrieTree( ABEL_GROUP ) -> TrieTree<inner_t<ABEL_GROUP>,ABEL_GROUP>;
+template <typename ABEL_GROUP , typename... ARGS> TrieTree( ABEL_GROUP , ARGS... ) -> TrieTree<inner_t<ABEL_GROUP>,ABEL_GROUP>;
 
 // - 要素数を管理したい場合
 //   TrieTree trie( AdditiveGroup<int>() );
