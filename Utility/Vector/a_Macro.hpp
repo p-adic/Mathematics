@@ -27,9 +27,10 @@
   template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ); \
   template <typename T> inline T pop( V<T>& a )                  \
 
+// <<={0,1}などの型推論に前者が必要。
 #define DEFINITION_OF_SHIFT_FOR_VECTOR( V )			\
   template <typename T> inline V<T>& operator<<=( V<T>& a , T t ) { a.push_back( move( t ) ); return a; } \
-  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ) { return a <<= T{ forward<U>( u ) }; } \
+  template <typename T , typename U> inline V<T>& operator<<=( V<T>& a , U&& u ) { return a <<= forward<T>( u ); } \
   template <typename T> inline T pop( V<T>& a ) { assert( !a.empty() ); T answer = move( a.back() ); a.pop_back(); return answer; } \
 
 #define DECLARATION_OF_ARITHMETICS_FOR_VECTOR( V )			\
