@@ -58,14 +58,14 @@
   template <typename T> inline V<T> operator*( const T& t , V<T> v ) { return move( v *= t ); } \
   DEFINITION_OF_SHIFT_FOR_VECTOR( V );                                  \
 
-#define DECLARATION_FOR_VECTOR_BOOL( OP )                               \
-  inline vector<bool>::reference operator OP ## =( vector<bool>::reference b0 , const bool& b1 ); \
-  inline vector<bool>& operator OP ## =( vector<bool>& b0 , const vector<bool>& b1 ); \
-  inline vector<bool> operator OP( vector<bool> b0 , const vector<bool>& b1 ); \
+#define DECLARATION_FOR_VECTOR_BOOL( OPR )                               \
+  inline vector<bool>::reference operator OPR ## =( vector<bool>::reference b0 , const bool& b1 ); \
+  inline vector<bool>& operator OPR ## =( vector<bool>& b0 , const vector<bool>& b1 ); \
+  inline vector<bool> operator OPR( vector<bool> b0 , const vector<bool>& b1 ); \
     
-#define DEFINITION_FOR_VECTOR_BOOL( OP )                                \
-  inline vector<bool>::reference operator OP ## =( vector<bool>::reference b0 , const bool& b1 ) { return move( b0 = bool( b0 ) OP b1 ); } \
-  inline vector<bool>& operator OP ## =( vector<bool>& b0 , const vector<bool>& b1 ) { const int L = b0.size(); for( int i = 0 ; i < L ; i++ ){ b0[i] OP ## = b1[i]; } return b0; } \
-  inline vector<bool> operator OP( vector<bool> b0 , const vector<bool>& b1 ) { return move( b0 OP ## = b1 ); } \
+#define DEFINITION_FOR_VECTOR_BOOL( OPR )                                \
+  inline vector<bool>::reference operator OPR ## =( vector<bool>::reference b0 , const bool& b1 ) { return move( b0 = bool( b0 ) OPR b1 ); } \
+  inline vector<bool>& operator OPR ## =( vector<bool>& b0 , const vector<bool>& b1 ) { const int L = b0.size(); for( int i = 0 ; i < L ; i++ ){ b0[i] OPR ## = b1[i]; } return b0; } \
+  inline vector<bool> operator OPR( vector<bool> b0 , const vector<bool>& b1 ) { return move( b0 OPR ## = b1 ); } \
 
 
