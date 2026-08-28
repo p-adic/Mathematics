@@ -32,3 +32,7 @@ template <typename V> inline void Reverse( V& a );
 template <typename V> inline V Reversed( V a );
 
 template <typename RET , template <typename...> typename V , typename T> inline V<RET> cast( const V<T>& a );
+
+DECLARATION_FOR_VECTOR_BOOL( & );
+DECLARATION_FOR_VECTOR_BOOL( | );
+DECLARATION_FOR_VECTOR_BOOL( ^ );

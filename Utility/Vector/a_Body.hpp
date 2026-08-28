@@ -27,3 +27,7 @@ template <typename V> inline void Reverse( V& a ) { const int size = len( a ) , 
 template <typename V> inline V Reversed( V a ) { Reverse( a ); return move( a ); }
 
 template <typename RET , template <typename...> typename V , typename T> inline V<RET> cast( const V<T>& a ) { V<RET> answer{}; for( auto& x : a ){ answer <<= a; } }
+
+DEFINITION_FOR_VECTOR_BOOL( & );
+DEFINITION_FOR_VECTOR_BOOL( | );
+DEFINITION_FOR_VECTOR_BOOL( ^ );
