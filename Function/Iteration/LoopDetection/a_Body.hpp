@@ -3,13 +3,13 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../Map/a_Body.hpp"
+#include "../../../Utility/Set/Map/a_Body.hpp"
 
-template <typename T , typename F> inline LoopDetection_Body<T,F>::LoopDetection_Body( const T& init , F f ) : m_init( init ) , m_f( move( f ) ) , m_length() , m_loop_start( -1 ) , m_loop_length( -1 ) { static_assert( is_invocable_r_v<T,F,T> ); }
-template <typename T , typename F> inline ValueCalculatorForLoopDetection<T,F>::ValueCalculatorForLoopDetection( const T& init , F f ) : LoopDetection_Body<T,F>( init , move( f ) ) , m_value() , m_value_inv() {}
-template <typename F> inline LoopDetection<F>::LoopDetection( const int& init , F f ) : ValueCalculatorForLoopDetection<int,F>( init , move( f ) ) {}
-template <typename T , typename F> inline MemorisationLoopDetection<T,F>::MemorisationLoopDetection( const T& init , F f ) : LoopDetection_Body<T,F>( init , move( f ) ) , m_memory() , m_memory_inv() {}
-template <typename T , typename Enum_T , typename Enum_T_inv , typename F> inline EnumerationLoopDetection<T,Enum_T,Enum_T_inv,F>::EnumerationLoopDetection( const T& init , Enum_T enum_T , Enum_T_inv enum_T_inv , F f ) : ValueCalculatorForLoopDetection<T,F>( init , move( f ) ) , m_enum_T( enum_T ) , m_enum_T_inv( enum_T_inv ) { static_assert( is_invocable_r_v<T,Enum_T,int> && is_invocable_r_v<int,Enum_T_inv,T> ); }
+template <typename T , typename F> inline LoopDetection_Body<T,F>::LoopDetection_Body( const T& init , F f , const int& search_max ) : m_init( init ) , m_f( move( f ) ) , m_search_max( search_max ) , m_length() , m_loop_start( -1 ) , m_loop_length( -1 ) { static_assert( is_invocable_r_v<T,F,T> ); }
+template <typename T , typename F> inline ValueCalculatorForLoopDetection<T,F>::ValueCalculatorForLoopDetection( const T& init , F f , const int& search_max ) : LoopDetection_Body<T,F>( init , move( f ) , search_max ) , m_value() , m_value_inv() {}
+template <typename F> inline LoopDetection<F>::LoopDetection( const int& init , F f , const int& search_max ) : ValueCalculatorForLoopDetection<int,F>( init , move( f ) , search_max ) {}
+template <typename T , typename F> inline MemorisationLoopDetection<T,F>::MemorisationLoopDetection( const T& init , F f , const int& search_max ) : LoopDetection_Body<T,F>( init , move( f ) , search_max ) , m_memory() , m_memory_inv() {}
+template <typename T , typename Enum_T , typename Enum_T_inv , typename F> inline EnumerationLoopDetection<T,Enum_T,Enum_T_inv,F>::EnumerationLoopDetection( const T& init , Enum_T enum_T , Enum_T_inv enum_T_inv , F f , const int& search_max ) : ValueCalculatorForLoopDetection<T,F>( init , move( f ) , search_max ) , m_enum_T( enum_T ) , m_enum_T_inv( enum_T_inv ) { static_assert( is_invocable_r_v<T,Enum_T,int> && is_invocable_r_v<int,Enum_T_inv,T> ); }
 
 template <typename T , typename F> template <typename INT>
 T LoopDetection_Body<T,F>::IteratedComposition( const INT& n )
@@ -44,7 +44,7 @@ template <typename T , typename F> inline const int& LoopDetection_Body<T,F>::Ge
 
 template <typename T , typename F> inline void LoopDetection_Body<T,F>::SetInit() { assert( m_length == 0 ); SetValue( e_inv( m_init ) ); }
 
-template <typename T , typename F> inline void LoopDetection_Body<T,F>::SearchLoop() { assert( m_loop_length == -1 ); int n = 0; while( m_loop_length == -1 ){ IteratedComposition( n++ ); } }
+template <typename T , typename F> inline void LoopDetection_Body<T,F>::SearchLoop() { assert( m_loop_length == -1 ); int n = 0; while( m_loop_length == -1 && ( m_search_max == -1 || n <= m_search_max ) ){ IteratedComposition( n++ ); } }
 
 template <typename F> inline int LoopDetection<F>::e( const int& i ) { return i; }
 template <typename T , typename F> inline T MemorisationLoopDetection<T,F>::e( const int& i ) { using base = LoopDetection_Body<T,F>; assert( i < base::m_length ); return m_memory_inv[i]; }
@@ -77,8 +77,8 @@ template <typename T , typename F> inline void ValueCalculatorForLoopDetection<T
 
 template <typename T , typename F> inline void MemorisationLoopDetection<T,F>::SetValue( const int& i ) {}
 
-template <typename T , typename F> inline int& ValueCalculatorForLoopDetection<T,F>::RefValue( const int& i ) { if( m_value.count( i ) == 0 ){ return m_value[i] = -1; } return m_value[i]; }
+template <typename T , typename F> inline int& ValueCalculatorForLoopDetection<T,F>::RefValue( const int& i ) { const int size = m_value.size(); if( size <= i ){ assert( size == i ); m_value.push_back( -1 ); } return m_value[i]; }
 template <typename T , typename F> inline const int& ValueCalculatorForLoopDetection<T,F>::GetValue( const int& i ) { return RefValue( i ); }
-template <typename T , typename F> inline const int& MemorisationLoopDetection<T,F>::GefValue( const int& i ) { return i; }
+template <typename T , typename F> inline const int& MemorisationLoopDetection<T,F>::GetValue( const int& i ) { return i; }
 
 template <typename T , typename F> inline int& ValueCalculatorForLoopDetection<T,F>::RefValue_inv( const int& i ) { if( m_value_inv.count( i ) == 0 ){ return m_value_inv[i] = -1; } return m_value_inv[i]; }
