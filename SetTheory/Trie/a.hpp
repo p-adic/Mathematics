@@ -3,6 +3,7 @@
 #pragma once
 // verify:
 // https://yukicoder.me/submissions/1177230 (AdditiveGroup, count, NodeNumber)
+// https://yukicoder.me/submissions/1181811 (AdditiveGroup, count, NodeNumber)
 
 #include "a_Macro.hpp"
 
@@ -148,4 +149,35 @@ template <typename ABEL_GROUP , typename... ARGS> TrieTree( ABEL_GROUP , ARGS...
 //   TrieTree trie( AdditiveGroup<Pair<int,ll>>() );
 //   trie.insert( v , {1,v}} );
 //   trie.erase( v , {1,v} );
+
+// イテレータとしてvやnodeを管理したい場合
+// TriTree tt( AdditiveGroup<int>() , 26 );
+// vector<int> v{} , node = {0};
+// int tail = 0;
+// として以下のように処理する。
+
+  // /* 文字xの末尾追加 */
+  // int c = x - 'a';
+  // if( tail > 0 ){
+  //   tail++;
+  // } else {
+  //   int n = tt.NodeNumber( c , node.back() );
+  //   if( n == -1 ){
+  //     tail = 1;
+  //   } else {
+  //     v <<= c;
+  //     node <<= n;
+  //   }
+  // }
+
+  // /* 末尾削除 */
+  // if( tail > 0 ){
+  //   tail--;
+  // } else {
+  //   pop( v );
+  //   pop( node );
+  // }
+
+  // /* {計数,接頭辞計数} */
+  // auto [c0,c1] = tail > 0 ? T2<int>{0,0} : tt.count( node.back() );
 
