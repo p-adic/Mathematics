@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Circle/Sphere/a_Body.hpp"
+#else
+CE CO double pi = 3.14159265358979;
+
+IN double SphereVolume(CO double& r){RE 4 * pi / 3 * r * r * r;}
+#endif
+

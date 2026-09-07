@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Circle/a_Body.hpp"
+#else
+CE CO double pi = 3.14159265358979;
+#endif
+

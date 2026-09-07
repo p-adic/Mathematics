@@ -1,0 +1,14 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/AffineSpace/Circle/Sphere/SphereIntersection/a_Body.hpp"
+#else
+IN T3<double> PerpendicularPartition(CO double& l0,CO double& l1,CO double& l2){RE{(l0 * l0 - l1 * l1 + l2 * l2)/(2 * l0),(l1 * l1 - l2 * l2 + l0 * l0)/(2 * l1),(l2 * l2 - l0 * l0 + l1 * l1)/(2 * l2)};}
+
+CE CO double pi = 3.14159265358979;
+
+IN double SphereVolume(CO double& r){RE 4 * pi / 3 * r * r * r;}
+
+IN T2<double> SphereCapVolumeHeight(CO double& R,CO double& h){CO double V = SphereVolume(R),W = min(V,pi / 3 * h * h *(3 * R - h));RE{W,V - W};}IN T2<double> SphereCapVolumeRadius(CO double& R,CO double& r){CO double h = r * r /(R + sqrt(max(R * R - r * r,0.0)));RE SphereCapVolumeHeight(R,h);}
+
+TE <TY DOUBLE>double SphereIntersectionVolume(CO DOUBLE& R0,CO DOUBLE& R1,CO DOUBLE& R2){if(R2 >= R0 + R1){RE 0;}if(R1 >= R2 + R0){RE SphereVolume(R0);}if(R0 >= R1 + R2){RE SphereVolume(R1);}auto[r0,r1,r2]= PerpendicularPartition(R0,R1,R2);auto[V00,V01]= SphereCapVolumeHeight(R0,R0 -(R2 - r2));auto[V10,V11]= SphereCapVolumeHeight(R1,R1 - r2);RE V00 + V10;}
+#endif
+
