@@ -6,7 +6,7 @@
 #include "../../../Algebra/Monoid/a_Body.hpp"
 
 template <typename INT>
-INT CostfreeKnapsackFewValues( const int& N , const vector<INT>& value , const INT& value_bound , const INT& value_sum_bound )
+INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const INT& value_bound , const INT& value_sum_bound )
 {
 
   INT answer = 0;
@@ -117,8 +117,16 @@ INT CostfreeKnapsackFewValues( const int& N , const vector<INT>& value , const I
 
 }
 
+template <typename INT>
+INT CostfreeKnapsackSmallValueSuBound( const int& N , const vector<INT>& value , const INT& value_sum_bound )
+{
+
+  
+  
+}
+
 template <typename U , typename COMM_MONOID>
-U AbstractCostfreeKnapsackFewItems( COMM_MONOID M , const vector<U>& value , const U& value_sum_bound )
+U AbstractCostfreeKnapsackSmallItems( COMM_MONOID M , const vector<U>& value , const U& value_sum_bound )
 {
 
   const int N = value.size();
@@ -187,5 +195,5 @@ U AbstractCostfreeKnapsackFewItems( COMM_MONOID M , const vector<U>& value , con
   
 }
 
-template <typename INT> inline INT CostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound ) { INT value_bound = 0; for( auto& v : value ){ assert( 0 <= v ); if( v <= value_sum_bound ){ value_bound = max( value_bound , v ); } } const int N = value.size(); return N >= 30 || value_bound >> ( N >> 1 ) == 0 ? CostfreeKnapsackFewValues( N , value , value_bound , value_sum_bound ) : AbstractCostfreeKnapsackFewItems( AdditiveMonoid<INT>() , value , value_sum_bound ); }
+template <typename INT> inline INT CostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound ) { INT value_bound = 0; for( auto& v : value ){ assert( 0 <= v ); if( v <= value_sum_bound ){ value_bound = max( value_bound , v ); } } const int N = value.size(); return N >= 30 || min( value_bound , value_sum_bound / 64 ) >> ( N >> 1 ) == 0 ? value_bound < value_sum_bound / 64 ? CostfreeKnapsackSmallValues( N , value , value_bound , value_sum_bound ) : CostfreeKnapsackSmallValueSumBound( N , value , value_sum_bound ) : AbstractCostfreeKnapsackSmallItems( AdditiveMonoid<INT>() , value , value_sum_bound ); }
 

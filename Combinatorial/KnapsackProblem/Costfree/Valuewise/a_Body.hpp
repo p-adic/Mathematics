@@ -3,28 +3,21 @@
 #pragma once
 #include "a.hpp"
 
+#include "../../../../Arithmetic/AdicExpansion/Dynamic/BitSet/a_Body.hpp"
+
 template <typename INT>
-vector<bool> CostfreePresentabilityKnapsack( const vector<INT>& value , const INT& value_sum_bound )
+DynamicBitSet CostfreePresentabilityKnapsack( const vector<INT>& value , const INT& value_sum_bound )
 {
 
-  const int N = value.size();
-  vector<bool> answer( value_sum_bound + 1 );
-  answer[0] = true;
+  DynamicBitSet S{ value_sum_bound + 1 };
+  S.Set( 0 , 1 );
 
-  for( int i = 0 ; i < N ; i++ ){
+  for( auto& v : value ){
 
-    auto& value_i= value[i];
-    assert( 0 <= value_i );
-
-    for( INT v = value_sum_bound ; v >= value_i ; v-- ){
-
-      answer[v] |= answer[v - value_i];
-
-    }
+    S |= ( S << v );
 
   }
 
-  return answer;
-
+  return S;
+  
 }
-

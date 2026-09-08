@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-// BoundedChoiceKnapsackFewItemsに使う。
+// BoundedChoiceKnapsackSmallItemsに使う。
 #include "ValueSumBound/a_Body.hpp"
 #include "../a_Body.hpp"
 
@@ -45,10 +45,10 @@ void SetIteratedItem( N_MODULE1 M1 , N_MODULE2 M2 , const int& N , const vector<
 
 }
 
-template <typename INT1 , typename INT2 , typename INT3> inline pair<INT1,INT2> BoundedChoiceKnapsackFewItems( const int& N , const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound ) { vector<INT1> value_new; vector<INT2> cost_new; SetIteratedItem( Module<int,INT1>() , Module<int,INT2>() , N , value , value_new , cost , cost_new , move( choice_num_bound ) ); return Knapsack( value_new , cost_new , cost_sum_bound ); }
+template <typename INT1 , typename INT2 , typename INT3> inline pair<INT1,INT2> BoundedChoiceKnapsackSmallItems( const int& N , const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound ) { vector<INT1> value_new; vector<INT2> cost_new; SetIteratedItem( Module<int,INT1>() , Module<int,INT2>() , N , value , value_new , cost , cost_new , move( choice_num_bound ) ); return Knapsack( value_new , cost_new , cost_sum_bound ); }
 
 template <typename INT1 , typename INT2 , typename INT3>
-pair<INT1,INT2> BoundedChoiceKnapsackFewValues( const int& N , const vector<INT1>& value , const INT1& value_bound , const INT1& value_sum_bound , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound )
+pair<INT1,INT2> BoundedChoiceKnapsackSmallValues( const int& N , const vector<INT1>& value , const INT1& value_bound , const INT1& value_sum_bound , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound )
 {
 
   const INT1 value_sum_range = min( value_sum_bound , value_bound * value_bound * INT1( N ) );
@@ -109,4 +109,4 @@ pair<INT1,INT2> BoundedChoiceKnapsackFewValues( const int& N , const vector<INT1
 
 }
 
-template <typename INT1 , typename INT2 , typename INT3> inline pair<INT1,INT2> BoundedChoiceKnapsack( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound ) { const int N = value.size(); const INT1 value_sum_bound = BoundedChoiceValueSumBound( value , cost_sum_bound , choice_num_bound ); INT1 v_max = 0; ll cn_max = 0; for( int i = 0 ; i < N ; i++ ){ v_max = max( v_max , value[i] ); value[i] > 0 ? cn_max = max( cn_max , min( ll( choice_num_bound[i] ) , value_sum_bound ) ) : cn_max; } const ll log_N = Log( N ) , log_v_max = Log( ll( v_max ) ) , log_cn_max = Log( cn_max ); return log_N + min( Log( min( ll( cost_sum_bound ) , ll( value_sum_bound ) ) ) , log_cn_max + ( N >> 1 ) ) + Log( log_cn_max ) < ( log_N << 1 ) + ( log_v_max << 1 ) + Log( log_v_max ) ? BoundedChoiceKnapsackFewItems( N , value , cost , cost_sum_bound , choice_num_bound ) : BoundedChoiceKnapsackFewValues( N , value , v_max , value_sum_bound , cost , cost_sum_bound , choice_num_bound ); }
+template <typename INT1 , typename INT2 , typename INT3> inline pair<INT1,INT2> BoundedChoiceKnapsack( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound , const vector<INT3>& choice_num_bound ) { const int N = value.size(); const INT1 value_sum_bound = BoundedChoiceValueSumBound( value , cost_sum_bound , choice_num_bound ); INT1 v_max = 0; ll cn_max = 0; for( int i = 0 ; i < N ; i++ ){ v_max = max( v_max , value[i] ); value[i] > 0 ? cn_max = max( cn_max , min( ll( choice_num_bound[i] ) , value_sum_bound ) ) : cn_max; } const ll log_N = Log( N ) , log_v_max = Log( ll( v_max ) ) , log_cn_max = Log( cn_max ); return log_N + min( Log( min( ll( cost_sum_bound ) , ll( value_sum_bound ) ) ) , log_cn_max + ( N >> 1 ) ) + Log( log_cn_max ) < ( log_N << 1 ) + ( log_v_max << 1 ) + Log( log_v_max ) ? BoundedChoiceKnapsackSmallItems( N , value , cost , cost_sum_bound , choice_num_bound ) : BoundedChoiceKnapsackSmallValues( N , value , v_max , value_sum_bound , cost , cost_sum_bound , choice_num_bound ); }

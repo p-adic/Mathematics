@@ -15,5 +15,10 @@
 // 価値の総和のvalue_sum_bound以下における最大値を求める。
 template <typename INT> inline INT CostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound );
 
+// value_sum_bound/64が小さい場合は
+// ./Valuewise
+// ./Valuewise/Constexpr
+// を使用。
+
 // 各項の選択が独立でなかったり選択に罰金や報酬がある場合は
 // 最小カット計算に帰着。
