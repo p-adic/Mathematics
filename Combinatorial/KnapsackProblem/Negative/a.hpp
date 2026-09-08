@@ -3,8 +3,8 @@
 #pragma once
 
 // 入力の範囲内で要件
-// (1) M1はoperator<(const U1&,const U1&)に関してUの全順序可換モノイド構造である。
-// (2) M2はoperator<(const U2&,const U2&)に関してUの全順序可換モノイド構造である。
+// (1) M1はoperator<(const U1&,const U1&)に関してU1の全順序可換モノイド構造である。
+// (2) M2はoperator<(const U2&,const U2&)に関してU2の全順序可換モノイド構造である。
 // (3) M1.One() <= value_sum_boundである。
 // (4) M2.One() <= cost_sum_boundである。
 // を満たす場合にのみサポート。

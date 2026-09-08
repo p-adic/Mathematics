@@ -9,7 +9,7 @@
 
 // O(N(sum_i value[i])(max_i cost[i]))
 template <typename INT1 , typename INT2>
-pair<INT1,INT2> UnboundedChoiceKnapsackFewValues( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound )
+pair<INT1,INT2> UnboundedChoiceKnapsackSmallValues( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound )
 {
 
   using T = Pair<INT2,INT1>;
@@ -76,4 +76,4 @@ pair<INT1,INT2> UnboundedChoiceKnapsackFewValues( const vector<INT1>& value , co
 
 }
 
-template <typename INT1 , typename INT2> inline pair<INT1,INT2> UnboundedChoiceKnapsack( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound ) { return len( value ) + static_cast<double>( cost_sum_bound ) * cost_sum_bound < Sum<double>( value ) * Max( cost ) ? NegativeValueUnboundedChoiceKnapsack( value , INT1( -1 ) , cost , cost_sum_bound ) : UnboundedChoiceKnapsackFewValues( value , cost , cost_sum_bound ); }
+template <typename INT1 , typename INT2> inline pair<INT1,INT2> UnboundedChoiceKnapsack( const vector<INT1>& value , const vector<INT2>& cost , const INT2& cost_sum_bound ) { return len( value ) + static_cast<double>( cost_sum_bound ) * cost_sum_bound < Sum<double>( value ) * Max( cost ) ? NegativeValueUnboundedChoiceKnapsack( value , INT1( -1 ) , cost , cost_sum_bound ) : UnboundedChoiceKnapsackSmallValues( value , cost , cost_sum_bound ); }
