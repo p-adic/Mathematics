@@ -1,0 +1,7 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/BreadthFirstSearch/TwoColour/a_Body.hpp"
+#else
+
+TE <TY GRAPH,TY T = inner_t<GRAPH>>VE<T2<VE<T>>> TwoColour(GRAPH& G,CO T& not_found){US U = Pair<T,bool>;auto&& N = G.SZ();auto Enum =[&](CRI i){RE U{G.Enumeration(i>>1),(i & 1)== 1};};auto Enum_inv =[&](CO U& v){RE(G.Enumeration_inv(v[O])<< 1)|(v[I]?1:0);};auto edge =[&](CO U& v){auto&[t,k]= v;VE<U> a{};for(auto& u:G.Edge(t)){a <<={u,!k};}RE a;};EnumerationGraph graph{N * 2,Enum,Enum_inv,edge};BFS bfs{graph,U{not_found,true}};auto[colour,colour_inv,colour_ulim]= bfs.GetConnectedComponent();VE<bool> found(colour_ulim);VE<T2<VE<T>>> AN{};for(int i = 0;i < N;i++){auto&& t = G.Enumeration(i);auto& c0 = colour[Enum_inv({t,false})],c1 = colour[Enum_inv({t,true})];if(c0 == c1){RE{};}if(found[c0]){continue;}found[c0]= found[c1]= true;AN <<={{},{}};for(auto&[u,b]:colour_inv[c0]){if(b){AN.back()[O]<<= u;}else{AN.back()[I]<<= u;}}}RE AN;}
+#endif
+
