@@ -4,27 +4,38 @@
 #include "a.hpp"
 
 #include "../../../Algebra/Monoid/a_Body.hpp"
+#include "../../../Utility/BinarySearch/a_Body.hpp"
 
 template <typename INT>
 INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const INT& value_bound , const INT& value_sum_bound )
 {
 
-  INT answer = 0;
+  INT sum = 0;
   int i = -1;
 
-  while( ++i < N && answer <= value_sum_bound ){
+  while( ++i < N ){
 
-    if( value[i] <= value_sum_bound ){
+    // value_boundの定義はvalue_sum_bound以下のvalueの最大値であることに注意。
+    // 以下価値value_boundより大きいものは価値0とみなす。
+    if( value[i] > value_bound ){
 
-      answer += value[i];
+      continue;
 
     }
 
+    if( sum + value[i] > value_sum_bound ){
+        
+        break;
+
+    }
+
+    sum += value[i];
+      
   }
 
   if( i == N ){
 
-    return answer;
+    return sum;
 
   }
 
@@ -35,25 +46,21 @@ INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const
   // (2) v <= value_sum_boundである場合にi,...,N-1のいずれかの追加をする。
   // という操作のみからなる操作列oprで得られるもの全体を考える。
   // 各oprに対し選択情報が更新されたi未満の項目番号の下限（存在しなければi-1）を
-  // updated_num_min[opr]と置いた時、vごとにoprを渡らせた時のupdated_num_min[opr]の最大値を
+  // updated_num_min[opr]と置いた時、vごとにoprを渡らせた時の
+  // updated_num_min[opr]の最大値を
   // u_v := u[v - ( value_sum_bound - value_bound + 1 )]
   // に格納して管理する。ただしvを実現するoprが存在しない場合はu_vを-1か0で定める。
-  // 特にu_v>=0である場合、u_v未満の番号に対応する項目が全て属す選択方法が構成できていることになる。
-  vector<INT> u( value_bound2 , -1 );
-
-  for( INT v = value_bound ; v < value_bound2 ; v++ ){
-
-    // 削除ステップの更新の都合、削除ステップに影響する添字だけ0に変更。
-    u[v] = 0;
-
-  }
-
-  // answer - value[i]は0,...,i-1までの価値の総和（oprは空の操作）でありi-1が格納される。
-  u[answer -= value[i-1] + ( value_sum_bound - value_bound + 1 )] = i - 1;
+  // 特にu_v>=0である場合、u_v未満の番号に対応する項目が全て選択されているままの
+  // 操作列optがvに対し構成できていることになる。
+  vector<INT> u( value_bound , -1 );
+  // 削除ステップの更新の都合、削除ステップに影響する添字だけ0に変更。
+  u.resize( value_bound2 );
+  // sumは0,...,i-1までの価値の総和（oprは空の操作）でありi-1が格納される。
+  u[sum - ( value_sum_bound - value_bound + 1 )] = --i;
   
   while( ++i < N ){
 
-    if( value[i] > value_sum_bound ){
+    if( value[i] > value_bound ){
 
       continue;
 
@@ -86,14 +93,14 @@ INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const
       // u_prev[v - value[j]]がj以上となっている。従ってjはu[v]以上の範囲だけ探索すれば良い。
       for( INT j = u_prev[v] ; j < j_ulim ; j++ ){
 
-        if( value[j] > value_sum_bound ){
+        if( value[j] > value_bound ){
 
           continue;
 
         }
-        
-	auto& u_v_j = u[v - value[j]];
-	u_v_j = max( u_v_j , j );
+
+        auto& u_v_j = u[v - value[j]];
+        u_v_j = max( u_v_j , j );
 
       }
       
@@ -101,7 +108,8 @@ INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const
 
   }
 
-  // answerの定義からv >= 0に辿り着く間にuの非自明成分が見付かるので、INTがunsignedでも問題ない。
+  // sumの定義からv >= 0に辿り着く間にuの非自明成分が見付かるので、
+  // INTがunsignedでも問題ない。
   for( INT v = value_bound - 1 ; v >= 0 ; v-- ){
 
     if( u[v] != -1 ){
@@ -115,14 +123,6 @@ INT CostfreeKnapsackSmallValues( const int& N , const vector<INT>& value , const
   abort();
   return -1;
 
-}
-
-template <typename INT>
-INT CostfreeKnapsackSmallValueSuBound( const int& N , const vector<INT>& value , const INT& value_sum_bound )
-{
-
-  
-  
 }
 
 template <typename U , typename COMM_MONOID>
@@ -169,8 +169,7 @@ U AbstractCostfreeKnapsackSmallItems( COMM_MONOID M , const vector<U>& value , c
     for( int s = 1 ; s < power_right ; s++ ){
 
       const int lsb = s & -s;
-      auto& value_sum_right_s = value_sum_right[s] = M.Product( value_sum_right[s ^ lsb] , value[N_half_left + valuation[lsb]] );
-      value_sum_bound < value_sum_right_s ? value_sum_right_s = one : value_sum_right_s;
+      value_sum_right[s] = M.Product( value_sum_right[s ^ lsb] , value[N_half_left + valuation[lsb]] );
 
     }
 
@@ -182,8 +181,8 @@ U AbstractCostfreeKnapsackSmallItems( COMM_MONOID M , const vector<U>& value , c
 
       if( !( value_sum_bound < value_sum_left_s ) ){
 	
-	BS2( t , 0 , power_right - 1 , M.Product( value_sum_left_s , value_sum_right[t] ) , value_sum_bound );
-	answer = max( answer , M.Product( value_sum_left_s , value_sum_right[t] ) );
+        MAX_LEQ( t , 0 , power_right - 1 , M.Product( value_sum_left_s , value_sum_right[t] ) , value_sum_bound );
+        answer = max( answer , M.Product( value_sum_left_s , value_sum_right[t] ) );
 
       }
 
@@ -195,5 +194,5 @@ U AbstractCostfreeKnapsackSmallItems( COMM_MONOID M , const vector<U>& value , c
   
 }
 
-template <typename INT> inline INT CostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound ) { INT value_bound = 0; for( auto& v : value ){ assert( 0 <= v ); if( v <= value_sum_bound ){ value_bound = max( value_bound , v ); } } const int N = value.size(); return N >= 30 || min( value_bound , value_sum_bound / 64 ) >> ( N >> 1 ) == 0 ? value_bound < value_sum_bound / 64 ? CostfreeKnapsackSmallValues( N , value , value_bound , value_sum_bound ) : CostfreeKnapsackSmallValueSumBound( N , value , value_sum_bound ) : AbstractCostfreeKnapsackSmallItems( AdditiveMonoid<INT>() , value , value_sum_bound ); }
+template <typename INT> inline INT CostfreeKnapsack( const vector<INT>& value , const INT& value_sum_bound ) { INT value_bound = 0; for( auto& v : value ){ assert( 0 <= v ); if( v <= value_sum_bound ){ value_bound = max( value_bound , v ); } } const int N = value.size(); return N >= 60 || value_bound >> ( N >> 1 ) == 0 ? CostfreeKnapsackSmallValues( N , value , value_bound , value_sum_bound ) : AbstractCostfreeKnapsackSmallItems( AdditiveMonoid<INT>() , value , value_sum_bound ); }
 

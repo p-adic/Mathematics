@@ -4,7 +4,7 @@
 #include "a.hpp"
 
 #include "../../../Loop/a_Body.hpp"
-#include "../../../../../Utility/BinarySearch/Set/a_Body.hpp"
+#include "../../../../Utility/Set/a_Body.hpp"
 
 // 多重ループの非再帰版
 template <typename INT>
@@ -27,6 +27,7 @@ INT CostfreeDifferenceKnapsack( const vector<INT>& value , int size_diff_bound )
   vector<ll> Comb( N + 1 , 1 );
   ll comb_sum = Comb[0];
 
+  // 鳩の巣原理で衝突を検出。
   for( int i = 1 ; i <= size_diff_bound ; i++ ){
 
     if( ( comb_sum += Comb[i] = Comb[i-1] * ( N - 1 - i ) / i ) > ( value_sum_bound += value_bound ) ){

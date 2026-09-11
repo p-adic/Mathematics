@@ -8,6 +8,7 @@
 
 template <typename INT> inline INT CostfreeRestfreeDifferenceKnapsack( const vector<INT>& value , const INT& dif_opt )
 {
+  
   assert( 0 <= dif_opt );
   const INT value_sum_bound = ValueSumBound( value );
 

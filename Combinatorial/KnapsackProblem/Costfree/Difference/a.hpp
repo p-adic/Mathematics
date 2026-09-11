@@ -11,8 +11,10 @@
 // (1) N未満の各iに対しvalue[i]が0以上である。
 // を満たす場合にのみサポート。
 
-// 計算量O(N + size_diff_bound value_bound^{(log_2 3)/2} log value_bound)で
-// 項を少なくとも一方は非空な２グループと余りに分け、
+// 計算量
+// O(鳩の巣原理で衝突が確定する?N:
+// √N 2^N + size_diff_bound * value_bound^{(log_2 3)/2} log value_bound)
+// で項を少なくとも一方は非空な２グループと余り（空でもよい）の３グループに分け、
 // ２グループの要素数の差がsize_diff_bound以下である時の
 // ２グループの価値の総和の差の絶対値の最小値を求める。
 // https://yukicoder.me/problems/no/2918の解説をもとに実装。

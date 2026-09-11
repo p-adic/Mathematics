@@ -1,8 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Costfree/Difference/Restfree/a.hpp
 
 #pragma once
-
-// verify: https://yukicoder.me/submissions/1031012
+// verify:
+// https://yukicoder.me/submissions/1031012
 
 // N>0?max(value):0をvalue_boundと置く。
 
@@ -13,3 +13,7 @@
 // 計算量O(N min(value_bound,2^{N/2}))で
 // 項を２グループに分け、２グループの価値の総和の差であってdif_optに最も近いものを求める。
 template <typename INT> inline INT CostfreeRestfreeDifferenceKnapsack( const vector<INT>& value , const INT& dif_opt = 0 );
+
+// N/2項目ずつ取り出す場合は
+// ./HalfSize/
+// で定義。
