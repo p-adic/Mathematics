@@ -3,9 +3,9 @@ class HillClimbing
 
 public:
   // constexpr data
-  static constexpr double time_threshold0 = 2100;
-  static constexpr double time_threshold1 = 2100;
-  static constexpr double time_threshold2 = 2100;
+  static constexpr double time_threshold0 = 2100; // mode0終了時刻。
+  static constexpr double time_threshold1 = 2100; // mode1終了時刻。
+  static constexpr double time_threshold2 = 2100; // mode2終了時刻。
 
   // mode
   int mode; // 現在どの最適化を進めている段階か。
