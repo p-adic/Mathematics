@@ -4,7 +4,7 @@
 #include "a.hpp"
 
 template <typename T , typename U , template <typename...> typename V , typename OPR> T LeftConnectiveProd( T t , const V<U>& f , OPR opr ) { for( auto& u : f ){ t = opr( move( t ) , u ); } return move( t ); }
-template <typename T , typename U , template <typename...> typename V> inline T Sum( const V<U>& f ) { return LeftConnectiveProd( T{ 0 } , f , []( T t0 , const U& u1 ){ return move( t0 += u1 ); } ); }
+template <typename T , typename U , template <typename...> typename V> inline T Sum( const V<U>& f ) { return LeftConnectiveProd( T{} , f , []( T t0 , const U& u1 ){ return move( t0 += u1 ); } ); }
 template <typename T , typename U , template <typename...> typename V> inline T Prod( const V<U>& f ) { return LeftConnectiveProd( T{ 1 } , f , []( T t0 , const U& u1 ){ return move( t0 *= u1 ); } ); }
 
 template <typename T> inline T& SetMax( T& t ) { return t; }
@@ -41,7 +41,7 @@ template <typename INT> inline INT ArithmeticProgressionSum( const INT& r ) { re
 
 template <typename INT> inline INT SquareSum( const INT& r ) { return r * ( r + 1 ) * ( 2 * r + 1 ) / 6; }
 
-template <typename T , typename UINT> inline T GeometricProgressionSum( T rate , UINT exponent_max , const T& init ) { T rate_minus = rate - 1; return rate_minus == 0 ? init * ++exponent_max : ( Power( move( rate ) , move( ++exponent_max ) ) - 1 ) / move( rate_minus ) * init; }
+template <typename T , typename UINT> inline T GeometricProgressionSum( T rate , UINT exponent_max , const T& init ) { T ratem = rate - 1; return ratem == 0 ? init * ++exponent_max : ( Power( move( rate ) , move( ++exponent_max ) ) - 1 ) / move( ratem ) * init; }
 
 template <typename T , typename UINT>
 T GeometricProgressionLinearCombinationSum( vector<T> rate , vector<UINT> exponent_max , const vector<T>& init )
