@@ -3,7 +3,6 @@
 #pragma once
 #include "a.hpp"
 
-
 template <typename INT>
 INT RoundDownSqrt( const INT& n )
 {
@@ -46,17 +45,19 @@ INT RoundUpSqrt( const INT& n )
   }
 
   constexpr INT r_max = is_same_v<INT,int> ? 46341 : is_same_v<INT,uint> ? 65536 : is_same_v<INT,ll> ? 3037000500 : 4294967296;
-  const INT n_minus = n - 1;
+  const INT nm = n - 1;
   INT l = 1 , r = min( r_max , n );
 
   while( l + 1 < r ){
 
     const INT m = ( l + r ) >> 1;
     // m * m < n‚©”Û‚©‚ð”»’èB
-    ( m <= n_minus / m ? l : r ) = m;
+    ( m <= nm / m ? l : r ) = m;
 
   }
 
   return r;
 
 }
+
+template <typename INT> bool IsSquare( const INT& n ) { const INT r = RoundDownSqrt( n ); return n == r * r; }
