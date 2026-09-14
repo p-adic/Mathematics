@@ -20,7 +20,7 @@ public:
 
 };
 
-int H , W , H_minus , W_minus;
+int H , W , Hm , Wm;
 ll HW;
 vector<string> grid;
 char walkable = '.';
@@ -44,7 +44,7 @@ inline void SetWallStringOnGrid( const int& i , vector<string>& S );
 // (0,-1) -> D
 // (-1,0) -> L
 const string direction = "URDL";
-bool grid_edge[3][3] = {
+vector<vector<bool>> grid_edge = {
   {false,true,false},
   {true,false,true},
   {false,true,false}
