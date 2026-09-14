@@ -26,9 +26,9 @@ template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator^=( ll ex
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator<<=( ll n ) { return *this *= ( n < 0 && -n < int( Constants::g_memory_length ) ) ? TwoPowerInverse( - int( n ) ) : ( n >= 0 && n < int( Constants::g_memory_length ) ) ? TwoPower( int( n ) ) : Mod<M>( 2 ) ^= move( n ); }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator>>=( ll n ) { return *this <<= move( n *= -1 ); }
 
-template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator++() noexcept { m_n < Constants::g_M_minus ? ++m_n : m_n = 0; return *this; }
+template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator++() noexcept { m_n < Constants::g_Mm ? ++m_n : m_n = 0; return *this; }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Mod<M>::operator++( int ) noexcept { Mod<M> n{ *this }; operator++(); return n; }
-template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator--() noexcept { m_n == 0 ? m_n = Constants::g_M_minus : --m_n; return *this; }
+template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M>& Mod<M>::operator--() noexcept { m_n == 0 ? m_n = Constants::g_Mm : --m_n; return *this; }
 template <INT_TYPE_FOR_MOD M> inline constexpr Mod<M> Mod<M>::operator--( int ) noexcept { Mod<M> n{ *this }; operator--(); return n; }
 
 DEFINITION_OF_COMPARISON_FOR_MOD( == );
