@@ -8,9 +8,9 @@ public:
   static constexpr double log_updatability_scale = log( updatability_scale );
 
   // 山登りを行わない場合はtime_threshold0を-1にする。
-  static constexpr double time_threshold0 = -1;
-  static constexpr double time_threshold1 = 1600;
-  static constexpr double time_threshold2 = 1900;
+  static constexpr double time_threshold0 = -1; // mode0終了時刻。
+  static constexpr double time_threshold1 = 1600; // mode1終了時刻。
+  static constexpr double time_threshold2 = 2100; // mode2終了時刻。
 
   // mode
   int mode; // 現在どの最適化を進めている段階か。mode==0の時は山登りを行う。
