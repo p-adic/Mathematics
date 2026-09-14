@@ -26,9 +26,9 @@ template <int NUM> inline DMods<NUM>& DMods<NUM>::operator^=( ll exponent ) { if
 template <int NUM> inline DMods<NUM>& DMods<NUM>::operator<<=( ll n ) { return *this *= ( n < 0 && -n < int( Constants::g_memory_length ) ) ? TwoPowerInverse( - int( n ) ) : ( n >= 0 && n < int( Constants::g_memory_length ) ) ? TwoPower( int( n ) ) : DMods<NUM>( 2 ) ^= move( n ); }
 template <int NUM> inline DMods<NUM>& DMods<NUM>::operator>>=( ll n ) { return *this <<= move( n *= -1 ); }
 
-template <int NUM> inline DMods<NUM>& DMods<NUM>::operator++() noexcept { m_n < Constants::g_M_minus ? ++m_n : m_n = 0; return *this; }
+template <int NUM> inline DMods<NUM>& DMods<NUM>::operator++() noexcept { m_n < Constants::g_Mm ? ++m_n : m_n = 0; return *this; }
 template <int NUM> inline DMods<NUM> DMods<NUM>::operator++( int ) noexcept { DMods<NUM> n{ *this }; operator++(); return n; }
-template <int NUM> inline DMods<NUM>& DMods<NUM>::operator--() noexcept { m_n == 0 ? m_n = Constants::g_M_minus : --m_n; return *this; }
+template <int NUM> inline DMods<NUM>& DMods<NUM>::operator--() noexcept { m_n == 0 ? m_n = Constants::g_Mm : --m_n; return *this; }
 template <int NUM> inline DMods<NUM> DMods<NUM>::operator--( int ) noexcept { DMods<NUM> n{ *this }; operator--(); return n; }
 
 DEFINITION_OF_COMPARISON_FOR_DMOD( == );
@@ -67,7 +67,7 @@ template <int NUM> inline const DMods<NUM>& DMods<NUM>::zero() noexcept { static
 template <int NUM> inline const DMods<NUM>& DMods<NUM>::one() noexcept { static const DMods<NUM> o{ 1 }; return o; }
 
 template <int NUM> inline const uint& DMods<NUM>::GetModulo() noexcept { return Constants::g_M; }
-template <int NUM> inline void DMods<NUM>::SetModulo( const uint& M , const bool& M_is_prime ) noexcept { Constants::g_M = M; Constants::g_memory_length = M < Constants::g_memory_bound ? M : Constants::g_memory_bound;; Constants::g_M_minus = M - 1; Constants::g_M_is_prime = M_is_prime; }
+template <int NUM> inline void DMods<NUM>::SetModulo( const uint& M , const bool& M_is_prime ) noexcept { Constants::g_M = M; Constants::g_memory_length = M < Constants::g_memory_bound ? M : Constants::g_memory_bound;; Constants::g_Mm = M - 1; Constants::g_M_is_prime = M_is_prime; }
 
 template <int NUM> inline DMods<NUM> Inverse( const DMods<NUM>& n ) { return move( DMods<NUM>( n ).Invert() ); }
 template <int NUM> inline DMods<NUM> Power( DMods<NUM> n , ll exponent ) { return move( n ^= move( exponent ) ); }

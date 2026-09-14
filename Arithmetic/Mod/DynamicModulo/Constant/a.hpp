@@ -15,7 +15,7 @@ private:
   static uint g_M;
   static constexpr const uint g_memory_bound = 2e6;
   static uint g_memory_length;
-  static uint g_M_minus;
+  static uint g_Mm;
   static bool g_M_is_prime;
 
 };

@@ -69,7 +69,7 @@ template <int NUM> inline const DMods<NUM>& DMods<NUM>::zero() noexcept { static
 template <int NUM> inline const DMods<NUM>& DMods<NUM>::one() noexcept { static const DMods<NUM> o{ 1 }; return o; }
 
 template <int NUM> inline const uint& DMods<NUM>::GetModulo() noexcept { return Constants::g_M; }
-template <int NUM> inline void DMods<NUM>::SetModulo( const uint& M , const bool& M_is_prime ) noexcept { Constants::g_M = M; Constants::g_memory_length = M < Constants::g_memory_bound ? M : Constants::g_memory_bound;; Constants::g_M_minus = M - 1; Constants::g_M_is_prime = M_is_prime; }
+template <int NUM> inline void DMods<NUM>::SetModulo( const uint& M , const bool& M_is_prime ) noexcept { Constants::g_M = M; Constants::g_memory_length = M < Constants::g_memory_bound ? M : Constants::g_memory_bound;; Constants::g_Mm = M - 1; Constants::g_M_is_prime = M_is_prime; }
 
 template <int NUM> inline DMods<NUM> Inverse( const DMods<NUM>& n ) { return move( DMods<NUM>( n ).Invert() ); }
 
