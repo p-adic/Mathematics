@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Negative/Cost/Multicost/a_Body.hpp"
+#else
+TE <TY U,TY COMM_MONOID>U AbstractValueSumBound(COMM_MONOID M,CO VE<U>& value){CO U& one = M.One();U AN = one;for(auto& v:value){one < v?AN = M.Product(MO(AN),v):AN;}RE AN;}TE <TY INT> IN INT ValueSumBound(CO VE<INT>& value){RE AbstractValueSumBound(AdditiveMonoid<INT>(),value);}
+
+TE <TY U,TY COMM_MONOID>U AbstractHalfNegativeMulticostKnapsack(COMM_MONOID M,CO VE<int>& value,CO VE<int>& cost0,CRI cost0_sum_bound,CO VE<U>& cost1,CO U& cost1_sum_bound,CO U& exceptional){CO int value_sum_bound = ValueSumBound(value);CO int N = value.SZ();AS(N == int(cost0.SZ())&& N == int(cost1.SZ()));VE dp(value_sum_bound + 1,VE(cost0_sum_bound + 1,exceptional));dp[0][0]= M.One();for(int i = 0;i < N;i++){for(int v = value_sum_bound;v >= value[i];v--){for(int w0 = cost0_sum_bound;w0 >= cost0[i];w0--){SetMin(dp[v][w0],M.Product(dp[v-value[i]][w0-cost0[i]],cost1[i]));}}}for(int v = value_sum_bound;v > 0;v--){for(int w0 = 0;w0 <= cost0_sum_bound;w0++){if(!(cost1_sum_bound < dp[v][w0])){RE v;}}}RE 0;}TE <TY INT> IN int HalfNegativeMulticostKnapsack(CO VE<int>& value,CO VE<int>& cost0,CRI cost0_sum_bound,CO VE<INT>& cost1,CO INT& cost1_sum_bound){RE AbstractHalfNegativeMulticostKnapsack(AdditiveMonoid<INT>(),value,cost0,cost0_sum_bound,cost1,cost1_sum_bound,cost1_sum_bound + 1);}
+#endif
+
