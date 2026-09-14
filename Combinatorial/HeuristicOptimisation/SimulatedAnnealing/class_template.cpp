@@ -37,8 +37,12 @@ public:
   SimulatedAnnealing( const int& N , const ll& K ) : N( N ) , K( K )
   {
     mode = 0;
+    // temporary parameterの初期化
     Q = id<int>( N + 1 );
     sum = N * ll( N + 1 ) * ( 2 * N + 1 ) / 6;
+    // 近傍探索用memoryの初期化
+    mi = 0;
+    mj = 0;
     // 単発の貪欲法など、繰り返しをともなわない前処理を以下に行う。
     // VVV
 
@@ -120,6 +124,7 @@ public:
   {
   }
   
+  // 基本的に変えなくて良い。
   void ModeChange()
   {
     OptimiseTemporary();
@@ -130,6 +135,7 @@ public:
     mode = mode_temp;
   }
 
+  // 基本的に変えなくて良い。
   void Shift( const double& current_time )
   {
     mode_temp = 0;
@@ -161,6 +167,7 @@ public:
     }
   }
 
+  // 基本的に変えなくて良い。
   void Revert()
   {
     mode_temp = 0;
