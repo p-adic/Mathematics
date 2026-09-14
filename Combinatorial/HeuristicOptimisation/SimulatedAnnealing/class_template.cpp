@@ -31,7 +31,7 @@ public:
   int mj;
 
   // score
-  using score_type = ll;
+  using score_type = ll; // 変えても良いが、変える場合はUpdatable判定も変更が必要。
   score_type score,score_opt,score_local_opt;
 
   SimulatedAnnealing( const int& N , const ll& K ) : N( N ) , K( K )
@@ -181,16 +181,19 @@ public:
     return score;
   }
 
+  // 基本的に変えなくて良い。
   double Temparature( const double& log_temparature_min , const double& time , const int& time_lim )
   {
     return exp( ( log_temparature_min * time ) / time_lim );
   }
   
+  // 基本的に変えなくて良い。
   bool Updatable( const int& updatability_scale , const score_type& score , const score_type& score_local_opt , const double& log_temparature_min , const double& time , const int& time_lim )
   {
     return score > score_local_opt || ( mode > 0 && GetRand( 0 , updatability_scale ) < exp( ( score - score_local_opt ) / Temparature( log_temparature_min , time , time_lim ) + log_updatability_scale ) );
   }
 
+  // 基本的に最適判定以外は変えなくて良い。
   const score_type& Execute( const double& log_temparature_min , const double& executed_time , const double& final_time , const int& updatability_scale )
   {
     START_WATCH;
