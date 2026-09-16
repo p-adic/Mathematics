@@ -207,6 +207,7 @@ public:
     start_time = executed_time;
     const double time_lim = final_time - start_time;
     score_opt = ComputeScore(); score_local_opt = score_opt;
+    CERR( "The first score:" , score_opt );
     while( CHECK_WATCH( time_lim ) ){
       // if( score_opt == 100000000 ){
       //   CERR( "Reached the maximum:" , score_opt );

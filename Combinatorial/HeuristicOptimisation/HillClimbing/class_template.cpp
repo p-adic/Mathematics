@@ -17,7 +17,7 @@ public:
 
   // temporary/optimal parameter
   vector<int> P,P_opt;
-  ll sum = 0;
+  ll sum,sum_opt;
 
   // 近傍探索用memory (先頭にmをつけて衝突を避ける)
   // ComputeScore()に計算コストがかかる場合は差分計算用の変数もここに用意する。
@@ -26,7 +26,7 @@ public:
 
   // score
   using score_type = ll;
-  score_type score,score_opt,score_local_opt;
+  score_type score,score_opt;
 
   HillClimbing( const int& N ) : N( N )
   {
@@ -47,12 +47,14 @@ public:
   void SetOptimal()
   {
     P_opt = P;
+    sum_opt = sum;
   }
   
   void OptimiseTemporary()
   {
     // 必要な部分のみ変更してもよい。
     P = P_opt;
+    sum = sum_opt;
   }
 
   // 近傍探索用memoryの変更。
@@ -184,23 +186,19 @@ public:
     START_WATCH;
     start_time = executed_time;
     const double time_lim = final_time - start_time;
-    score_opt = ComputeScore(); score_local_opt = score_opt;
+    score_opt = ComputeScore();
+    CERR( "The first score:" , score_opt );
     while( CHECK_WATCH( time_lim ) ){
       // if( score_opt == 100000000 ){
       //   CERR( "Reached the maximum:" , score_opt );
       //   break;
       // }
       Shift( current_time );
-      const score_type score = ComputeScore();
-      if( score > score_local_opt ){
-        if( score > score_opt ){
-          CERR( "Updated the optimal score:" , score_opt , "->" , score );
-          SetOptimal();
-          score_opt = score_local_opt = score;
-        } else {
-          CERR( "Updated the local optimal score:" , score_local_opt , "->" , score );
-          score_local_opt = score;
-        }
+      auto&& score = ComputeScore();
+      if( score > score_opt ){
+        CERR( "Updated the optimal score:" , score_opt , "->" , score );
+        SetOptimal();
+        score_opt = score;
       } else {
         CERR( "Declined the last score:" , score );
         Revert();
