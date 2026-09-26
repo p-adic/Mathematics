@@ -1,0 +1,8 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/IncreasingSequence/IncreasingSubsequence/Disjoint/a_Body.hpp"
+#else
+TE <TY INT>Pair<VE<VE<INT>>,VE<VE<int>>> RobinsonSchenstedKnuth(CO VE<INT>& v,int K = -1){CO int N = v.SZ();VE<VE<INT>> a0 ={{}};VE<VE<int>> a1 ={{}};if(K == -1){K = N;}for(int i = 0;i < N;i++){CO int L = a0.SZ();INT t = v[i];for(int j = 0;j < L;j++){auto EN = a0[j].EN(),IT = lower_bound(a0[j].BE(),EN,t);if(IT == EN){a0[j]<<= t;a1[j]<<= i;if(j == L - 1 && L < K){a0 <<={};a1 <<={};}break;}else{swap(*IT,t);}}}if(a0.back().empty()){pop(a0);pop(a1);}RE{MO(a0),MO(a1)};}
+
+TE <TY T>int LongestDisjointNonStrictlyIncreasingSubsequence(CO VE<T>& a,int K = -1){auto[P0,P1]= RobinsonSchenstedKnuth(a,MO(K));int AN = 0;for(auto& v:P0){AN += v.SZ();}RE AN;}
+#endif
+
