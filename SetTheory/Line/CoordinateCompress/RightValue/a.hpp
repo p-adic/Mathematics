@@ -31,3 +31,5 @@ public:
 
 };
 
+// 右辺値を圧縮し、{enum_im,enum_im_inv,len(enum_im)}={圧縮前の値をソートして重複をなくした配列,圧縮後の値の元の値,圧縮後の値の最大値+1}を返す。
+template <typename INT> tuple<vector<INT>,map<INT,int>,int> inline Enumerate( const vector<INT>& a );

@@ -68,3 +68,5 @@ template <typename INT , bool ordered> inline void CoordinateCompressR<INT,order
 
 }
 
+template <typename INT> tuple<vector<INT>,map<INT,int>,int> inline Enumerate( const vector<INT>& a ) { CoordinateCompressR<INT> cc{}; for( auto& x : a ){ cc.Set( x ); } return cc.Get(); }
+

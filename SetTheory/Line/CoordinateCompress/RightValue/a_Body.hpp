@@ -28,3 +28,5 @@ tuple<vector<INT>,conditional_t<ordered,map<INT,int>,unordered_map<INT,int>>,int
 
 template <typename INT , bool ordered> inline void CoordinateCompressR<INT,ordered>::clear() { m_r.clear(); }
 
+template <typename INT> tuple<vector<INT>,map<INT,int>,int> inline Enumerate( const vector<INT>& a ) { CoordinateCompressR<INT> cc{}; for( auto& x : a ){ cc.Set( x ); } return cc.Get(); }
+
