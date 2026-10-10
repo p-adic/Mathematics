@@ -2,55 +2,11 @@
 
 #pragma once
 
-#define DECLARATION_OF_SLIDING_MIMALISATION( MIN )                        \
-  template <typename INT> vector<INT> Sliding ## MIN ## imalisation( const vector<INT>& a , const int& interval_size ) \
+#define DECLARATION_OF_SLIDING_MINIMALISATION( MIN )                    \
+  template <typename FUNC0 , typename FUNC1 , typename T> void Sliding ## MIN ## imalisation( FUNC0 f , FUNC1 g , vector<T>& answer , const int& interval_size ) \
 
-#define DEFINITION_OF_SLIDING_MIMALISATION( MIN , OPR )                   \
-  template <typename INT>                                               \
-  vector<INT> Sliding ## MIN ## imalisation( const vector<INT>& a , const int& interval_size ) \
-  {                                                                     \
-                                                                        \
-    const int size = a.size();                                          \
-    vector<INT> answer( size );                                         \
-                                                                        \
-    if( 0 < interval_size && interval_size <= size ){                   \
-                                                                        \
-      list<pair<INT,int>> interval{};                                   \
-                                                                        \
-      for( int i = 0 ; i < interval_size - 1 ; i++ ){                   \
-                                                                        \
-        while( !interval.empty() && interval.back().first OPR a[i] ){   \
-                                                                        \
-          interval.pop_back();                                          \
-                                                                        \
-        }                                                               \
-                                                                        \
-        interval.push_back( {a[i],i} );                                 \
-                                                                        \
-      }                                                                 \
-                                                                        \
-      for( int i = interval_size - 1 ; i < size ; i++ ){                \
-                                                                        \
-        while( !interval.empty() && interval.back().first > a[i] ){     \
-                                                                        \
-          interval.pop_back();                                          \
-                                                                        \
-        }                                                               \
-                                                                        \
-        interval.push_back( {a[i],i} );                                 \
-        auto& [x,j] = interval.front();                                 \
-        answer[i] = x;                                                  \
-                                                                        \
-        if( j == i - interval_sum + 1 ){                                \
-                                                                        \
-          interval.pop_front();                                         \
-                                                                        \
-        }                                                               \
-                                                                        \
-      }                                                                 \
-                                                                        \
-    }                                                                   \
-                                                                        \
-    return answer;                                                      \
-                                                                        \
-  }                                                                     \
+#define DEFINITION_OF_SLIDING_MINIMALISATION( MIN , OPR )               \
+  template <typename FUNC0 , typename FUNC1 , typename T>               \
+  void Sliding ## MIN ## imalisation( FUNC0 f , FUNC1 g , vector<T>& answer , const int& interval_size ){ SlidingMinimalisationBody( move( f ) , move( g ) , answer , interval_size , [&]( const T& t0 , const T& t1 ){ return t0 OPR t1; } ); } \
+
+
