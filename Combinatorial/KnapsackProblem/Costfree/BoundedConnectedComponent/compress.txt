@@ -1,0 +1,10 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Combinatorial/KnapsackProblem/Costfree/BoundedConnectedComponent/a_Body.hpp"
+#else
+#define DF_OF_SLIDING_MINIMALISATION(MIN,OPR)TE <TY FUNC0,TY FUNC1,TY T> VO Sliding ## MIN ## imalisation(FUNC0 f,FUNC1 g,VE<T>& AN,CRI interval_SZ){SlidingMinimalisationBody(MO(f),MO(g),AN,interval_SZ,[&](CO T& t0,CO T& t1){RE t0 OPR t1;});}
+DF_OF_SLIDING_MINIMALISATION(Min,>);DF_OF_SLIDING_MINIMALISATION(Max,<);
+TE <TY FUNC0,TY FUNC1,TY T,TY COMP>VO SlidingMinimalisationBody(FUNC0 f,FUNC1 g,VE<T>& AN,CRI interval_SZ,COMP comp){AS(0 < interval_SZ);CO int N = AN.SZ();LI<pair<decldecay_t(g(0)),int>> interval{};for(int i = 0;i < N;i++){T t = g(i);WH(!interval.empty()&& comp(interval.back().first,t)){interval.pop_back();}interval.push_back({MO(t),i});auto&[x,j]= interval.front();AN[i]= f(x,i);if(j == i - interval_SZ + 1){interval.pop_front();}}RE;}
+
+TE <TY INT>INT CostfreeBoundedConnectedComponentKnapsack(CO VE<INT>& value,CRI r,CRI l = 1){CO int N = value.SZ();AS(0 < l);INT sum = Sum<INT>(value),opt = r < N?sum:0;VE<INT> sm(N);SlidingMinimalisation([&](CO INT& x,CRI i){RE i <= r?value[i]:x +(i < N?value[i]:0);},[&](CRI i){RE i < l?sum:sm[i-l];},sm,r - l + 2);for(int i = max(0,N -(r + 1));i < N;i++){SetMin(opt,sm[i]);}RE sum - opt;}
+#endif
+
