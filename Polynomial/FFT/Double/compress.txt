@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Polynomial/FFT/Double/a_Body.hpp"
+#else
+US cd = complex<double>;CE CO cd pij{0,-3.141592653589793};TE <TY INT>VE<cd> FFT(CO VE<INT>& f,int n,int v){VE<cd> a(n,f[0]);if(n > 1){n >>= 1;v--;VE<cd> f0(n),f1(n);CO cd pijn = pij / forward<double>(n);for(int e = 0;e < n;e++){f0[e]= f[e]+ f[n|e];f1[e]= forward<cd>(f[e]- f[n|e])* exp(pijn * forward<double>(e));}f0 = FFT(f0,n,v);f1 = FFT(f1,n,v);for(int e = 0;e < n;e++){a[e<<1]= f0[e];a[(e<<1)|1]= f1[e];}}RE a;}IN VO IFFT(VE<cd>& f,CRI n,int v){for(auto& z:f){z = conj(z);}f = FFT(f,n,MO(v));for(auto& z:f){z = conj(z)/ forward<double>(n);}}TE <TY VEC0,TY VEC1>VE<ll> CN(VEC0 f,VEC1 g){CO int L0 = f.SZ(),L1 = g.SZ(),L = L0 + L1 - 1;if(min(L0,L1)== 0){RE{};}int n = 1,v = 0;WH(n < L){n <<= 1;v++;}f.resize(n);g.resize(n);auto Ff = FFT(f,n,v),Fg = FFT(g,n,v);for(int e = 0;e < n;e++){Ff[e]*= Fg[e];}IFFT(Ff,n,v);VE<ll> a(n);for(int e = 0;e < n;e++){a[e]= llround(Ff[e].real());}WH(!a.empty()&& a.back()== 0){a.pop_back();}RE a;}
+#endif
+

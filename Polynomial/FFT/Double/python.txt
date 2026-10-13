@@ -1,0 +1,34 @@
+# 2^52 à 4.5*10^15¸“x‚ÌFFTB
+# - â‘Î’l2*10^5ˆÈ‰º‚ÌŒW”‚ðŽ‚Â10^5ŽŸˆÈ‰º‚Ì‘½€Ž®“¯Žm‚ÌÏ
+# - â‘Î’l2*10^4ˆÈ‰º‚ÌŒW”‚ðŽ‚Â10^7ŽŸˆÈ‰º‚Ì‘½€Ž®“¯Žm‚ÌÏ
+# ‚È‚Ç‚ðˆµ‚¤B
+# ƒvƒƒX‘f”‚ð–@‚Æ‚·‚éNTT‚æ‚è’è””{ç­‚¢‚ªAŽŸ”‚Ì—Z’Ê‚ª—˜‚­B
+
+import cmath
+pij = -cmath.pi * 1j
+
+def FFT(f,n,v):
+	if n>1:
+		n >>= 1
+		v -= 1
+		f = FFT([x + y + 0j for x,y in zip(f,f[n:])],n,v) + FFT([(x - y) * w for x,y,w in zip(f,f[n:],[cmath.exp(pij * e / n)for e in R(n)])],n,v)
+		f = [f[((e & 1) << v) | (e >> 1)]for e in R(n << 1)]
+	return f
+def IFFT(f,n,v):
+	return [x.conjugate() / n for x in FFT([y.conjugate() for y in f],n,v)]
+
+def convolution(f,g):
+	assert max(abs(x) for x in f + [0]) * max(abs(y) for y in g + [0]) * min(len(f),len(g)) < 1 << 52
+	L0 = len(f)
+	L1 = len(g)
+	if min(L0,L1):
+		L = L0 + L1 - 1
+		n = 1
+		v = 0
+		while n < L:
+			n <<= 1
+			v += 1
+		a = [round(z.real) for z in IFFT([x * y for x,y in zip(FFT(f + [0] * (n - L0),n,v),FFT(g + [0] * (n - L1),n,v))],n,v)]
+		while a and a[-1] == 0:a.pop()
+	else:a = []
+	return a
