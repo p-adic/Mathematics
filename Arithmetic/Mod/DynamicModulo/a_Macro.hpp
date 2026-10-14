@@ -9,7 +9,7 @@
   inline bool operator OPR( const DMods<NUM>& n ) const noexcept	\
 
 #define DECLARATION_OF_ARITHMETIC_FOR_DMOD( OPR , EX )		\
-  inline DMods<NUM> operator OPR( DMods<NUM> n ) const EX;	\
+  inline DMods<NUM> operator OPR( DMods<NUM> n ) const EX	\
 
 #define DEFINITION_OF_COMPARISON_FOR_DMOD( OPR )			\
   template <int NUM> inline bool DMods<NUM>::operator OPR( const DMods<NUM>& n ) const noexcept { return m_n OPR n.m_n; } \
