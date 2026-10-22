@@ -1,9 +1,8 @@
 // c:/Users/user/Documents/Programming/Mathematics/Algebra/Monoid/Semirng/MeetSemirng/Implement/a.hpp
 
 #pragma once
-
 // verify:
-// https://yukicoder.me/submissions/964836
+// https://yukicoder.me/submissions/1194127
 
 template <typename U> class Trop;
 
@@ -24,7 +23,7 @@ private:
 // (2) g_zeroが最小元である。
 // を満たす場合にのみサポート。
 // Uのoperator+=とoperaror<に関する非単位的Maxトロピカル半環に相当する型を得る。
-// 行列を使う場合などAbsractTropicalSemrngでは遲いかもしれない場合に用いる。
+// 行列を使う場合などAbsractTropicalSemirngでは遲いかもしれない場合に用いる。
 template <typename U = ll>
 class Trop
 {
@@ -40,10 +39,10 @@ public:
   inline Trop<U> operator+( const Trop<U>& n ) const;
   inline Trop<U> operator*( const Trop<U>& n ) const;
 
-  inline void Set( const U& n ) noexcept;
+  inline void Set( U n ) noexcept;
   inline const U& Get() const noexcept;
 
-  static inline void SetZero( const U& zero ) noexcept;;
+  static inline void SetZero( U zero ) noexcept;;
   
 };
 

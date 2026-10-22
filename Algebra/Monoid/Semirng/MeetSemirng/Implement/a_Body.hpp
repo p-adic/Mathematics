@@ -11,10 +11,10 @@ template <typename U> inline Trop<U>& Trop<U>::operator*=( const Trop<U>& n ) { 
 template <typename U> inline Trop<U> Trop<U>::operator+( const Trop<U>& n ) const { return move( Trop<U>( *this ) += n ); }
 template <typename U> inline Trop<U> Trop<U>::operator*( const Trop<U>& n ) const { return move( Trop<U>( *this ) *= n ); }
 
-template <typename U> inline void Trop<U>::Set( const U& n ) noexcept { m_n = n; }
+template <typename U> inline void Trop<U>::Set( U n ) noexcept { m_n = move( n ); }
 template <typename U> inline const U& Trop<U>::Get() const noexcept { return m_n; }
 
-template <typename U> inline void Trop<U>::SetZero( const U& zero ) noexcept { ZeroForTrop<U>::g_zero = zero; };
+template <typename U> inline void Trop<U>::SetZero( U zero ) noexcept { ZeroForTrop<U>::g_zero = move( zero ); };
 
 template <class Traits , typename U> inline basic_istream<char,Traits>& operator>>( basic_ostream<char,Traits>& is , const Trop<U>& n ) noexcept { U temp; is >> temp; n.Set( temp ); return is; }
 template <class Traits , typename U> inline basic_ostream<char,Traits>& operator<<( basic_ostream<char,Traits>& os , const Trop<U>& n ) noexcept { return os << n.Get(); }
