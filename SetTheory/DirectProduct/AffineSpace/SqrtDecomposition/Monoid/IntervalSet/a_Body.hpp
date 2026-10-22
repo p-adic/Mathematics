@@ -3,7 +3,7 @@
 #pragma once
 #include "a.hpp"
 
-#include "../../Sqrt/a_Body.hpp"
+#include "../../Coordinate/a_Body.hpp"
 
 template <typename U , typename NON_COMM_N_MODULE> template <typename...Args> inline IntervalSetMonoidSqrtDecomposition<U,NON_COMM_N_MODULE>::IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , const int& N , const Args&... args ) : SqrtDecompositionCoordinate( N , args... ) , m_M( move( M ) ) , m_a( m_N_m , m_M.One() ) , m_b( m_N_d , m_M.One() ) , m_lazy_substitution( m_N_d , m_M.One() ) , m_suspended( m_N_d ) { static_assert( ! is_same_v<U,int> && is_same_v<U,inner_t<NON_COMM_N_MODULE>> ); }
 
@@ -65,7 +65,7 @@ template <typename U , typename NON_COMM_N_MODULE> inline void IntervalSetMonoid
       IntervalSet_Body( i_0 , d_0_N_sqrt , m_lazy_substitution_d );
       m_suspended_d = false;
       // îÒâ¬ä∑Nâ¡åQê´ÇégÇ¡ÇΩÅB
-      m_bd = m_M.Product( m_M.Power( m_lazy_substitution_d , m_N_sqrt - ( i_0 - i_min ) ) , m_M.Power( u , i_0 - i_min ) );
+      m_bd = m_M.Product( m_M.Product( m_M.Power( m_lazy_substitution_d , i_min - d_0_N_sqrt_minus ) , m_M.Power( u , i_0 - i_min ) ) , m_M.Power( m_lazy_substitution_d , d_0_N_sqrt - i_0 ) );
 
     } else {
 

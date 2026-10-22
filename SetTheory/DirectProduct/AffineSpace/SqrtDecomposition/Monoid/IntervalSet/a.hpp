@@ -3,7 +3,7 @@
 #pragma once
 #include "../../a_Macro.hpp"
 
-#include "../../Sqrt/a.hpp"
+#include "../../Coordinate/a.hpp"
 
 // verify:
 // https://yukicoder.me/submissions/964805（配列初期化、一点代入、区間積）
@@ -37,7 +37,7 @@ protected:
   
 public:
   // MonoidSqrtDecompositionのコンストラクタとm_lazy_substitution,m_suspendedの零初期化
-  template <typename...Args> inline IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , const int& N = 0 , const Args&... args );
+  template <typename...Args> inline IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , const int& N = 1 , const Args&... args );
   template <typename...Args> IntervalSetMonoidSqrtDecomposition( NON_COMM_N_MODULE M , vector<U> a , const Args&... args );
 
   template <typename...Args> inline void Initialise( Args&&... args );
