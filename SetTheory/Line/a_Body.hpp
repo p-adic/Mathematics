@@ -228,6 +228,8 @@ template <typename INT> void LineSubset<INT>::IntervalErase( const INT& i_start 
 
 }
 
+template <typename INT> inline typename LineSubset<INT>::int_iterator& LineSubset<INT>::IntervalErase( int_iterator& itr ){ m_size -= itr->first - itr->second + 1; return itr = m_l.erase( itr ); }
+
 template <typename INT> inline int LineSubset<INT>::count( const INT& i ) const noexcept { return find( i ) ? 1 : 0; }
 
 template <typename INT>
@@ -278,3 +280,5 @@ pair<INT,INT> LineSubset<INT>::IntervalOf( const INT& i ) const noexcept
 }
 
 template <typename INT> inline const map<INT,INT>& LineSubset<INT>::GetInterval() const noexcept { return m_l; }
+template <typename INT> inline map<INT,INT>& LineSubset<INT>::RefInterval() noexcept { return m_l; }
+

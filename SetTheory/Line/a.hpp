@@ -6,7 +6,7 @@
 // verify:
 // https://yukicoder.me/submissions/1002789 (insert, erase, IntervalOf)
 // https://yukicoder.me/submissions/1123304 (IntervalInsert, IntervalOf, GetInterval)
-// https://yukicoder.me/submissions/1168481 (IntervalInsert, IntervalErase, GetInterval, clear)
+// https://yukicoder.me/submissions/1194306 (IntervalInsert, IntervalErase, GetInterval, RefInterval, clear)
 
 // 構築O(1)
 // 一点挿入O(log Q)
@@ -38,6 +38,7 @@ private:
 
 public:
   using iterator = IteratorOfLineSubset<INT>;
+  using int_iterator = typename map<INT,INT>::iterator;
   
   void insert( const INT& i ) noexcept;
   void IntervalInsert( const INT& i_start , const INT& i_final ) noexcept;
@@ -45,6 +46,8 @@ public:
   // itrをインクリメントして書き換え、それへの参照を返す。
   inline iterator& erase( iterator& itr );
   void IntervalErase( const INT& i_start , const INT& i_final ) noexcept;
+  // itrをインクリメントして書き換え、それへの参照を返す。
+  inline int_iterator& IntervalErase( int_iterator& itr );
 
   inline int count( const INT& i ) const noexcept;
   bool find( const INT& i ) const noexcept;
@@ -57,18 +60,19 @@ public:
   inline iterator begin() noexcept;
   inline iterator end() noexcept;
 
-  inline iterator MaximumLeq( const INT& i , const INT& k = 0 ) const noexcept;
-  inline iterator MaximumLt( const INT& i , const INT& k = 0 ) const noexcept;
-  inline iterator MinimumGeq( const INT& i , const INT& k = 0 ) const noexcept;
-  inline iterator MinimumGt( const INT& i , const INT& k = 0 ) const noexcept;
+  inline iterator MaximumLeq( const INT& i ) const noexcept;
+  inline iterator MaximumLt( const INT& i ) const noexcept;
+  inline iterator MinimumGeq( const INT& i ) const noexcept;
+  inline iterator MinimumGt( const INT& i ) const noexcept;
 
-  inline INT Maximum( const INT& k = 0 ) const;
-  inline INT Minimum( const INT& k = 0 ) const;
+  inline INT Maximum() const;
+  inline INT Minimum() const;
 
   // iを含む連結成分を返す。存在しない場合は[1+1,i-1]を返す。
   pair<INT,INT> IntervalOf( const INT& i ) const noexcept;
 
   // [r,l]の列をmapとして参照する。
   inline const map<INT,INT>& GetInterval() const noexcept;
+  inline map<INT,INT>& RefInterval() noexcept;
   
 };

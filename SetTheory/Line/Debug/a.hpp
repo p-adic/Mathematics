@@ -25,6 +25,7 @@ public:
   inline LineSubset( const bool& output_mode = true );
   
   using iterator = IteratorOfLineSubset<INT>;
+  using int_iterator = typename map<INT,INT>::iterator;
   
   void insert( const INT& i ) noexcept;
   void IntervalInsert( const INT& i_start , const INT& i_final ) noexcept;
@@ -32,6 +33,8 @@ public:
   // itrをインクリメントして書き換え、それへの参照を返す。
   inline iterator& erase( iterator& itr );
   void IntervalErase( const INT& i_start , const INT& i_final ) noexcept;
+  // itrをインクリメントして書き換え、それへの参照を返す。
+  inline int_iterator& IntervalErase( int_iterator& itr );
 
   inline int count( const INT& i ) const noexcept;
   bool find( const INT& i ) const noexcept;
@@ -56,6 +59,7 @@ public:
   pair<INT,INT> IntervalOf( const INT& i ) const noexcept;
 
   inline const map<INT,INT>& GetInterval() const noexcept;
+  inline map<INT,INT>& RefInterval() noexcept;
 
   inline void Display() const noexcept;
   
