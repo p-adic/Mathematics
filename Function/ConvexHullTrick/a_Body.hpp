@@ -6,10 +6,10 @@
 #include "../../Utility/Reverse/a_Body.hpp"
 
 template <typename U , typename V , typename X , typename FUNC> inline VirtualMaxCrossingHierarchy<U,V,X,FUNC>::VirtualMaxCrossingHierarchy( FUNC func , const X& x_min , const X& x_max , const U& dummy1 , const V& dummy2 ) : m_func( move( func ) ) , m_x_min( x_min ) , m_x_max( x_max ) , m_uvx() , m_xu() { assert( m_x_min <= m_x_max ); }
-template <typename U , typename V , typename X , typename FUNC> inline VirtualMinCrossingHierarchy<U,V,X,FUNC>::VirtualMinCrossingHierarchy( FUNC func , const X& x_min , const X& x_max , const U& dummy1 , const V& dummy2 ) : VirtualMaxCrossingHierarchy<Reversed<U>,Reversed<V>,X,ReversedCrossingHierarchy<U,V,X,FUNC>>( move( func ) , x_min , x_max , dummy1 , dummy2 ) {}
+template <typename U , typename V , typename X , typename FUNC> inline VirtualMinCrossingHierarchy<U,V,X,FUNC>::VirtualMinCrossingHierarchy( FUNC func , const X& x_min , const X& x_max , const U& dummy1 , const V& dummy2 ) : VirtualMaxCrossingHierarchy<Rev<U>,Rev<V>,X,ReversedCrossingHierarchy<U,V,X,FUNC>>( move( func ) , x_min , x_max , dummy1 , dummy2 ) {}
 template <typename U , typename V , typename X , typename FUNC> inline ReversedCrossingHierarchy<U,V,X,FUNC>::ReversedCrossingHierarchy( FUNC&& func ) : FUNC( move( func ) ) {}
   
-template <typename U , typename V , typename X , typename FUNC> inline Reversed<ret_t<FUNC,const U&,const V&,const X&>> ReversedCrossingHierarchy<U,V,X,FUNC>::operator()( const Reversed<U>& u , const Reversed<V>& v , const X& x ) { return Reversed<ret_t<FUNC,const U&,const V&,const X&>>( FUNC::operator()( u.Get() , v.Get() , x ) ); }
+template <typename U , typename V , typename X , typename FUNC> inline Rev<ret_t<FUNC,const U&,const V&,const X&>> ReversedCrossingHierarchy<U,V,X,FUNC>::operator()( const Rev<U>& u , const Rev<V>& v , const X& x ) { return Rev<ret_t<FUNC,const U&,const V&,const X&>>( FUNC::operator()( u.Get() , v.Get() , x ) ); }
 
 template <typename U , typename V , typename X , typename FUNC>
 void VirtualMaxCrossingHierarchy<U,V,X,FUNC>::SetMax( const U& u , const V& v )
@@ -194,7 +194,7 @@ tuple<ret_t<FUNC,const U&,const V&,const X&>,U,V> VirtualMaxCrossingHierarchy<U,
   
 }
 
-template <typename U , typename V , typename X , typename FUNC> inline tuple<ret_t<FUNC,const U&,const V&,const X&>,U,V> VirtualMinCrossingHierarchy<U,V,X,FUNC>::Get( const X& x ) { auto [y,u,v] = VirtualMaxCrossingHierarchy<Reversed<U>,Reversed<V>,X,ReversedCrossingHierarchy<U,V,X,FUNC>>::Get( x ); return { y.move() , u.move() , v.move() }; }
+template <typename U , typename V , typename X , typename FUNC> inline tuple<ret_t<FUNC,const U&,const V&,const X&>,U,V> VirtualMinCrossingHierarchy<U,V,X,FUNC>::Get( const X& x ) { auto [y,u,v] = VirtualMaxCrossingHierarchy<Rev<U>,Rev<V>,X,ReversedCrossingHierarchy<U,V,X,FUNC>>::Get( x ); return { y.move() , u.move() , v.move() }; }
 
 template <typename U , typename V , typename X , typename INTERSECTION>
 inline AbstractCrossingHierarchyIntersection<U,V,X,INTERSECTION>::AbstractCrossingHierarchyIntersection( INTERSECTION intersection ) : m_intersection( move( intersection ) ) { }

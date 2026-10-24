@@ -5,9 +5,9 @@
 
 // verify:
 // https://yukicoder.me/submissions/995705（一次関数）
-// https://yukicoder.me/submissions/995704（等差数列との差の絶対値）
+// https://yukicoder.me/submissions/1194863（等差数列との差の絶対値）
 
-// X=INTにおいて二分探索を行うため、Xを反転させる時はReversed<X>でなくoperator-()を使うこと。
+// X=INTにおいて二分探索を行うため、Xを反転させる時はRev<X>でなくoperator-()を使うこと。
 
 template <typename U , typename V , typename INT , typename FUNC>
 class CrossingHierarchyBinarySearchIntersection :
@@ -44,7 +44,7 @@ public:
 template <typename U , typename V , typename INT , typename FUNC>
 class MinCrossingHierarchyBinarySearch :
   public VirtualMinCrossingHierarchy<U,V,INT,FUNC> ,
-  public CrossingHierarchyBinarySearchIntersection<Reversed<U>,Reversed<V>,INT,ReversedCrossingHierarchy<U,V,INT,FUNC>>
+  public CrossingHierarchyBinarySearchIntersection<Rev<U>,Rev<V>,INT,ReversedCrossingHierarchy<U,V,INT,FUNC>>
 {
 
 public:
