@@ -13,4 +13,4 @@ template <typename INT> inline constexpr INT PositiveBaseModulo( INT a , const I
 template <typename INT> inline constexpr INT Modulo( INT a , const INT& p ) { return PositiveBaseModulo( move( a ) , p < 0 ? -p : p ); }
 
 template <typename INT> inline constexpr INT PositiveBaseQuotient( INT a , const INT& p ){ return move( ( a < 0 ? ++a -= p : a ) /= p ); }
-template <typename INT> inline constexpr INT Quotient( INT a , const INT& p ){ return p < 0 ? PositiveBaseQuotient( -a , -p ) : PositiveBaseQuotient( move( a ) , p ); }
+template <typename INT> inline constexpr INT Quotient( INT a , const INT& p ){ return p < 0 ? -PositiveBaseQuotient( a , -p ) : PositiveBaseQuotient( move( a ) , p ); }
