@@ -1,0 +1,6 @@
+#ifdef DEBUG
+  #include "c:/Users/user/Documents/Programming/Mathematics/Arithmetic/Mod/Function/Residue/Signed/a_Body.hpp"
+#else
+TE <TY INT> CE INT Modulo(INT n,CO INT& M){RE Residue(MO(n),abs(M));}TE <TY INT> CE INT PositiveBaseQuotient(INT n,CO INT& M){RE MO((n < 0?++n -= M:n)/= M);}TE <TY INT> CE INT Quotient(INT n,CO INT& M){RE M < 0?-PositiveBaseQuotient(MO(n),-M):PositiveBaseQuotient(MO(n),M);}
+#endif
+
