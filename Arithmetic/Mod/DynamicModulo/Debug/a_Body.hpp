@@ -98,3 +98,6 @@ template <int NUM> inline string to_string( const DMods<NUM>& n ) noexcept { con
 
 #include "../../Hash/a_Body.hpp"
 template <int NUM> DEFINITION_OF_HASH_FOR_MOD( DMods<NUM> );
+
+// ”ñDebug‚Æinclude‚ğ“ˆê‚·‚éB
+#include "../../Function/Residue/Debug/a_Body.hpp"
