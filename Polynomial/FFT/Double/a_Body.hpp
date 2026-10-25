@@ -3,7 +3,6 @@
 #pragma once
 #include "a.hpp"
 
-
 template <typename INT>
 vector<cd> FFT( const vector<INT>& f , int n , int v )
 {
