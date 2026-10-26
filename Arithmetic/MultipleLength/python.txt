@@ -1,0 +1,75 @@
+#2^52 ≒ 4.5*10^15精度のFFT。
+#絶対値10^{2000000}以下整数同士の積などを扱う。
+#基本的に*の方が速い。
+
+import cmath
+pij = -cmath.pi * 1j
+
+def FFT(f,n,v):
+	if n>1:
+		n >>= 1
+		v -= 1
+		f = FFT([x + y + 0j for x,y in zip(f,f[n:])],n,v) + FFT([(x - y) * w for x,y,w in zip(f,f[n:],[cmath.exp(pij * e / n)for e in R(n)])],n,v)
+		f = [f[((e & 1) << v) | (e >> 1)]for e in R(n << 1)]
+	return f
+def IFFT(f,n,v):
+	return [x.conjugate() / n for x in FFT([y.conjugate() for y in f],n,v)]
+
+def convolution(f,g):
+	assert max(abs(x) for x in f + [0]) * max(abs(y) for y in g + [0]) * min(len(f),len(g)) < 1 << 52
+	L0 = len(f)
+	L1 = len(g)
+	if min(L0,L1):
+		L = L0 + L1 - 1
+		n = 1
+		v = 0
+		while n < L:
+			n <<= 1
+			v += 1
+		a = [round(z.real) for z in IFFT([x * y for x,y in zip(FFT(f + [0] * (n - L0),n,v),FFT(g + [0] * (n - L1),n,v))],n,v)]
+		while a and a[-1] == 0:a.pop()
+	else:a = []
+	return a
+
+base_size = 16
+base_mask = (1 << base_size) - 1
+def AdicExpansion(n):
+	a = []
+	while n:
+		a.append(n & base_mask)
+		n >>= base_size
+	return a
+def AdicExpansionInverse(f):
+	e = 0
+	while True:
+		t = f[e] >> base_size
+		if t:
+			if e == len(f) - 1:f.append(0)
+			f[e+1] += t
+		elif e == len(f) - 1:break
+		f[e] &= base_mask
+		e += 1
+	while f and f[-1] == 0:f.pop()
+	a = 0
+	for e in R(len(f)):a += f[e] << (e * base_size)
+	return a
+def AdicConvolution(n,m):
+	sign = 1
+	if n < 0:
+		sign = -sign
+		n = -n
+	if m < 0:
+		sign = -sign
+		m = -m
+	a = AdicExpansionInverse(convolution(AdicExpansion(n),AdicExpansion(m)))
+	if sign < 0:a = -a
+	return a
+def AdicConvolutionPower(n,e):
+	assert e >= 0
+	a = 1
+	while e:
+		if e & 1:a = AdicConvolution(a,n)
+		n = AdicConvolution(n,n)
+		e >>= 1
+	return a
+
