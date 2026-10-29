@@ -40,11 +40,9 @@ public:
   Polynomial<T>& operator+=( const Polynomial<T>& f );
   Polynomial<T>& operator-=( const Polynomial<T>& f );
   Polynomial<T>& operator*=( Polynomial<T> f );
-  // fがReduceされている場合にのみサポート。
-  inline Polynomial<T>& operator/=( const Polynomial<T>& f );
+  inline Polynomial<T>& operator/=( Polynomial<T> f );
   Polynomial<T>& operator/=( const T& t );
-  // fがReduceされている場合にのみサポート。
-  Polynomial<T>& operator%=( const Polynomial<T>& f );
+  Polynomial<T>& operator%=( Polynomial<T> f );
   Polynomial<T>& operator%=( const T& t );
 
   bool operator==( const Polynomial<T>& f ) const;
@@ -56,10 +54,10 @@ public:
   DECLARATION_OF_ARITHMETIC_FOR_POLYNOMIAL( - );
   DECLARATION_OF_ARITHMETIC_FOR_POLYNOMIAL( * );
   // fがReduceされている場合にのみサポート。
-  inline Polynomial<T> operator/( const Polynomial<T>& f ) const;
+  inline Polynomial<T> operator/( Polynomial<T> f ) const;
   inline Polynomial<T> operator/( const T& t ) const;
   // fがReduceされている場合にのみサポート。
-  inline Polynomial<T> operator%( const Polynomial<T>& f ) const;
+  inline Polynomial<T> operator%( Polynomial<T> f ) const;
   inline Polynomial<T> operator%( const T& t ) const;
 
   inline const vector<T>& GetCoefficient() const noexcept;
