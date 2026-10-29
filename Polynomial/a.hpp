@@ -23,8 +23,8 @@
 template <typename T> class Polynomial;
 template <typename T> class FormalPowerSeries;
 template <typename T> Polynomial<T> FFTConvolution( Polynomial<T> f0 , Polynomial<T> f1 , const int& N_trunc );
-template <typename T> Polynomial<T> FFTQuotient( Polynomial<T> f0 , Polynomial<T> f1 );
-template <typename T> Polynomial<T> FFTResidue( Polynomial<T> f0 , const Polynomial<T>& f1 );
+template <typename T> Polynomial<T> FFTQuotient( Polynomial<T>& f0 , Polynomial<T> f1 );
+template <typename T> Polynomial<T> FFTResidue( Polynomial<T>& f0 , Polynomial<T> f1 );
 
 template <typename T>
 class Polynomial
@@ -32,8 +32,8 @@ class Polynomial
 
   friend class FormalPowerSeries<T>;
   friend Polynomial<T> FFTConvolution<T>( Polynomial<T> f0 , Polynomial<T> f1 , const int& N_trunc );
-  friend Polynomial<T> FFTQuotient<T>( Polynomial<T> f0 , Polynomial<T> f1 );
-  friend Polynomial<T> FFTResidue<T>( Polynomial<T> f0 , const Polynomial<T>& f1 );
+  friend Polynomial<T> FFTQuotient<T>( Polynomial<T>& f0 , Polynomial<T> f1 );
+  friend Polynomial<T> FFTResidue<T>( Polynomial<T>& f0 , Polynomial<T> f1 );
 
 protected:
   vector<T> m_f;
@@ -62,11 +62,9 @@ public:
   Polynomial<T>& operator+=( const Polynomial<T>& f );
   Polynomial<T>& operator-=( const Polynomial<T>& f );
   Polynomial<T>& operator*=( Polynomial<T> f );
-  // fがReduceされている場合にのみサポート。
-  inline Polynomial<T>& operator/=( const Polynomial<T>& f );
+  inline Polynomial<T>& operator/=( Polynomial<T> f );
   Polynomial<T>& operator/=( const T& t );
-  // fがReduceされている場合にのみサポート。
-  Polynomial<T>& operator%=( const Polynomial<T>& f );
+  Polynomial<T>& operator%=( Polynomial<T> f );
   Polynomial<T>& operator%=( const T& t );
 
   bool operator==( const Polynomial<T>& f ) const;
@@ -77,11 +75,9 @@ public:
   inline Polynomial<T> operator-() const;
   DECLARATION_OF_ARITHMETIC_FOR_POLYNOMIAL( - );
   DECLARATION_OF_ARITHMETIC_FOR_POLYNOMIAL( * );
-  // fがReduceされている場合にのみサポート。
-  inline Polynomial<T> operator/( const Polynomial<T>& f ) const;
+  inline Polynomial<T> operator/( Polynomial<T> f ) const;
   inline Polynomial<T> operator/( const T& t ) const;
-  // fがReduceされている場合にのみサポート。
-  inline Polynomial<T> operator%( const Polynomial<T>& f ) const;
+  inline Polynomial<T> operator%( Polynomial<T> f ) const;
   inline Polynomial<T> operator%( const T& t ) const;
 
   inline const vector<T>& GetCoefficient() const noexcept;
@@ -91,7 +87,8 @@ public:
 
   inline void swap( Polynomial<T>& f );
   inline void swap( vector<T>& f );
-  
+
+  // 末尾の0を削除する。
   void Reduce();
   // N_trunc-1次までで打ち切って係数を反転する。
   void Transpose( const int& N_trunc );

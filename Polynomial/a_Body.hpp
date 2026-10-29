@@ -222,9 +222,9 @@ template <typename T> inline Polynomial<T> Polynomial<T>::operator-() const { re
 DEFINITION_OF_ARITHMETIC_FOR_POLYNOMIAL( - , f.SignInvert() += *this );
 DEFINITION_OF_ARITHMETIC_FOR_POLYNOMIAL( * , f *= *this );
 template <typename T> inline Polynomial<T> Polynomial<T>::operator/( const T& t ) const { return move( Polynomial<T>( *this ) /= t ); }
-template <typename T> inline Polynomial<T> Polynomial<T>::operator/( const Polynomial<T>& f ) const { return move( Polynomial<T>( *this ) /= f ); }
+template <typename T> inline Polynomial<T> Polynomial<T>::operator/( Polynomial<T> f ) const { return move( Polynomial<T>( *this ) /= move( f ) ); }
 template <typename T> inline Polynomial<T> Polynomial<T>::operator%( const T& t ) const { return move( Polynomial<T>( *this ) %= t ); }
-template <typename T> inline Polynomial<T> Polynomial<T>::operator%( const Polynomial<T>& f ) const { return move( Polynomial<T>( *this ) %= f ); }
+template <typename T> inline Polynomial<T> Polynomial<T>::operator%( Polynomial<T> f ) const { return move( Polynomial<T>( *this ) %= move( f ) ); }
 
 template <typename T> inline const vector<T>& Polynomial<T>::GetCoefficient() const noexcept { return m_f; }
 template <typename T> inline const int& Polynomial<T>::size() const noexcept { return m_size; }
@@ -449,11 +449,11 @@ Polynomial<T> Polynomial<T>::NaiveConvolution( Polynomial<T> f0 , const int& val
 // }
 
 // template <typename T>
-// Polynomial<T>& Polynomial<T>::operator/=( const Polynomial<T>& f )
+// Polynomial<T>& Polynomial<T>::operator/=( Polynomial<T> f )
 // {
 
-//   assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
 //   Reduce();
+//   f.Reduce();
   
 //   if( m_size < f.m_size ){
 
@@ -466,11 +466,11 @@ Polynomial<T> Polynomial<T>::NaiveConvolution( Polynomial<T> f0 , const int& val
 // }
 
 // template <typename T>
-// Polynomial<T>& Polynomial<T>::operator%=( const Polynomial<T>& f )
+// Polynomial<T>& Polynomial<T>::operator%=( Polynomial<T> f )
 // {
 
-//   assert( f.m_size > 0 && f[f.m_size-1] != c_zero() );
 //   Reduce();
+//   f.Reduce();
 //   return *this = NaiveResidue( move( *this ) , f );
 
 // }
