@@ -51,5 +51,5 @@ template <typename T> inline void IFFT( vector<T>& f , const int& N_shift , cons
 
 // Polynomial‚Ì“Áê‰»—pB
 template <typename T> Polynomial<T> FFTConvolution( Polynomial<T> f0 , Polynomial<T> f1 , const int& N_trunc );
-template <typename T> Polynomial<T> FFTQuotient( Polynomial<T> f0 , Polynomial<T> f1 );
-template <typename T> Polynomial<T> FFTResidue( Polynomial<T> f0 , const Polynomial<T>& f1 );
+template <typename T> Polynomial<T> FFTQuotient( Polynomial<T>& f0 , Polynomial<T> f1 );
+template <typename T> Polynomial<T> FFTResidue( Polynomial<T>& f0 , Polynomial<T> f1 );

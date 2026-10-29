@@ -96,10 +96,10 @@ void CooleyTukey( vector<T>& f , const int& N_shift , const int& N_input_start ,
 
       while( j < j_lim ){
 
-      	diff = f[j + N_input_start] - f[j + N_input_final_curr];
-      	f[j + N_input_start] += f[j + N_input_final_curr];
-      	f[j + N_input_final_curr] = zeta * diff;
-      	j++;
+        diff = f[j + N_input_start] - f[j + N_input_final_curr];
+        f[j + N_input_start] += f[j + N_input_final_curr];
+        f[j + N_input_final_curr] = zeta * diff;
+        j++;
 
       }
 
@@ -110,14 +110,14 @@ void CooleyTukey( vector<T>& f , const int& N_shift , const int& N_input_start ,
       // 2進付値の取得。unordered_mapや__builtin_popcountを使うと逆に遲い。
       while( true ){
 
-	if( ( ( bit_num >> j ) & 1 ) == 1 ){
+        if( ( ( bit_num >> j ) & 1 ) == 1 ){
 
-	  zeta *= PRT[j+1];
-	  break;
+          zeta *= PRT[j+1];
+          break;
 
-	}
+        }
 
-	j++;
+        j++;
 
       }
 
@@ -136,13 +136,13 @@ void CooleyTukey( vector<T>& f , const int& N_shift , const int& N_input_start ,
 
   if( N_shift > 0 ){
 
-    for( int i = N_trunc - 1 ; i >= N_zero ; i-- ){
+    for( int i = min( length , N_trunc ) - 1 ; i >= N_zero ; i-- ){
 
       f[i] = move( f[i - N_shift] );
     
     }
 
-    for( int i = N_zero - 1 ; i >= N_input_start ; i-- ){
+    for( int i = min( length , N_zero ) - 1 ; i >= N_input_start ; i-- ){
 
       f[i] = T{};
     
@@ -162,11 +162,23 @@ template <typename T>
 Polynomial<T> FFTConvolution( Polynomial<T> f0 , Polynomial<T> f1 , const int& N_trunc )
 {
 
+  if( f0.m_size > N_trunc ){
+
+    f0.m_f.resize( f0.m_size = N_trunc );
+
+  }
+  
   f0.Reduce();
 
   if( f0.m_size == 0 ){
 
     return move( f0 );
+
+  }
+
+  if( f1.m_size > N_trunc ){
+
+    f1.m_f.resize( f1.m_size = N_trunc );
 
   }
 
@@ -178,8 +190,6 @@ Polynomial<T> FFTConvolution( Polynomial<T> f0 , Polynomial<T> f1 , const int& N
 
   }
 
-  // operator*=の定義から、片方が0の時はこれが成り立たないことに注意。
-  assert( f0.m_size <= N_trunc );
   const int valuation0 = f0.Valuation();
   const int valuation1 = f1.Valuation();
 
@@ -216,10 +226,12 @@ Polynomial<T> FFTConvolution( Polynomial<T> f0 , Polynomial<T> f1 , const int& N
 }
 
 template <typename T>
-Polynomial<T> FFTQuotient( Polynomial<T> f0 , Polynomial<T> f1 )
+Polynomial<T> FFTQuotient( Polynomial<T>& f0 , Polynomial<T> f1 )
 {
 
-  assert( f1.m_size > 0 && f1[f1.m_size-1] != f0.c_zero() );
+  f0.Reduce();
+  f1.Reduce();
+  assert( f1.m_size > 0 );
   
   if( f0.m_size < f1.m_size ){
 
@@ -240,8 +252,12 @@ Polynomial<T> FFTQuotient( Polynomial<T> f0 , Polynomial<T> f1 )
 }
 
 template <typename T>
-Polynomial<T> FFTResidue( Polynomial<T> f0 , const Polynomial<T>& f1 )
+Polynomial<T> FFTResidue( Polynomial<T>& f0 , Polynomial<T> f1 )
 {
+
+  f0.Reduce();
+  f1.Reduce();
+  assert( f1.m_size > 0 );
 
   if( f0.m_size >= f1.m_size ){
 
