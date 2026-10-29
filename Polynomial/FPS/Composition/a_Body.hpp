@@ -64,7 +64,7 @@ FormalPowerSeries<T> Composite( const FormalPowerSeries<T>& f  , const FormalPow
     
     if( ++k == K || d == N_minus ){
 
-      answer += h == 0 ? answer_h : answer_h *= g_power2[h];
+      answer += answer_h *= g_power2[h];
       k = 0;
       h++;
       n_max -= K;
@@ -105,18 +105,16 @@ FormalPowerSeries<T> MoeviusComposition( const int& N , Polynomial<T> f , T a , 
       c *= b;
       d *= b;
       Shift( f , a );
-      const int& size = f.size();
+      const int size = f.size();
 
       if( size > 0 ){
 	
-	f.Transpose( size );
-	AffineTransformation( f , c , d );
-	FormalPowerSeries<T> g{ N };
-	g[0] = move( d );
-	g[1] = move( c );
-	g = Inverse( Power( g , size - 1 ) );
-	g *= f;
-	f = move( g );
+        f.Transpose( size );
+        AffineTransformation( f , c , d );
+        FormalPowerSeries<T> g{ N };
+        g[0] = move( d );
+        g[1] = move( c );
+        f = FormalPowerSeries<T>{ N , move( f ) } /= Power( g , size - 1 );
 
       }
 
