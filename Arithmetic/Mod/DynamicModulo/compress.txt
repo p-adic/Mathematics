@@ -1,9 +1,8 @@
 CEXPR(uint,P,998244353);
-// SetModulo( M , M_is_prime = false );
-// M_is_primeがtrueの時はinverseの計算がメモ化再帰される。
 #define RP Represent
 #define DeRP Derepresent
-
+// SetModulo( M , M_is_prime = false );
+// M_is_primeがtrueの時はinverseの計算がメモ化再帰される。
 TE <TY INT1,TY INT2> CE INT1 Residue(INT1 n,CO INT2& M)NE{RE MO(n < 0?((((++n)*= -1)%= M)*= -1)+= M - 1:n < M?n:n %= M);}
 TE <TY INT> IN INT ModularInverse(CO INT& base,ll c){AS(base > 0);ll a[2]={0,1 % base};INT b[2]={base,INT((c %= base)< 0?c += base:c)};WH(b[1]!= 0){CO INT q = b[0]/ b[1];(a[0]-= q * a[1]% base)< 0?a[0]+= base:a[0];b[0]-= q * b[1];swap(a[0],a[1]);swap(b[0],b[1]);}AS(b[0]== 1 &&(a[0]* c - 1)% base == 0);RE a[0];}
 
