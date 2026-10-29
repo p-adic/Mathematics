@@ -1,19 +1,18 @@
+CEXPR(uint,P,998244353);
+#define RP Represent
+#define DeRP Derepresent
 /* ConstexprModulo (8KB) */
 // (1) 常設ライブラリーのDynamicModsを消すか、DynamicModsの
-// - CEXPR(uint,P,998244353);
 // - US MP = DMod;
 // をコメントアウトする。いずれの場合も
 // - US MP = Mod<P>
 // のコメントアウトを解除して常設ライブラリーに下を追加する。
-CEXPR(uint,P,998244353);
-#define RP Represent
-#define DeRP Derepresent
 TE <uint M,TY INT> CE INT Residue(INT n)NE{RE MO(n < 0?((((++n)*= -1)%= M)*= -1)+= M - 1:n < INT(M)?n:n %= M);}TE <TY INT> CE INT& ResidueP(INT& n)NE{CE CO uint trunc =(1 << 23)- 1;INT n_u = n >> 23;n &= trunc;INT n_uq =(n_u / 7)/ 17;n_u -= n_uq * 119;n += n_u << 23;RE n < n_uq?n += P - n_uq:n -= n_uq;}
 TE <TY INT> IN INT ModularInverse(CO INT& base,ll c){AS(base > 0);ll a[2]={0,1 % base};INT b[2]={base,INT((c %= base)< 0?c += base:c)};WH(b[1]!= 0){CO INT q = b[0]/ b[1];(a[0]-= q * a[1]% base)< 0?a[0]+= base:a[0];b[0]-= q * b[1];swap(a[0],a[1]);swap(b[0],b[1]);}AS(b[0]== 1 &&(a[0]* c - 1)% base == 0);RE a[0];}
 TE <uint M> CL Mod;TE <uint M>CL COantsForMod{PU:COantsForMod()= delete;ST CE CO uint g_memory_bound = 2e6;ST CE CO uint g_memory_le = M < g_memory_bound?M:g_memory_bound;ST CE uint g_Mm = M - 1;ST CE int g_order = M - 1;ST CE int g_orderm = g_order - 1;};
 #define SFINAE_FOR_MOD enable_if_t<is_COructible_v<uint,decay_t<T>>>*
 #define DC_OF_CM_FOR_MOD(OPR)CE bool OP OPR(CO Mod<M>& n)CO NE
-#define DC_OF_AR_FOR_MOD(OPR,EX)CE Mod<M> OP OPR(Mod<M> n)CO EX;
+#define DC_OF_AR_FOR_MOD(OPR,EX)CE Mod<M> OP OPR(Mod<M> n)CO EX
 #define DF_OF_CM_FOR_MOD(OPR)TE <uint M> CE bool Mod<M>::OP OPR(CO Mod<M>& n)CO NE{RE m_n OPR n.m_n;}
 #define DF_OF_AR_FOR_MOD(OPR,EX,LEFT,OPR2)TE <uint M> CE Mod<M> Mod<M>::OP OPR(Mod<M> n)CO EX{RE MO(LEFT OPR2 ## = *TH);}TE <uint M,TY T,SFINAE_FOR_MOD = nullptr> CE Mod<M> OP OPR(T n0,CO Mod<M>& n1)EX{RE MO(Mod<M>(MO(n0))OPR ## = n1);}
 TE <uint M>CL Mod{PU:uint m_n;CE Mod()NE;CE Mod(CO Mod<M>& n)NE;CE Mod(Mod<M>&& n)NE;TE <TY T,SFINAE_FOR_MOD = nullptr> CE Mod(T n)NE;CE Mod<M>& OP=(Mod<M> n)NE;CE Mod<M>& OP+=(CO Mod<M>& n)NE;CE Mod<M>& OP-=(CO Mod<M>& n)NE;CE Mod<M>& OP*=(CO Mod<M>& n)NE;IN Mod<M>& OP/=(Mod<M> n);CE Mod<M>& OP^=(ll EX);CE Mod<M>& OP<<=(ll n);CE Mod<M>& OP>>=(ll n);CE Mod<M>& OP++()NE;CE Mod<M> OP++(int)NE;CE Mod<M>& OP--()NE;CE Mod<M> OP--(int)NE;DC_OF_CM_FOR_MOD(==);DC_OF_CM_FOR_MOD(!=);DC_OF_CM_FOR_MOD(<);DC_OF_CM_FOR_MOD(<=);DC_OF_CM_FOR_MOD(>);DC_OF_CM_FOR_MOD(>=);DC_OF_AR_FOR_MOD(+,NE);DC_OF_AR_FOR_MOD(-,NE);DC_OF_AR_FOR_MOD(*,NE);DC_OF_AR_FOR_MOD(/,);CE Mod<M> OP^(ll EX)CO;CE Mod<M> OP<<(ll n)CO;CE Mod<M> OP>>(ll n)CO;CE Mod<M> OP-()CO NE;CE VO swap(Mod<M>& n)NE;CE CRUI RP()CO NE;ST CE Mod<M> DeRP(uint n)NE;ST IN CO Mod<M>& Factorial(CRL n);ST IN CO Mod<M>& FactorialInverse(CRL n);ST IN Mod<M> Combination(CRL n,CRL i);ST IN CO Mod<M>& zero()NE;ST IN CO Mod<M>& one()NE;ST CE uint GetModulo()NE;CE Mod<M>& SignInvert()NE;IN Mod<M>& Invert();CE Mod<M>& PPW(ll EX)NE;CE Mod<M>& NNPW(ll EX)NE;ST IN CO Mod<M>& Inverse(CRI n);ST IN CO Mod<M>& TwoPower(CRI n);ST IN CO Mod<M>& TwoPowerInverse(CRI n);US COants = COantsForMod<M>;};
