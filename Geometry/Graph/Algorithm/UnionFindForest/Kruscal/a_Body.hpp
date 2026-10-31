@@ -51,7 +51,7 @@ pair<vector<int>,int> Kruscal( const int& V , const vector<PAIR>& E , const list
 {
   
   static_assert( is_invocable_r_v<bool,On,int> );
-  UnionFindForest<> uff{ V };
+  UnionFindForest uff{ V };
 
   for( auto& n : answer ){
 
