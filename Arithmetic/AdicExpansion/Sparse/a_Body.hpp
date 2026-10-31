@@ -54,61 +54,52 @@ template <int M , typename INT>
 int SparseAdicExpansion<M,INT>::comp( const SparseAdicExpansion<M,INT>& n ) const noexcept
 {
 
-  INT a = 0 , d;
+  // 現在走査中の桁情報
+  INT c = 0 , d;
   auto itr0 = m_digit.rbegin() , end0 = m_digit.rend() , itr1 = n.m_digit.rbegin() , end1 = n.m_digit.rend();
 
-  while( abs( a ) <= 1 && itr0 != end0 && itr1 != end1 ){
+  // abs( c ) > 1の時、これ以降の繰り下がりでも消えない桁が確定するので大小が確定する。
+  while( abs( c ) <= 1 && itr0 != end0 && itr1 != end1 ){
 
     auto& [d0,c0] = *itr0;
     auto& [d1,c1] = *itr1;
 
-    if( a == 0 ){
+    if( c == 0 ){
 
-      if( d0 < d1 ){
+      c = ( d0 <= d1 ? c1 : 0 ) - ( d1 <= d0 ? c0 : 0 );
 
-        a = c1;
-
-      } else if( d1 < d0 ){
-
-        a = -c0;
-
-      } else {
-
-        a = c1 - c0;
-
-      }
-
-      if( a == 0 ){
+      if( c == 0 ){
 
         itr0++;
         itr1++;
 
       } else {
 
-        d = a < 0 ? d0 : d1;
+        d = c < 0 ? d0 : d1;
 
       }
 
-      continue;
+    } else {
+
+      if( --d != ( c < 0 ? d0 : d1 ) ){
+
+        break;
+
+      }
+
+      c = ( d1 == d ? c1 : 0 ) - ( d0 == d ? c0 : 0 ) + ( c < 0 ? -M : M );
 
     }
+    
+  }
 
-    if( --d != ( a < 0 ? d0 : d1 ) ){
+  // itr0かitr1のいずれかがendに達した場合。
+  if( c == 0 ){
 
-      break;
-
-    }
-
-    a = ( d1 == d ? c1 : 0 ) - ( d0 == d ? c0 : 0 ) + ( a < 0 ? -M : M );
+    c = ( itr1 == end1 ? 0 : itr1->second ) - ( itr0 == end0 ? 0 : itr0->second );
 
   }
 
-  if( a == 0 ){
-
-    a = ( itr1 == end1 ? 0 : itr1->second ) - ( itr0 == end0 ? 0 : itr0->second );
-
-  }
-
-  return a > 0 ? 1 : a < 0 ? -1 : 0;
+  return c > 0 ? 1 : c < 0 ? -1 : 0;
 
 }
