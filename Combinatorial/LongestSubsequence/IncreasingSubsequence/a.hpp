@@ -1,0 +1,20 @@
+// c:/Users/user/Documents/Programming/Mathematics/Combinatorial/LongestSubsequence/IncreasingSubsequence/a.hpp
+
+#pragma once
+#include "a_macro.hpp"
+
+// 入力の範囲内で
+// (1) bool operator<=(const T&,const T&)が等号つき全順序である。
+// (2) aの成分かinftyである任意の項tに対しt <= f(t)がtrueである。
+// (3) aの任意の成分tに対しt <= infty && t!=inftyがtrueである。
+// が満たされる場合にのみサポート。
+
+// O(size log size)でaの連続とは限らない非空部分列であって任意の隣接２成分s,tに対し
+// f(s) <= tであるものの長さの最大値を返す。
+template <typename T , typename F> int LongestIncreasingSubsequence( const vector<T>& a , const T& infty , F f );
+
+// O(size log size)でanswer[i]にaの連続とは限らない非空単調増加部分列であって末尾が(i,a[i])
+// であるものの長さの最大値を返す。
+template <typename T> vector<int> LongestStrictlyIncreasingSubsequence( const vector<T>& a );
+template <typename T> vector<int> LongestNonStrictlyIncreasingSubsequence( const vector<T>& a );
+
