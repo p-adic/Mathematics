@@ -3,70 +3,69 @@
 #pragma once
 
 // many_edge == true‚ÌŽž(O(V^2))
-#define DIJKSTRA_BODY_1( SET_PREV )					\
-  if( path_length == -1 ){						\
-									\
-    path_length = size;                                                 \
-									\
-  }									\
-									\
-  weight[i_start] = one;						\
-  int i = i_start;							\
-									\
-  for( int num = 0 ; num < path_length ; num++ ){			\
-									\
-    if( fixed[i] ){                                                     \
-                                                                        \
-      break;                                                            \
-                                                                        \
-    }                                                                   \
-                                                                        \
-    fixed[i] = true;							\
-    const U& weight_i = weight[i];					\
-    auto&& edge_i = m_G.Edge( m_G.Enumeration( i ) );			\
-									\
-    for( auto&& edge_ij : edge_i ){                                     \
-									\
-      auto&& j = m_G.Enumeration_inv( get<0>( edge_ij ) );              \
-      									\
-      if( !fixed[j] ){							\
-									\
-	const U& w_ij = get<1>( edge_ij );				\
-	U temp = m_M.Product( weight_i , w_ij );			\
-	assert( temp < infty );						\
-	U& weight_j = weight[j];					\
-									\
-	if( temp < weight_j ){						\
-									\
-	  SET_PREV;							\
-	  weight_j = move( temp );					\
-									\
-	}								\
-									\
-      }									\
-									\
-    }									\
-									\
-    U temp = infty;							\
-									\
-    for( int j = 0 ; j < size ; j++ ){					\
-									\
-      if( !fixed[j] ){							\
-									\
-	U& weight_j = weight[j];					\
-									\
-	if( weight_j < temp ){						\
-									\
-	  temp = weight_j;						\
-	  i = j;							\
-									\
-	}								\
-									\
-      }									\
-									\
-    }									\
-									\
-  }									\
+#define DIJKSTRA_BODY_1( SET_PREV )                             \
+  if( path_length == -1 ){                                      \
+                                                                \
+    path_length = size;                                         \
+                                                                \
+  }                                                             \
+                                                                \
+  weight[i_start] = one;                                        \
+  int i = i_start;                                              \
+                                                                \
+  for( int num = 0 ; num < path_length ; num++ ){               \
+                                                                \
+    if( fixed[i] ){                                             \
+                                                                \
+      break;                                                    \
+                                                                \
+    }                                                           \
+                                                                \
+    fixed[i] = true;                                            \
+    const U& weight_i = weight[i];                              \
+    auto&& edge_i = m_G.Edge( m_G.Enumeration( i ) );           \
+                                                                \
+    for( auto&& edge_ij : edge_i ){                             \
+                                                                \
+      auto&& j = m_G.Enumeration_inv( get<0>( edge_ij ) );      \
+                                                                \
+      if( !fixed[j] ){                                          \
+                                                                \
+	const U& w_ij = get<1>( edge_ij );                      \
+	U temp = m_M.Product( weight_i , w_ij );                \
+	U& weight_j = weight[j];                                \
+                                                                \
+	if( temp < weight_j ){                                  \
+                                                                \
+	  SET_PREV;                                             \
+	  weight_j = move( temp );                              \
+                                                                \
+	}                                                       \
+                                                                \
+      }                                                         \
+                                                                \
+    }                                                           \
+                                                                \
+    U temp = infty;                                             \
+                                                                \
+    for( int j = 0 ; j < size ; j++ ){                          \
+                                                                \
+      if( !fixed[j] ){                                          \
+                                                                \
+	U& weight_j = weight[j];                                \
+                                                                \
+	if( weight_j < temp ){                                  \
+                                                                \
+	  temp = weight_j;                                      \
+	  i = j;                                                \
+                                                                \
+	}                                                       \
+                                                                \
+      }                                                         \
+                                                                \
+    }                                                           \
+                                                                \
+  }                                                             \
 
 // many_edge == true‚ÌŽž(O((|V|+|E|)log |V|))
 #define DIJKSTRA_BODY_2( CHECK_FINAL , SET_PREV )			\
@@ -92,7 +91,6 @@
 									\
 	const U& w_ij = get<1>( edge_ij );				\
 	U temp = m_M.Product( weight_i , w_ij );			\
-	assert( temp < infty );						\
 	U& weight_j = weight[j];					\
 									\
 	if( temp < weight_j ){						\
@@ -121,11 +119,11 @@
   }									\
 
 #define DIJKSTRA_BODY( INITIALISE_PREV , CHECK_FINAL , SET_PREV )	\
-  const U& one = m_M.One();				\
-  assert( one < infty );				\
-  auto&& i_start = m_G.Enumeration_inv( t_start );	\
-  assert( 0 <= i_start && i_start < size );		\
-  INITIALISE_PREV;					\
+  const U& one = m_M.One();                                             \
+  assert( one < infty );                                                \
+  auto&& i_start = m_G.Enumeration_inv( t_start );                      \
+  assert( 0 <= i_start && i_start < size );                             \
+  INITIALISE_PREV;                                                      \
 									\
   if( many_edges ){							\
 									\

@@ -6,7 +6,7 @@
 // https://yukicoder.me/submissions/961784（GetDistance、many_edges=true）
 // https://yukicoder.me/submissions/961385（SetDistance、many_edges=true）
 // https://yukicoder.me/submissions/961826（GetPath、many_edged=false）
-
+// https://yukicoder.me/submissions/1194875 (AbstractDijkstra)
 
 #include "a_Macro.hpp"
 
@@ -18,8 +18,8 @@
 // 入力の範囲内で要件
 // (0) Mは全順序可換モノイド構造である。
 // (1) E_Gの値の各成分の第2成分がM.One()以上である。
-// (2) inftyがE_Gの値の各成分の第2成分|V_G|個以下の和で表せるいかなる数よりも大きい。
-// が成り立つ場合にのみサポート。
+// (2) M.One() < inftyである。
+// が成り立つ場合にのみサポート。最短経路長とinftyの最小値を求める。
 
 // 単一始点単一終点最短経路探索／経路復元なしO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
 // 単一始点単一終点最短経路探索／経路復元ありO(min(|V_G|^2+|E_G|,|V_G|+|E_G| log |V_G|))
@@ -71,7 +71,6 @@ class Dijkstra :
 {
 
 public:
-  // llをテンプレートにしてllにキャストするとデフォルト引数を取る時に型推論できないことに注意。
-  inline Dijkstra( GRAPH& G , const ll& infty = 1e18 );
+  inline Dijkstra( GRAPH& G , const ll& infty );
 
 };

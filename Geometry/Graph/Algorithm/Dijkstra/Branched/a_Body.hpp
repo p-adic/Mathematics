@@ -9,22 +9,20 @@
 #include "../../../../../Utility/Set/a_Body.hpp"
 #include "../../../../../Utility/Vector/a_Body.hpp"
 
-template <typename GRAPH , typename U , typename COMM_SEMIGRP , typename T> inline AbstractBranchedDijkstra<GRAPH,U,COMM_SEMIGRP,T>::AbstractBranchedDijkstra( GRAPH& G , COMM_SEMIGRP M , const U& infty ) : PointedSet<U>( infty ) , m_G( G ) , m_M( move( M ) ) { static_assert( is_same_v<T,inner_t<GRAPH>> ); }
-template <typename GRAPH , typename T> inline BranchedDijkstra<GRAPH,T>::BranchedDijkstra( GRAPH& G ,  const ll& infty ) : AbstractBranchedDijkstra<GRAPH,ll,AdditiveMonoid<>,T>( G , AdditiveMonoid<>() , infty ) {}
+template <typename GRAPH , typename U , typename COMM_SEMIGRP , typename T> inline AbstractBranchedDijkstra<GRAPH,U,COMM_SEMIGRP,T>::AbstractBranchedDijkstra( GRAPH& G , COMM_SEMIGRP M ) : m_G( G ) , m_M( move( M ) ) { static_assert( is_same_v<T,inner_t<GRAPH>> ); }
+template <typename GRAPH , typename T> inline BranchedDijkstra<GRAPH,T>::BranchedDijkstra( GRAPH& G ) : AbstractBranchedDijkstra<GRAPH,ll,AdditiveMonoid<>,T>( G , AdditiveMonoid<>() ) {}
 
 template <typename GRAPH , typename U , typename COMM_SEMIGRP , typename T> template <template <typename...> typename TUPLE , typename S>
 vector<vector<Pair<U,S>>> AbstractBranchedDijkstra<GRAPH,U,COMM_SEMIGRP,T>::GetDistance( const vector<TUPLE<T,U,S>>& t_start , const int& length )
 {
 
   const int& size = m_G.size();
-  const U& infty = this->Infty();
   vector weight( size , vector<Pair<U,S>>{} );
   vector<Set<S>> fixed( size );
   set<tuple<U,S,int>> vertex{};
 
   auto set = [&]( const int& i , const U& u , const S& s ){
 
-    assert( u < infty );
     vertex <<= {u,s,i};
     auto& wi = weight[i];
     int L = wi.size() , l = -1;

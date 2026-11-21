@@ -11,16 +11,13 @@
 // 入力の範囲内で要件
 // (0) Mは全順序可換半群構造である。
 // (1) E_Gの値の各成分の第2成分がM.One()以上である。
-// (2) inftyが始辺の第2成分とE_Gの値の各成分の第2成分|V_G|個以下の和で表せるいかなる数
-//      よりも大きい。
 // が成り立つ場合にのみサポート。
 
 // 架空の始点からいくつかの頂点へ重みつき色つきの有向辺を貼った時に
 // 各点への最短経路長を色ごとに、上位length個まで計算する。
 // O(length(|V_G|+|E_G| log length |E_G|))
 template <typename GRAPH , typename U , typename COMM_SEMIGRP , typename T = inner_t<GRAPH>>
-class AbstractBranchedDijkstra :
-  public PointedSet<U>
+class AbstractBranchedDijkstra
 {
 
 private:
@@ -31,7 +28,7 @@ private:
   COMM_SEMIGRP m_M;
 
 public:
-  inline AbstractBranchedDijkstra( GRAPH& G , COMM_SEMIGRP M , const U& infty );
+  inline AbstractBranchedDijkstra( GRAPH& G , COMM_SEMIGRP M );
 
   // TUPLEはtupleなど。Sはoperator<()が全順序である型。
   // 各点への最短径路長を始辺の色ごとに上位length個まで求める。
@@ -46,7 +43,6 @@ class BranchedDijkstra :
 {
 
 public:
-  // llをテンプレートにしてllにキャストするとデフォルト引数を取る時に型推論できないことに注意。
-  inline BranchedDijkstra( GRAPH& G , const ll& infty = 1e18 );
+  inline BranchedDijkstra( GRAPH& G );
 
 };

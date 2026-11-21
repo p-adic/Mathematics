@@ -75,18 +75,17 @@ U AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start , const
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    // SET_PREV;
-	    weight_j = move( temp );
+            // SET_PREV;
+            weight_j = move( temp );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -94,18 +93,18 @@ U AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start , const
 
       for( int j = 0 ; j < size ; j++ ){
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  U& weight_j = weight[j];
+          U& weight_j = weight[j];
 
-	  if( weight_j < temp ){
+          if( weight_j < temp ){
 
-	    temp = weight_j;
-	    i = j;
+            temp = weight_j;
+            i = j;
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -129,35 +128,34 @@ U AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start , const
 
       for( auto itr = edge_i.begin() , end = edge_i.end() ; itr != end ; itr++ ){
 
-	auto&& j = m_G.Enumeration_inv( get<0>( *itr ) );
+        auto&& j = m_G.Enumeration_inv( get<0>( *itr ) );
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  const U& w_ij = get<1>( *itr );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          const U& w_ij = get<1>( *itr );
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    if( weight_j != infty ){
+            if( weight_j != infty ){
 
-	      vertex.erase( pair<U,int>( weight_j , j ) );
+              vertex.erase( pair<U,int>( weight_j , j ) );
 
-	    }
+            }
 
-	    // SET_PREV;
-	    changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
+            // SET_PREV;
+            changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
       for( auto& v : changed_vertex ){
 
-	vertex.insert( v );
+        vertex.insert( v );
 
       }
 
@@ -218,18 +216,17 @@ vector<U> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    // SET_PREV;
-	    weight_j = move( temp );
+            // SET_PREV;
+            weight_j = move( temp );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -237,18 +234,18 @@ vector<U> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start
 
       for( int j = 0 ; j < size ; j++ ){
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  U& weight_j = weight[j];
+          U& weight_j = weight[j];
 
-	  if( weight_j < temp ){
+          if( weight_j < temp ){
 
-	    temp = weight_j;
-	    i = j;
+            temp = weight_j;
+            i = j;
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -277,30 +274,29 @@ vector<U> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetDistance( const T& t_start
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    if( weight_j != infty ){
+            if( weight_j != infty ){
 
-	      vertex.erase( pair<U,int>( weight_j , j ) );
+              vertex.erase( pair<U,int>( weight_j , j ) );
 
-	    }
+            }
 
-	    // SET_PREV;
-	    changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
+            // SET_PREV;
+            changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
       for( auto& v : changed_vertex ){
 
-	vertex.insert( v );
+        vertex.insert( v );
 
       }
 
@@ -354,18 +350,17 @@ void AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::SetDistance( vector<U>& weight , v
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    // SET_PREV;
-	    weight_j = move( temp );
+            // SET_PREV;
+            weight_j = move( temp );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -373,18 +368,18 @@ void AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::SetDistance( vector<U>& weight , v
 
       for( int j = 0 ; j < size ; j++ ){
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  U& weight_j = weight[j];
+          U& weight_j = weight[j];
 
-	  if( weight_j < temp ){
+          if( weight_j < temp ){
 
-	    temp = weight_j;
-	    i = j;
+            temp = weight_j;
+            i = j;
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -413,30 +408,29 @@ void AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::SetDistance( vector<U>& weight , v
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    if( weight_j != infty ){
+            if( weight_j != infty ){
 
-	      vertex.erase( pair<U,int>( weight_j , j ) );
+              vertex.erase( pair<U,int>( weight_j , j ) );
 
-	    }
+            }
 
-	    // SET_PREV;
-	    changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
+            // SET_PREV;
+            changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
       for( auto& v : changed_vertex ){
 
-	vertex.insert( v );
+        vertex.insert( v );
 
       }
 
@@ -492,18 +486,17 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    prev[j] = i; // SET_PREV;
-	    weight_j = move( temp );
+            prev[j] = i; // SET_PREV;
+            weight_j = move( temp );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -511,18 +504,18 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
 
       for( int j = 0 ; j < size ; j++ ){
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  U& weight_j = weight[j];
+          U& weight_j = weight[j];
 
-	  if( weight_j < temp ){
+          if( weight_j < temp ){
 
-	    temp = weight_j;
-	    i = j;
+            temp = weight_j;
+            i = j;
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -551,30 +544,29 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    if( weight_j != infty ){
+            if( weight_j != infty ){
 
-	      vertex.erase( pair<U,int>( weight_j , j ) );
+              vertex.erase( pair<U,int>( weight_j , j ) );
 
-	    }
+            }
 
-	    prev[j] = i; // SET_PREV;
-	    changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
+            prev[j] = i; // SET_PREV;
+            changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
       for( auto& v : changed_vertex ){
 
-	vertex.insert( v );
+        vertex.insert( v );
 
       }
 
@@ -645,18 +637,17 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
         if( !fixed[j] ){
 
           const U& w_ij = get<1>( edge_ij );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    prev[j] = i; // SET_PREV;
-	    weight_j = move( temp );
+            prev[j] = i; // SET_PREV;
+            weight_j = move( temp );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -664,18 +655,18 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
 
       for( int j = 0 ; j < size ; j++ ){
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  U& weight_j = weight[j];
+          U& weight_j = weight[j];
 
-	  if( weight_j < temp ){
+          if( weight_j < temp ){
 
-	    temp = weight_j;
-	    i = j;
+            temp = weight_j;
+            i = j;
 
-	  }
+          }
 
-	}
+        }
 
       }
 
@@ -699,35 +690,34 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
 
       for( auto itr = edge_i.begin() , end = edge_i.end() ; itr != end ; itr++ ){
 
-	auto&& j = m_G.Enumeration_inv( get<0>( *itr ) );
+        auto&& j = m_G.Enumeration_inv( get<0>( *itr ) );
 
-	if( !fixed[j] ){
+        if( !fixed[j] ){
 
-	  const U& w_ij = get<1>( *itr );
-	  U temp = m_M.Product( weight_i , w_ij );
-	  assert( temp < infty );
-	  U& weight_j = weight[j];
+          const U& w_ij = get<1>( *itr );
+          U temp = m_M.Product( weight_i , w_ij );
+          U& weight_j = weight[j];
 
-	  if( temp < weight_j ){
+          if( temp < weight_j ){
 
-	    if( weight_j != infty ){
+            if( weight_j != infty ){
 
-	      vertex.erase( pair<U,int>( weight_j , j ) );
+              vertex.erase( pair<U,int>( weight_j , j ) );
 
-	    }
+            }
 
-	    prev[j] = i; // SET_PREV;
-	    changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
+            prev[j] = i; // SET_PREV;
+            changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
-	  }
+          }
 
-	}
+        }
 
       }
 
       for( auto& v : changed_vertex ){
 
-	vertex.insert( v );
+        vertex.insert( v );
 
       }
 
@@ -750,8 +740,8 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
 
       while( i != i_start ){
 
-	i = prev[i];
-	path_j.push_front( m_G.Enumeration( i ) );
+        i = prev[i];
+        path_j.push_front( m_G.Enumeration( i ) );
 
       }
 

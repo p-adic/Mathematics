@@ -6,13 +6,13 @@
 import heapq
 N,M=J()
 E=[[]for i in R(N+1)]
-for _ in[0]*M:u,v,w=J();E[u]+=[[v,w]];E[v]+=[[u,w]]
+for j in R(M):u,v,w=J();E[u]+=[(v,w)];E[v]+=[(u,w)]
 W=[9**20]*(N+1)
 W[s]=0
-S=[[0,s]]
+S=[(0,s)]
 while S:
 	w,i=heapq.heappop(S)
 	if w>W[i]:continue
 	for j,v in E[i]:
-		if w+v<W[j]:W[j]=w+v;heapq.heappush(S,[w+v,j])
+		if w+v<W[j]:W[j]=w+v;heapq.heappush(S,(w+v,j))
 
