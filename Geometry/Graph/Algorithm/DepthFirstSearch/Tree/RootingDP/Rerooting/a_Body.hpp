@@ -104,7 +104,7 @@ template <typename DFST , typename MONOID , typename F , typename G , typename U
 
     for( int m = 0 ; m < size_i ; m++ ){
 
-      c[i].push_back( { dfst.Children( i )[m] , children_value[i][m] } );
+      c[i].push_back( { dfst.Children( i )[m] , move( children_value[i][m] ) } );
 
     }
     
