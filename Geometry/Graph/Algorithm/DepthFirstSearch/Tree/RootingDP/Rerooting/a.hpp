@@ -1,25 +1,31 @@
 // c:/Users/user/Documents/Programming/Mathematics/Geometry/Graph/Algorithm/DepthFirstSearch/Tree/RootingDP/Rerooting/a.hpp
 
 #pragma once
-// verify:
-// https://yukicoder.me/submissions/957399（RerootingDP）
-// https://yukicoder.me/submissions/957400（RerootingDP）
-
 #include "../../a.hpp"
+#include "../../../../../../../Algebra/Monoid/a.hpp"
+
+// verify:
+// https://yukicoder.me/submissions/957399
+// https://yukicoder.me/submissions/957400
+// https://yukicoder.me/submissions/1200840
 
 // Uは適当な型、Fは写像f:U \times N ->Uに相当する型、
 // Gは写像g:U \times \{0,1\} \times N^2 -> Uに相当する型。
 // 入力の範囲内で要件
 // (1) MがUのモノイド構造である。（以下演算を*と置く）
 // を満たす場合のみサポート。
+
 // dp[i][j] =
-// f(iを根とみなした時のjの子ノードkをord(i,j)順でわたらせてg(dp[i][k],元の木構造でjはiの子孫,k,j)のMに関して右に掛けていく積,j)
-// を満たす二重配列dpの対角成分dp[i][i]をO(|V_T|)で求めてanswer[i]に格納する。
+// f(iを根とみなした時のjの子ノードkをord(i,j)順でわたらせてg(dp[i][k],元の木構造でjはiの子孫(j==i含む),k,j)のMに関して右に掛けていく積,j)
+// を満たす二重配列dpの対角成分dp[i][i]と
+// c[i] =
+// iを根とみなした時のiの子ノードkをord(i,i)順でわたらせてdp[i][k]を並べた列
+// をO(|V_T|)で求めてanswer[i]に(dp[i][i],c[i])を格納する。
 // ただしord(i,j)はiを根とした時のjの子ノードkの順序づけで、
 // - 元の木構造でjの親となるものを最初に
 // - そうでないものはChildrenNumber()に関して昇順に
 // として定義する。
-template <typename DFST , typename MONOID , typename F , typename G> vector<inner_t<MONOID>> RerootingDP( DFST& dfst , MONOID M , F f , G g );
+template <typename DFST , typename MONOID , typename F , typename G , typename U = inner_t<MONOID>> pair<vector<U>,vector<vector<pair<int,U>>>> RerootingDP( DFST& dfst , MONOID M , F f , G g );
 // fはノードjごとのデータ（グラフ構造に依存しないもの）しか使えず、
 // gは有向辺is_child?(j,k):(k,j)ごとのデータ（グラフ構造、例えばkが葉か否かに依存できる）が使える。
 // -「パスの数」を求める場合：

@@ -37,7 +37,7 @@ template <typename DFST , typename F> vector<ret_t<F>> RootingDP( DFST& dfst , F
 //     for( auto& [x,j] : u ){ answer = M.Product( move( answer ) , x ); }
 //     return pair{ move( answer ) , i };
 //   };
-// 他のメンバを使わないのであれば、定数倍の軽い再帰版
+// 根など１つのノードでの値しか使わないのであれば、メモリが軽い再帰版
 // Recursion/a_Body.hpp
 // の使用を検討する。
 
