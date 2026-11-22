@@ -28,8 +28,8 @@ template <typename T , typename GRAPH> inline VirtualBreadthFirstSearch<T,GRAPH>
 
       if( empty ){
 
-	empty = false;
-	DERR( "—LŒü•Ó‚ª" );
+        empty = false;
+        DERR( "—LŒü•Ó‚ª" );
 
       }
 
@@ -219,7 +219,7 @@ template <typename T , typename GRAPH> template <template <typename...> typename
 
       for( int j = 0 ; j < V ; j++ ){
 
-	if( m_reached[j] ){
+        if( m_reached[j] ){
 
           DERRNS( " " , m_G.Enumeration( j ) );
 
