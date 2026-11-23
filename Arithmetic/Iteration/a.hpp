@@ -35,9 +35,9 @@ template <typename T> inline T PowerMemorisation( const T& t , const int& expone
 
 
 // 初項l交差dの等差数列のr以下までの総和を取る。
-// 0 <= l , r <= 4e9ならばINT = llでオーバーフローを避けられる。
-// 0 <= l , r <= 6e9ならばINT = ullでオーバーフローを避けられる。
-template <typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d = 1 );
+// 0 <= l , r <= 4e9ならばRET = llでオーバーフローを避けられる。
+// 0 <= l , r <= 6e9ならばRET = ullでオーバーフローを避けられる。
+template <typename RET , typename INT> inline INT ArithmeticProgressionSum( const INT& l , const INT& r , const INT& d = 1 );
 template <typename INT> inline INT ArithmeticProgressionSum( const INT& r );
 
 // 0^2からr^2までの平方数の総和を取る。
