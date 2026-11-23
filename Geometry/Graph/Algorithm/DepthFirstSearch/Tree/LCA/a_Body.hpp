@@ -5,7 +5,7 @@
 
 #include "../a_Body.hpp"
 
-template <typename DFST> inline AncestorDoubling<DFST>::AncestorDoubling( DFST& dfst ) : m_p_dfst{ &dfst } , m_size( m_p_dfst->size() ) , m_doubling( 1 , vector<int>( m_size , -1 ) ) {}
+template <typename DFST> inline AncestorDoubling<DFST>::AncestorDoubling( DFST& dfst ) : m_p_dfst{ &dfst } , m_size( m_p_dfst->size() ) , m_doubling( 1 , vector<int>( m_size , -1 ) ) { for( int i = 0 ; i < m_size ; i++ ){ m_doubling[0][i] = dfst.Parent( i ); } }
 
 template <typename DFST>
 int AncestorDoubling<DFST>::Ancestor( int i , int n )
@@ -16,7 +16,7 @@ int AncestorDoubling<DFST>::Ancestor( int i , int n )
   
   while( i != -1 && n != 0 ){
 
-    ( n & 1 ) == 1 ? i = Get( d )[i] ) : i;
+    ( n & 1 ) == 1 ? i = Get( d )[i] : i;
     d++;
     n >>= 1;
 

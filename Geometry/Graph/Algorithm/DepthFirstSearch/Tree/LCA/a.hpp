@@ -3,6 +3,7 @@
 #pragma once
 // verify:
 // https://yukicoder.me/submissions/957468（Ancestor,LCA）
+// https://yukicoder.me/submissions/1201392 (LCA)
 
 #include "../a.hpp"
 
@@ -27,10 +28,10 @@ public:
   inline AncestorDoubling( DFST& dfst );
 
   // n階の親Parent^n( i )を返す。
-  int Ancestor( DFST& dfst , int i , int n );
+  int Ancestor( int i , int n );
 
   // {iとjの最近接共通祖先,LCAからi側に進める場合に進んだ先の頂点のラベル,同j側}を返す。
-  tuple<int,int,int> LCA( DFST& dfst , int i , int j );
+  tuple<int,int,int> LCA( int i , int j );
 
 private:
   const vector<int>& Get( const int& d );
