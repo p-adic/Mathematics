@@ -447,7 +447,7 @@ void AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::SetDistance( vector<U>& weight , v
 }
 
 template <typename GRAPH , typename U , typename COMM_MONOID , typename T>
-pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const T& t_final , const bool& many_edges , int path_length )
+pair<U,list<pair<T,U>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const T& t_final , const bool& many_edges , int path_length )
 {
 
   const int& size = m_G.size();
@@ -455,12 +455,12 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
   vector weight( size , infty );
   vector<bool> fixed( size );
   auto&& i_final = m_G.Enumeration_inv( t_final );
-  // VVV DIJKSTRA_BODY( vector<int> prev( size ) , if( i == i_final ){ break; } , prev[j] = i );
+  // VVV DIJKSTRA_BODY( vector<pair<int,U>> prev( size ) , if( i == i_final ){ break; } , prev[j] = {i,w_ij} );
   const U& one = m_M.One();
   assert( one < infty );
   auto&& i_start = m_G.Enumeration_inv( t_start );
   assert( 0 <= i_start && i_start < size );
-  vector<int> prev( size ); // INITIALISE_PREV;
+  vector<pair<int,U>> prev( size ); // INITIALISE_PREV;
 
   if( many_edges ){
 
@@ -491,7 +491,7 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
 
           if( temp < weight_j ){
 
-            prev[j] = i; // SET_PREV;
+            prev[j] = {i,w_ij}; // SET_PREV;
             weight_j = move( temp );
 
           }
@@ -555,7 +555,7 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
 
             }
 
-            prev[j] = i; // SET_PREV;
+            prev[j] = {i,w_ij}; // SET_PREV;
             changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
           }
@@ -575,15 +575,15 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
   }
   // AAA DIJKSTRA_BODY( vector<int> prev( size ) , if( i == i_final ){ break; } , prev[j] = i );
   int i = i_final;
-  list<T> path{};
-  path.push_back( t_final );
+  list<pair<T,U>> path{};
+  path.push_back( { t_final , one } );
 
   if( weight[i] != infty ){
 
     while( i != i_start ){
 
-      i = prev[i];
-      path.push_front( m_G.Enumeration( i ) );
+      auto& [j,w] = prev[i];
+      path.push_front( { m_G.Enumeration( i = j ) , w } );
 
     }
 
@@ -599,19 +599,19 @@ pair<U,list<T>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_sta
 }
 
 template <typename GRAPH , typename U , typename COMM_MONOID , typename T> template <template <typename...> typename V> 
-pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const V<T>& t_finals , const bool& many_edges , int path_length )
+pair<vector<U>,vector<list<pair<T,U>>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const V<T>& t_finals , const bool& many_edges , int path_length )
 {
 
   const int& size = m_G.size();
   const U& infty = this->Infty();
   vector weight( size , infty );
   vector<bool> fixed( size );
-  // VVV DIJKSTRA_BODY( vector<int> prev( size ) , , prev[j] = i );
+  // VVV DIJKSTRA_BODY( vector<pair<int,U>> prev( size ) , , prev[j] = {i,w_ij} );
   const U& one = m_M.One();
   assert( one < infty );
   auto&& i_start = m_G.Enumeration_inv( t_start );
   assert( 0 <= i_start && i_start < size );
-  vector<int> prev( size ); // INITIALISE_PREV;
+  vector<pair<int,U>> prev( size ); // INITIALISE_PREV;
 
   if( many_edges ){
 
@@ -642,7 +642,7 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
 
           if( temp < weight_j ){
 
-            prev[j] = i; // SET_PREV;
+            prev[j] = {i,w_ij}; // SET_PREV;
             weight_j = move( temp );
 
           }
@@ -706,7 +706,7 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
 
             }
 
-            prev[j] = i; // SET_PREV;
+            prev[j] = {i,w_ij}; // SET_PREV;
             changed_vertex.push_back( pair<U,int>( weight_j = move( temp ) , j ) );
 
           }
@@ -724,43 +724,44 @@ pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath
     }
 
   }
-  // AAA DIJKSTRA_BODY( vector<int> prev( size ) , , prev[j] = i );
+  // AAA DIJKSTRA_BODY( vector<int> prev( size ) , , prev[j] = {i,w_ij} );
   const int path_size = t_finals.size();
-  vector<list<T>> path;
+  vector<list<pair<T,U>>> path;
   path.reserve( path_size );
 
-  for( auto itr = t_finals.begin() , end = t_finals.end() ; itr != end ; itr++ ){
+  for( auto& t_final : t_finals  ){
 
-    list<T> path_j{};
-    const T& t_final = *itr;
-    path_j.push_back( t_final );
+    list<pair<T,U>> path_t{};
+    path_t.push_back( { t_final , one } );
     int i = m_G.Enumeration_inv( t_final );
 
     if( weight[i] != infty ){
 
       while( i != i_start ){
 
-        i = prev[i];
-        path_j.push_front( m_G.Enumeration( i ) );
+        auto& [j,w] = prev[i];
+        path_t.push_front( { m_G.Enumeration( i = j ) , w } );
 
       }
 
     }
 
-    path.push_back( path_j );
+    path.push_back( path_t );
 
   }
 
   DERR( "Dijkstra::GetPath( t_start =" , t_start , ", t_finals = (" , t_finals , ") , many_edges =" , many_edges , ", path_length =" , path_length , ")ÇÃé¿çsåãâ ÅF" );
   DERR( "weight =" , weight );
-  DERR( "path =" , path );
+  FOR( i , 0 , size ){
+    DERR( "path[" , m_G.Enumeration( i ) , "] =" , path[m_G.Enumeration( i )] );
+  }
   DERR( "" );
   return { move( weight ) , move( path ) };
 
 }
 
 template <typename GRAPH , typename U , typename COMM_MONOID , typename T>
-pair<vector<U>,vector<list<T>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const bool& many_edges , int path_length )
+pair<vector<U>,vector<list<pair<T,U>>>> AbstractDijkstra<GRAPH,U,COMM_MONOID,T>::GetPath( const T& t_start , const bool& many_edges , int path_length )
 {
 
   const int& size = m_G.size();

@@ -53,15 +53,16 @@ public:
 
   // Œo˜H‚ª‘¶İ‚·‚éê‡‚ÍÅ’ZŒa˜H’·‚ğA‘¶İ‚µ‚È‚¢ê‡‚Íinfty‚ğ‘æ1¬•ª‚ÉA
   // Œo˜H‚ª‘¶İ‚·‚éê‡‚ÍÅ’ZŒa˜H‚ğA‘¶İ‚µ‚È‚¢ê‡‚Í‹ó—ñ‚ğ‘æ2¬•ª‚É•Ô‚·B
-  pair<U,list<T>> GetPath( const T& t_start , const T& t_final , const bool& many_edges = false , int path_length = -1 );
+  pair<U,list<pair<T,U>>> GetPath( const T& t_start , const T& t_final , const bool& many_edges = false , int path_length = -1 );
   // t_finals‚É‘®‚·‚Æ‚ÍŒÀ‚ç‚È‚¢i’ˆÓIjŠe“_‚É‘Î‚µ
   //   uŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H’·:inftyv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ1¬•ª‚ÉA
   // t_finals‚É‘®‚·Še“_‚É‘Î‚µ
-  //   uŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H:‹ó—ñv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ2¬•ª‚É•Ô‚·B
-  template <template <typename...> typename V> pair<vector<U>,vector<list<T>>> GetPath( const T& t_start , const V<T>& t_finals , const bool& many_edges = false , int path_length = -1 );
-  // Še“_‚É‘Î‚µuŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H’·:inftyv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ1¬•ª‚ÉA
-  // Še“_‚É‘Î‚µuŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H:‹ó—ñv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ2¬•ª‚É•Ô‚·B
-  pair<vector<U>,vector<list<T>>> GetPath( const T& t_start , const bool& many_edges = false , int path_length = -1 );
+  //   uŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H({’¸“_,Ÿ•Ó‚Ìd‚³}‚Ì—ñ):‹ó—ñv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ2¬•ª‚É•Ô‚·B
+  template <template <typename...> typename V> pair<vector<U>,vector<list<pair<T,U>>>> GetPath( const T& t_start , const V<T>& t_finals , const bool& many_edges = false , int path_length = -1 );
+  // Še“_‚É‘Î‚µ
+  // uŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H’·:inftyv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ1¬•ª‚ÉA
+  // uŒo˜H‚ª‘¶İ‚·‚é?Å’ZŒa˜H({’¸“_,Ÿ•Ó‚Ìd‚³}‚Ì—ñ):‹ó—ñv‚ğŠi”[‚µ‚½”z—ñ‚ğ‘æ2¬•ª‚É•Ô‚·B
+  pair<vector<U>,vector<list<pair<T,U>>>> GetPath( const T& t_start , const bool& many_edges = false , int path_length = -1 );
   
 };
 
