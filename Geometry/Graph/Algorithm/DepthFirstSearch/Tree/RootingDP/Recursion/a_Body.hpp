@@ -24,7 +24,7 @@ ret_t<F> RecursionRootingDP_Body( TREE& T , F& f , const int& i , vector<bool>& 
       
     }
 
-    temp.push_back( RootingDP_Body( T , f , j , checked ) );
+    temp.push_back( RecursionRootingDP_Body( T , f , j , checked ) );
 
   }
   

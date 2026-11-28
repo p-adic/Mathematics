@@ -22,6 +22,7 @@ private:
 public:
   inline DSTOnTree( TREE& T , const int& root = 0 );
   inline int LCA( const int& i , const int& j );
+  // ‹——£
   inline int d( const int& i , const int& j );
 
 private:
